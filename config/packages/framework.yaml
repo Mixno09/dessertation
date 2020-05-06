@@ -14,3 +14,16 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    assets:
+        version_format: '%%s?v=%%s'
+        packages:
+            bootstrap:
+                base_path: '/bootstrap'
+                version: '4.4.1'
+            jquery:
+                base_path: '/jquery'
+                version: '3.4.1'
+            chartjs:
+                base_path: '/chartjs'
+                version: '2.9.3'

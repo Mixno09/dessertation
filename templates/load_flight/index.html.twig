@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LoadFlightController!{% endblock %}
+
+{% block body %}
+<div class="row align-items-center">
+    <div class="offset-sm-3 col-sm-6">
+        <form class="p-3 border">
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Номер борта</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    <option>32</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlFile2">Номер вылета</label>
+                <input type="text" class="form-control-file" id="exampleFormControlFile2">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlFile1">Выберите файл для загрузки</label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1">
+            </div>
+            <button type="submit" class="btn btn-primary">Загрузить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChartController!{% endblock %}
+
+{% block body %}
+    <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
+    <script>
+        var labels = [];
+        var data = [];
+        for (var i = 0; i < 30; i++) {
+            labels.push(i);
+            data.push(Math.random() * 30);
+        }
+
+        var ctx = document.getElementById('myChart');
+        // eslint-disable-next-line no-unused-vars
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Test',
+                    data: data,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {}
+        })
+    </script>
+{% endblock %}
