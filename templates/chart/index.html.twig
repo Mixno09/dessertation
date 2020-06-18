@@ -9,29 +9,59 @@
 {% block javascripts %}
     <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
     <script>
-        var labels = [];
-        var data = [];
-        for (var i = 0; i < 30; i++) {
-            labels.push(i);
-            data.push(Math.random() * 30);
-        }
-
         var ctx = document.getElementById('myChart');
         // eslint-disable-next-line no-unused-vars
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels,
+                labels: {{ labels|json_encode|raw }},
                 datasets: [{
-                    label: 'Test',
-                    data: data,
+                    label: 'Температура правого',
+                    data: {{ t4Right|json_encode|raw }},
                     backgroundColor: 'transparent',
-                    borderColor: '#007bff',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#007bff'
+                    borderColor: '#0000ff',
+                    borderWidth: 1,
+                    pointBackgroundColor: '#0000ff'
+                },{
+                    label: 'Температура левого',
+                    data: {{ t4Left|json_encode|raw }},
+                    backgroundColor: 'transparent',
+                    borderColor: '#ff0000',
+                    borderWidth: 1,
+                    pointBackgroundColor: '#ff0000'
                 }]
             },
-            options: {}
+            options: {
+                elements: {
+                    point: {
+                        radius: 0
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Температура двигателя'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intercept: false,
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Время, с'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Температура, Цельс'
+                        }
+                    }],
+                }
+            }
         })
     </script>
 {% endblock %}
