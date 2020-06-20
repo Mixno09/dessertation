@@ -15,19 +15,69 @@
             data: {
                 labels: {{ labels|json_encode|raw }},
                 datasets: [{
-                    label: 'Температура правого',
+                    label: 'Температура правого двигателя',
                     backgroundColor: '#0000ff',
                     borderColor: '#0000ff',
                     data: {{ t4Right|json_encode|raw }},
                     borderWidth: 1,
-                    fill: false
+                    fill: false,
+                    yAxisID: 'y-temp-engine',
                 }, {
-                    label: 'Температура левого',
+                    label: 'Температура левого двигателя',
                     backgroundColor: '#ff0000',
                     borderColor: '#ff0000',
                     data: {{ t4Left|json_encode|raw }},
                     borderWidth: 1,
-                    fill: false
+                    fill: false,
+                    yAxisID: 'y-temp-engine',
+                }, {
+                    label: 'Положение РУД правого двигателя',
+                    backgroundColor: '#00ff00',
+                    borderColor: '#00ff00',
+                    data: {{ alfaRight|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-alfa-rud',
+                }, {
+                    label: 'Положение РУД левого двигателя',
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    data: {{ alfaLeft|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-alfa-rud',
+                }, {
+                    label: 'Обороты РНД правого двигателя',
+                    backgroundColor: '#999900',
+                    data: {{ rndRight|json_encode|raw }},
+                    borderColor: '#999900',
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-rnd',
+                }, {
+                    label: 'Обороты РНД левого двигателя',
+                    backgroundColor: '#ff8000',
+                    borderColor: '#ff8000',
+                    data: {{ rndLeft|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-rnd',
+                }, {
+                    label: 'Обороты РВД правого двигателя',
+                    backgroundColor: '#b300b3',
+                    borderColor: '#b300b3',
+                    data: {{ rvdRight|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-rvd',
+                }, {
+                    label: 'Обороты РВД левого двигателя',
+                    backgroundColor: '#00b38f',
+                    borderColor: '#00b38f',
+                    data: {{ rvdLeft|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-rvd',
                 }]
             },
             options: {
@@ -61,7 +111,31 @@
                         scaleLabel: {
                             display: true,
                             labelString: 'Температура, °C'
-                        }
+                        },
+                        id: 'y-temp-engine',
+                    }, {
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Положение РУД, °'
+                        },
+                        id: 'y-alfa-rud',
+                    }, {
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Обороты РНД, %'
+                        },
+                        position: 'right',
+                        id: 'y-rnd',
+                    }, {
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Обороты РВД, %'
+                        },
+                        position: 'right',
+                        id: 'y-rvd',
                     }]
                 }
             }
