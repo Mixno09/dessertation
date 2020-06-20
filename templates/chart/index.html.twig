@@ -3,32 +3,31 @@
 {% block title %}Hello ChartController!{% endblock %}
 
 {% block body %}
-    <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+    <canvas class="my-4 w-100" id="myChart"></canvas>
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
     <script>
         var ctx = document.getElementById('myChart');
-        // eslint-disable-next-line no-unused-vars
-        var myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'line',
             data: {
                 labels: {{ labels|json_encode|raw }},
                 datasets: [{
                     label: 'Температура правого',
-                    data: {{ t4Right|json_encode|raw }},
-                    backgroundColor: 'transparent',
+                    backgroundColor: '#0000ff',
                     borderColor: '#0000ff',
+                    data: {{ t4Right|json_encode|raw }},
                     borderWidth: 1,
-                    pointBackgroundColor: '#0000ff'
-                },{
+                    fill: false
+                }, {
                     label: 'Температура левого',
-                    data: {{ t4Left|json_encode|raw }},
-                    backgroundColor: 'transparent',
+                    backgroundColor: '#ff0000',
                     borderColor: '#ff0000',
+                    data: {{ t4Left|json_encode|raw }},
                     borderWidth: 1,
-                    pointBackgroundColor: '#ff0000'
+                    fill: false
                 }]
             },
             options: {
@@ -43,23 +42,27 @@
                 },
                 tooltips: {
                     mode: 'index',
-                    intercept: false,
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
                 },
                 scales: {
                     xAxes: [{
-                        display: true,
-                        scaleLabel: {
+                         display: true,
+                         scaleLabel: {
                             display: true,
                             labelString: 'Время, с'
-                        }
+                         }
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Температура, Цельс'
+                            labelString: 'Температура, °C'
                         }
-                    }],
+                    }]
                 }
             }
         })
