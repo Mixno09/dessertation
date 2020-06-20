@@ -113,6 +113,10 @@
                             labelString: 'Температура, °C'
                         },
                         id: 'y-temp-engine',
+                        ticks: {
+                            min: -1800,
+                            max: 600,
+                        }
                     }, {
                         display: true,
                         scaleLabel: {
@@ -120,6 +124,10 @@
                             labelString: 'Положение РУД, °'
                         },
                         id: 'y-alfa-rud',
+                        ticks: {
+                            min: -160,
+                            max: 160,
+                        }
                     }, {
                         display: true,
                         scaleLabel: {
@@ -128,6 +136,10 @@
                         },
                         position: 'right',
                         id: 'y-rnd',
+                        ticks: {
+                            min: -120,
+                            max: 360,
+                        }
                     }, {
                         display: true,
                         scaleLabel: {
@@ -136,6 +148,10 @@
                         },
                         position: 'right',
                         id: 'y-rvd',
+                        ticks: {
+                            min: 0,
+                            max: 400,
+                        }
                     }]
                 }
             }
