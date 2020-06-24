@@ -24,21 +24,17 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/departure/{airplane}/{date}/{departure}", name="departure")
-     * @param int $airplane
-     * @param int $departure
-     * @param string $date
+     * @Route("/departure/{id}", name="departure")
+     * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(int $airplane, string $date, int $departure): Response
+    public function index(int $id): Response
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $query = $queryBuilder
             ->select('*')
             ->from('flight_information')
-            ->where('airplane = ' . $queryBuilder->createPositionalParameter($airplane))
-            ->andWhere('date = ' . $queryBuilder->createPositionalParameter($date))
-            ->andWhere('departure = ' . $queryBuilder->createPositionalParameter($departure))
+            ->where('departure_id = ' . $queryBuilder->createPositionalParameter($id))
             ->orderBy('time');
         $statement = $query->execute();
         $params = $statement->fetchAll();

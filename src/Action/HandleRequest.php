@@ -30,14 +30,19 @@ final class HandleRequest
             $command->flightInformation->getRealPath()
         );
         $this->connection->transactional(function (Connection $connection) use ($command, $reader) {
+            $connection->insert('departures', [
+                'airplane' => $command->numberAirplane,
+                'date' => $command->date->format('Y-m-d'),
+                'departure' => $command->numberFlight,
+            ]);
+            $departureId = $connection->lastInsertId();
+
             foreach ($reader->getSheetIterator() as $sheet) {
                 foreach ($sheet->getRowIterator() as $row) {
                     /** @var \Box\Spout\Common\Entity\Cell[] $cells */
                     $cells = $row->getCells();
                     $connection->insert('flight_information', [
-                        'airplane' => (int) $command->numberAirplane,
-                        'date' => $command->date->format('Y-m-d'),
-                        'departure' => (int) $command->numberFlight,
+                        'departure_id' => $departureId,
                         'time' => $cells[0]->getValue(),
                         't4_right' => $cells[1]->getValue(),
                         't4_left' => $cells[2]->getValue(),

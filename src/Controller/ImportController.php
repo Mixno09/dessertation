@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LoadFlightController extends AbstractController
+class ImportController extends AbstractController
 {
     /**
      * @var HandleRequest
@@ -27,7 +27,7 @@ class LoadFlightController extends AbstractController
     }
 
     /**
-     * @Route("/load/flyght", name="load_flight", methods={"GET","POST"})
+     * @Route("/import", name="import", methods={"GET","POST"})
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -38,9 +38,9 @@ class LoadFlightController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handler->handle($command);
-            return $this->redirectToRoute('load_flight');
+            return $this->redirectToRoute('import');
         }
-        return $this->render('load_flight/index.html.twig', [
+        return $this->render('import/index.html.twig', [
             'form' => $form->createView()
         ]);
     }
