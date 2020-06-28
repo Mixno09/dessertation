@@ -24,7 +24,7 @@ class ChartController extends AbstractController
     }
 
     /**
-     * @Route("/departure/{id}", name="departure")
+     * @Route("/departure/{id}", name="departure", methods="GET")
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
