@@ -38,7 +38,43 @@
         </ul>
     </div>
 </nav>
+{% set currentRoute = app.request.attributes.get('_route') %}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('import') }}">
+                            <span data-feather="tag"></span>
+                            Импорт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('index') }}">
+                            <span data-feather="shopping-bag"></span>
+                            Данные вылетов
+                        </a>
+                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="{{ path('api') }}" target="_blank">#}
+{#                            <span data-feather="tool"></span>#}
+{#                            API#}
+{#                        </a>#}
+{#                    </li>#}
+                </ul>
+            </div>
+        </nav>
 
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block h1 %}Просмотр данных{% endblock %}</h1>
+                {% block h1_after %}{% endblock %}
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
 <main role="main" class="container">
     {% block body %}{% endblock %}
 </main>
