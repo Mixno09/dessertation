@@ -27,8 +27,9 @@ final class Version20200709153817 extends AbstractMigration
             airplane INT UNSIGNED NOT NULL COMMENT \'номер борта\', 
             date DATE DEFAULT NULL COMMENT \'дата вылета\', 
             departure INT UNSIGNED NOT NULL COMMENT \'номер вылета\', 
-            UNIQUE INDEX departures_airplane_date_departure_uindex (airplane, date, departure), 
-            PRIMARY KEY(id)) 
+            PRIMARY KEY(id),
+            UNIQUE INDEX departures_airplane_date_departure_uindex (airplane, date, departure)
+            ) 
             DEFAULT CHARACTER SET utf8 
             COLLATE `utf8_unicode_ci` ENGINE = InnoDB COMMENT = \'Параметры вылета\' ');
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
@@ -44,11 +45,12 @@ final class Version20200709153817 extends AbstractMigration
             rvd_left NUMERIC(4, 1) UNSIGNED NOT NULL, 
             rnd_right NUMERIC(4, 1) UNSIGNED NOT NULL, 
             rvd_right NUMERIC(4, 1) UNSIGNED NOT NULL,
-            constraint flight_information_departures_id_fk,
-            foreign key (departure_id) references departures (id),
-            on update cascade on delete cascade, 
-            INDEX flight_information_departures_id_fk (departure_id), 
-            PRIMARY KEY(id)) 
+            PRIMARY KEY(id),
+            constraint flight_information_departures_id_fk
+            foreign key (departure_id) references departures (id)
+            on update cascade on delete cascade
+            )
+             
             DEFAULT CHARACTER SET utf8 
             COLLATE `utf8_unicode_ci` 
             ENGINE = InnoDB COMMENT = \'данные вылета\' ');
