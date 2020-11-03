@@ -102,6 +102,9 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v5.2.0"
     },
+    "markrogoyski/math-php": {
+        "version": "v1.6.0"
+    },
     "monolog/monolog": {
         "version": "2.0.2"
     },

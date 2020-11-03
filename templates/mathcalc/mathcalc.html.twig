@@ -1,17 +1,26 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Получение данных рнд{% endblock %}
 {% block body %}
-    {% for left in  rvd_left %}
-        <h1>
-            {{ left }}
-        </h1>
+    {% for left in  rnd_left %}
+        {{ left }}
     {% endfor %}
     <br>
 
     <br>
-    {% for right in  rvd_right %}
-        <h1>
-            {{ right }}
-        </h1>
+    {% for time in  time_left %}
+        {{ time }}
+    {% endfor %}
+    <br>
+
+    <br>
+    {% for right in  rnd_right %}
+        {{ right }}
+    {% endfor %}
+    <br>
+
+    <br>
+    {% for time in  time_right %}
+        {{ time }}
     {% endfor %}
 {% endblock %}

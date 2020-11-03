@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\FlightInformationRepository;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,41 +19,51 @@ final class MathController extends AbstractController
     private $connection;
 
     /**
+     * @var FlightInformationRepository
+     */
+    private $flightInformationRepository;
+    /**
      * MathController constructor.
      * @param \Doctrine\DBAL\Connection $connection
+     * @param \App\Repository\FlightInformationRepository $flightInformationRepository
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, FlightInformationRepository $flightInformationRepository)
     {
         $this->connection = $connection;
+        $this->flightInformationRepository = $flightInformationRepository;
     }
 
     /**
-     * @Route("/math", name="math", methods={"GET"})
+     * @Route("/math/{id}", name="math", methods={"GET"})
+     * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function math(): Response
+    public function math(int $id): Response
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('rvd_left', 'rvd_right')
-            ->from('flight_information')
-            ->where('alfa_rud_left>43');
-//            ->andWhere('alfa_rud_right>40');
-        $statement = $query->execute();
-        $params = $statement->fetchAll();
+        $repository = $this->flightInformationRepository;
+        $rnd_left = $repository->findRndLeft($id);
+        $rnd_right = $repository->findRndRight($id);
 
-        $rvdLeft = [];
-        $rvdRight = [];
+        $rndLeft = [];
+        $timeLeft = [];
+        $rndRight = [];
+        $timeRight = [];
 
-        foreach ($params as $param) {
-            $rvdLeft[] = $param['rvd_left'];
-            $rvdRight[] = $param['rvd_right'];
+        foreach ($rnd_left as $left) {
+            $rndLeft[] = $left['rnd_left'];
+            $timeLeft[] = $left['time'];
         }
-//        var_dump($params, $rvdLeft, $rvdRight);
-//        die();
+
+        foreach ($rnd_right as $right) {
+            $rndRight[] = $right['rnd_right'];
+            $timeRight[] = $right['time'];
+        }
         return $this->render('mathcalc/mathcalc.html.twig', [
-            'rvd_left' => $rvdLeft,
-            'rvd_right' => $rvdRight,
+            'rnd_left' => $rndLeft,
+            'time_left' => $timeLeft,
+            'rnd_right' => $rndRight,
+            'time_right' => $timeRight,
         ]);
     }
 }

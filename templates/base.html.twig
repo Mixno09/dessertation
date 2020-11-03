@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Главная{% endblock %}</title>
 
     <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
 
@@ -29,7 +29,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="#">Тест</a>
+    <a class="navbar-brand" href={{ path('index') }}>Тест</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -56,12 +56,12 @@
                             Данные вылетов
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('math') }}" target="_blank">
-                            <span data-feather="tool"></span>
-                            Что-то расчитать
-                        </a>
-                    </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="{{ path('math', {'id': departure.id}) }}" target="_blank">#}
+{#                            <span data-feather="tool"></span>#}
+{#                            Что-то расчитать#}
+{#                        </a>#}
+{#                    </li>#}
                 </ul>
             </div>
         </nav>
