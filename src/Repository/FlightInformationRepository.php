@@ -22,22 +22,22 @@ final class FlightInformationRepository
         $this->connection = $connection;
     }
 
-    public function findRndLeft(int $id): array
+    public function getRndLeftForDeparture(int $departureId): array
     {
         $sql = 'SELECT rnd_left, time FROM flight_information WHERE departure_id = ? AND  alfa_rud_left > ? AND rnd_left > ? ORDER BY time ASC';
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $id);
+        $statement->bindValue(1, $departureId);
         $statement->bindValue(2, 67);
         $statement->bindValue(3, 90);
         $statement->execute();
         return $statement->fetchAll();
     }
 
-    public function findRndRight(int $id): array
+    public function getRndRightForDeparture(int $departureId): array
     {
         $sql = 'SELECT rnd_right, time FROM flight_information WHERE departure_id = ? AND  alfa_rud_right > ? AND rnd_right > ? ORDER BY time ASC';
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $id);
+        $statement->bindValue(1, $departureId);
         $statement->bindValue(2, 67);
         $statement->bindValue(3, 90);
         $statement->execute();

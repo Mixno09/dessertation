@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 final class MathController extends AbstractController
 {
     /**
@@ -37,13 +36,12 @@ final class MathController extends AbstractController
      * @Route("/math/{id}", name="math", methods={"GET"})
      * @param int $id
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function math(int $id): Response
     {
         $repository = $this->flightInformationRepository;
-        $rnd_left = $repository->findRndLeft($id);
-        $rnd_right = $repository->findRndRight($id);
+        $rnd_left = $repository->getRndLeftForDeparture($id);
+        $rnd_right = $repository->getRndRightForDeparture($id);
 
         $rndLeft = [];
         $timeLeft = [];
