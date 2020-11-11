@@ -38,7 +38,8 @@ class ChartController extends AbstractController
             ->orderBy('time');
         $statement = $query->execute();
         $params = $statement->fetchAll();
-
+//var_dump($params);
+//die();
         $labels = [];
         $t4Right = [];
         $t4Left = [];
@@ -48,6 +49,7 @@ class ChartController extends AbstractController
         $rndRight = [];
         $rvdLeft = [];
         $rvdRight = [];
+        $departure_id = '';
         foreach ($params as $param) {
             $labels[] = $param['time'];
             $t4Right[] = $param['t4_right'];
@@ -58,7 +60,17 @@ class ChartController extends AbstractController
             $rndRight[] = $param['rnd_right'];
             $rvdLeft[] = $param['rvd_left'];
             $rvdRight[] = $param['rvd_right'];
+            $departure_id = $param['departure_id'];
         }
+
+        $t4Right = self::filter($t4Right);
+        $t4Left = self::filter($t4Left);
+        $alfaRudLeft = self::filter($alfaRudLeft);
+        $alfaRudRight = self::filter($alfaRudRight);
+        $rndLeft = self::filter($rndLeft);
+        $rndRight = self::filter($rndRight);
+        $rvdLeft = self::filter($rvdLeft);
+        $rvdRight = self::filter($rvdRight);
 
         return $this->render('chart/index.html.twig', [
             'labels' => $labels,
@@ -70,6 +82,49 @@ class ChartController extends AbstractController
             'rndRight' => $rndRight,
             'rvdLeft' => $rvdLeft,
             'rvdRight' => $rvdRight,
+            'departure_id' => $departure_id,
         ]);
+    }
+
+    private static function medianFilter(...$values)
+    {
+        sort($values);
+        if (count($values) % 2 === 0) {
+            $rightIndex = count($values) / 2;
+            $leftIndex = $rightIndex - 1;
+            $right = $values[$rightIndex];
+            $left = $values[$leftIndex];
+            $result = ($right + $left) / 2;
+        } else {
+            $lastIndex = count($values) - 1;
+            $middleIndex = $lastIndex / 2;
+            $result = $values[$middleIndex];
+        }
+        return $result;
+    }
+
+    private static function filter(array $data): array
+    {
+        $result = [];
+        for ($key = 0; $key < count($data); $key++) {
+            $values = [];
+            $offset = 5;
+            $leftIndex = $key - $offset;
+            while ($leftIndex < 0) {
+                $values[] = $data[$key];
+                $leftIndex++;
+            }
+            $rightIndex = $key + $offset;
+            while ($rightIndex >= count($data)) {
+                $values[] = $data[$key];
+                $rightIndex--;
+            }
+            for ($i = $leftIndex; $i <= $rightIndex; $i++) {
+                $values[] = $data[$i];
+            }
+            $middle = self::medianFilter(...$values);
+            $result[$key] = $middle;
+        }
+        return $result;
     }
 }

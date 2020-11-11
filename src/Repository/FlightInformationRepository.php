@@ -43,4 +43,12 @@ final class FlightInformationRepository
         $statement->execute();
         return $statement->fetchAll();
     }
+
+    public function findCountEngineShutdowns(): array
+    {
+        $sql = 'SELECT departure FROM departures ORDER BY departure ASC';
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        return $statement->fetchAll();
+    }
 }
