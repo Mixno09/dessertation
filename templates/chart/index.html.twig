@@ -4,10 +4,6 @@
 
 {% block body %}
     <canvas class="my-4 w-100" id="myChart"></canvas>
-    <a class="btn btn-success mb-2" href="{{ path('math', {'id': departure_id}) }}" target="_blank">
-        <span data-feather="tool"></span>
-        Что-то расчитать
-    </a>
 {% endblock %}
 
 {% block javascripts %}
@@ -92,7 +88,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Температура двигателя'
+                    text: 'Параметры полета'
                 },
                 tooltips: {
                     mode: 'index',

@@ -38,8 +38,7 @@ class ChartController extends AbstractController
             ->orderBy('time');
         $statement = $query->execute();
         $params = $statement->fetchAll();
-//var_dump($params);
-//die();
+
         $labels = [];
         $t4Right = [];
         $t4Left = [];
@@ -72,6 +71,7 @@ class ChartController extends AbstractController
         $rvdLeft = self::filter($rvdLeft);
         $rvdRight = self::filter($rvdRight);
 
+
         return $this->render('chart/index.html.twig', [
             'labels' => $labels,
             't4Right' => $t4Right,
@@ -86,7 +86,7 @@ class ChartController extends AbstractController
         ]);
     }
 
-    private static function medianFilter(...$values)
+    public static function medianFilter(...$values)
     {
         sort($values);
         if (count($values) % 2 === 0) {
@@ -103,12 +103,12 @@ class ChartController extends AbstractController
         return $result;
     }
 
-    private static function filter(array $data): array
+    public static function filter(array $data): array
     {
         $result = [];
         for ($key = 0; $key < count($data); $key++) {
             $values = [];
-            $offset = 5;
+            $offset = 0;
             $leftIndex = $key - $offset;
             while ($leftIndex < 0) {
                 $values[] = $data[$key];

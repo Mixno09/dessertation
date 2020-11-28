@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SelectAirplane{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr class="d-flex">
+                    <th scope="col" class="col-md-2">Номер самолета</th>
+                    <th scope="col" class="col-md-10">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for airplane in pagination %}
+                    <tr class="d-flex">
+                        <td class="col-md-2">{{ airplane.airplane }}</td>
+                        <td class="col-md-10">
+                            <a href="{{ path('chart_time_rotor', {'airplaneId': airplane.airplane}) }}" target="_blank"
+                               class="btn btn-outline-primary text-nowrap">
+                                <span data-feather="eye"></span> Выбег ротора РНД и РВД левого двигателя
+                            </a>
+{#                            <a href="{{ path('approximation_time_rotor', {'airplane': airplane.airplane}) }}" target="_blank"#}
+{#                               class="btn btn-outline-primary text-nowrap">#}
+{#                                <span data-feather="eye"></span> Аппроксимированный выбег ротора РНД и РВД левого двигателя#}
+{#                            </a>#}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-auto">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+{% endblock %}

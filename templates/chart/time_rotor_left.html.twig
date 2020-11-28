@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Оперативный контроль{% endblock %}
+
+{% block body %}
+<canvas class="my-4 w-100" id="myChart"></canvas>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
+    <script>
+        var ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ count_rnd_left|json_encode|raw }},
+                datasets: [{
+                    label: 'Время выбега ротора РНД левого двигателя',
+                    backgroundColor: '#0000ff',
+                    borderColor: '#0000ff',
+                    data: {{ time_rnd_left|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-time-rnd-left',
+                },{
+                    label: 'Время выбега ротора РВД левого двигателя',
+                    backgroundColor: '#ff0000',
+                    borderColor: '#ff0000',
+                    data: {{ time_rvd_left|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-time-rnd-left',
+                },{
+                    label: 'Аппроксимированное время выбега ротора РНД левого двигателя',
+                    backgroundColor: '#00ff00',
+                    borderColor: '#00ff00',
+                    data: {{ approximation_time_rnd_left|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-approximation-time-rnd-left',
+                },{
+                    label: 'Аппроксимированное время выбега ротора РВД левого двигателя',
+                    backgroundColor: '#000000',
+                    borderColor: '#000000',
+                    data: {{ approximation_time_rvd_left|json_encode|raw }},
+                    borderWidth: 1,
+                    fill: false,
+                    yAxisID: 'y-approximation-time-rnd-left',
+                }]
+            },
+            options: {
+                elements: {
+                    point: {
+                        radius: 0
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Выбег роторов РНД и РВД'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Номер вылета'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Время выбега роторов левого двигателя'
+                        },
+                        id: 'y-time-rnd-left',
+                        ticks: {
+                            min: 0,
+                            max: 50,
+                        }
+                    },{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Аппроксимированное время выбега роторов левого двигателя'
+                        },
+                        id: 'y-approximation-time-rnd-left',
+                        position: 'right',
+                        ticks: {
+                            min: 0,
+                            max: 100,
+                        }
+                    },]
+                }
+            }
+        })
+    </script>
+{% endblock %}
