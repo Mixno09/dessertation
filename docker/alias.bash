@@ -23,3 +23,8 @@ function phpunit()
 {
   eval "(cd $dockerDir && docker-compose exec php-fpm php bin/phpunit $*)"
 }
+
+function build()
+{
+  eval "(cd $dockerDir && docker-compose build)"
+}

@@ -36,9 +36,10 @@ class TestController extends AbstractController
         $alfaRudRight = [];
         $labels = [];
         foreach ($data as $information) {
-            $alfaRudLeft[$information['time']] = $information['alfa_rud_left'];
-            $alfaRudRight[$information['time']] = $information['alfa_rud_right'];
-            $labels[] = $information['time'];
+            $time = $information['time'];
+            $alfaRudLeft[$time] = $information['alfa_rud_left'];
+            $alfaRudRight[$time] = $information['alfa_rud_right'];
+            $labels[] = $time;
         }
         $filterAlfaRudLeft = array_reverse(MathService::filter($alfaRudLeft), true);
         $filterAlfaRudRight = array_reverse(MathService::filter($alfaRudRight), true);
@@ -54,9 +55,9 @@ class TestController extends AbstractController
         return $this->render('chart/test.html.twig', [
             'count' => array_reverse($labels),
             'alfa_rud_left' => $alfaRudLeft,
-            'filter_alfa_rud_left' => $filterAlfaRudLeft, //todo КУДА ДЕЛИСЬ ДАННЫЕ???????
+            'filter_alfa_rud_left' => array_values($filterAlfaRudLeft),
             'alfa_rud_right' => $alfaRudRight,
-            'filter_alfa_rud_right' => $filterAlfaRudRight,
+            'filter_alfa_rud_right' => array_values($filterAlfaRudRight),
         ]);
     }
 }
