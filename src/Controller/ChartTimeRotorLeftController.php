@@ -7,15 +7,12 @@ namespace App\Controller;
 use App\Repository\AirplaneRepository;
 use App\Repository\FlightInformationRepository;
 use App\Services\MathService;
-use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ChartTimeRotorLeftController extends AbstractController
 {
-    private Connection $connection;
-
     private FlightInformationRepository $flightInformationRepository;
 
     private MathService $mathService;
@@ -23,24 +20,22 @@ class ChartTimeRotorLeftController extends AbstractController
     private AirplaneRepository $airplaneRepository;
 
     public function __construct(
-        Connection $connection,
         FlightInformationRepository $flightInformationRepository,
         MathService $mathService,
         AirplaneRepository $airplaneRepository
     )
     {
-        $this->connection = $connection;
         $this->flightInformationRepository = $flightInformationRepository;
         $this->mathService = $mathService;
         $this->airplaneRepository = $airplaneRepository;
     }
 
     /**
-     * @Route("/charttimerotor/{airplaneId}", name="chart_time_rotor", methods={"GET"})
+     * @Route("/charttimeleftrotor/{airplaneId}", name="chart_time_left_rotor", methods={"GET"})
      * @param int $airplaneId
      * @return Response
      */
-    public function chartTimeRotor(int $airplaneId): Response
+    public function chartTimeLeftRotor(int $airplaneId): Response
     {
         $departures = $this->airplaneRepository->findAirplanesById($airplaneId);
 
@@ -62,11 +57,11 @@ class ChartTimeRotorLeftController extends AbstractController
             if (count($timeRvdLeftRotor) > 0) {
                 $timeRvdLeft[$number] = count($timeRvdLeftRotor);
             }
-            $t = $this->mathService->getApproximationTimeRotor($timeRndLeftRotor);
+            $t = $this->mathService->approximationTimeRotor($timeRndLeftRotor);
             if (is_float($t)) {
                 $approximationTimeRndLeft[$number] = $t;
             }
-            $t = $this->mathService->getApproximationTimeRotor($timeRvdLeftRotor);
+            $t = $this->mathService->approximationTimeRotor($timeRvdLeftRotor);
             if (is_float($t)) {
                 $approximationTimeRvdLeft[$number] = $t;
             }

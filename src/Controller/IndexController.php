@@ -13,21 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class IndexController extends AbstractController
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var PaginationRepository
-     */
-    private $paginationRepository;
+    private PaginationRepository $paginationRepository;
 
-    /**
-     * IndexController constructor.
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \App\Repository\PaginationRepository $paginationRepository
-     */
     public function __construct(Connection $connection, PaginationRepository $paginationRepository)
     {
         $this->connection = $connection;
@@ -35,11 +24,11 @@ final class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/", name="index", methods="GET")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/", name="main", methods="GET")
+     * @param Request $request
+     * @return Response
      */
-    public function index(Request $request): Response
+    public function main(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
         $pagination = $this->paginationRepository->paginate($page, 6);

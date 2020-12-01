@@ -8,14 +8,11 @@ use Doctrine\DBAL\Connection;
 
 final class FlightInformationRepository
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     /**
      * FlightInformationRepository constructor.
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param Connection $connection
      */
     public function __construct(Connection $connection)
     {
@@ -54,11 +51,11 @@ final class FlightInformationRepository
 
     public function findTimeRndLeftRotor(int $id): array
     {
-        $sql = 'SELECT time, rnd_left FROM flight_information WHERE departure_id = ? AND time > ? AND alfa_rud_left < ? ORDER BY time ASC';
+        $sql = 'SELECT time, rnd_left FROM flight_information WHERE departure_id = :id AND time > :time AND alfa_rud_left < :alfa_rud_left ORDER BY time ASC';
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $id);
-        $statement->bindValue(2, 250);
-        $statement->bindValue(3, 10);
+        $statement->bindValue(':id', $id);
+        $statement->bindValue(':time', 250);
+        $statement->bindValue(':alfa_rud_left', 10);
         $statement->execute();
         $values = $statement->fetchAll();
 
@@ -72,13 +69,32 @@ final class FlightInformationRepository
         return $this->sortTimeByParams($valueTimeRndLeft, $valueRndLeft);
     }
 
+    public function findTimeRndRightRotor(int $id): array
+    {
+        $sql = 'SELECT time, rnd_right FROM flight_information WHERE departure_id = :id AND time > :time AND alfa_rud_right < :alfa_rud_right ORDER BY time ASC';
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->bindValue(':time', 250);
+        $statement->bindValue(':alfa_rud_right', 10);
+        $statement->execute();
+        $values = $statement->fetchAll();
+
+        $valueRndRight = [];
+        $valueTimeRndRight = [];
+        foreach ($values as $value) {
+            $valueRndRight[] = $value['rnd_right'];
+            $valueTimeRndRight[] = $value['time'];
+        }
+        return $this->sortTimeByParams($valueTimeRndRight, $valueRndRight);
+    }
+
     public function findTimeRvdLeftRotor(int $id): array
     {
-        $sql = 'SELECT time, rvd_left FROM flight_information WHERE departure_id = ? AND time > ? AND alfa_rud_left < ? ORDER BY time ASC';
+        $sql = 'SELECT time, rvd_left FROM flight_information WHERE departure_id = :id AND time > :time AND alfa_rud_left < :alfa_rud_left ORDER BY time ASC';
         $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $id);
-        $statement->bindValue(2, 250);
-        $statement->bindValue(3, 10);
+        $statement->bindValue(':id', $id);
+        $statement->bindValue(':time', 250);
+        $statement->bindValue(':alfa_rud_left', 10);
         $statement->execute();
         $values = $statement->fetchAll();
 
@@ -90,6 +106,26 @@ final class FlightInformationRepository
         }
 
         return $this->sortTimeByParams($valueTimeRvdLeft, $valueRvdLeft);
+    }
+
+    public function findTimeRvdRightRotor(int $id): array
+    {
+        $sql = 'SELECT time, rvd_right FROM flight_information WHERE departure_id = :id AND time > :time AND alfa_rud_right < :alfa_rud_right ORDER BY time ASC';
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':id', $id);
+        $statement->bindValue(':time', 250);
+        $statement->bindValue(':alfa_rud_right', 10);
+        $statement->execute();
+        $values = $statement->fetchAll();
+
+        $valueRvdRight = [];
+        $valueTimeRvdRight = [];
+        foreach ($values as $value) {
+            $valueRvdRight[] = $value['rvd_right'];
+            $valueTimeRvdRight[] = $value['time'];
+        }
+
+        return $this->sortTimeByParams($valueTimeRvdRight, $valueRvdRight);
     }
 
     private function sortTimeByParams(array $times, array $values): array
@@ -107,5 +143,11 @@ final class FlightInformationRepository
             break;
         }
         return $timeAndValue;
+    }
+
+    public function findInformationById(int $id): array
+    {
+        $statement = $this->connection->executeQuery('SELECT * FROM flight_information WHERE departure_id = :id ORDER BY time', [':id' => $id]);
+        return $statement->fetchAll();
     }
 }

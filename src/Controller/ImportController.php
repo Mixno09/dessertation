@@ -38,7 +38,7 @@ class ImportController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->handler->handle($command);
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('main');
         }
         return $this->render('import/index.html.twig', [
             'form' => $form->createView()

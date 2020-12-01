@@ -12,19 +12,13 @@ use Knp\Component\Pager\PaginatorInterface;
 
 final class PaginationRepository
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var PaginatorInterface
-     */
-    private $paginationInterface;
+    private PaginatorInterface $paginationInterface;
     /**
      * IndexController constructor.
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \Knp\Component\Pager\PaginatorInterface $paginationInterface
+     * @param Connection $connection
+     * @param PaginatorInterface $paginationInterface
      */
     public function __construct(Connection $connection, PaginatorInterface $paginationInterface)
     {

@@ -49,7 +49,7 @@ final class DeleteController extends AbstractController
                 ->delete('departures')
                 ->where('id = ' . $queryBuilder->createPositionalParameter($id));
             $query->execute();
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('main');
         }
         return $this->render('index/delete.html.twig', [
             'form' => $form->createView(),
