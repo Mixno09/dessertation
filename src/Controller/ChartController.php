@@ -52,18 +52,6 @@ class ChartController extends AbstractController
             $departure_id = $param['departure_id'];
         }
 
-        $mathService = $this->mathService;
-        
-        $t4Right = $mathService::filter($t4Right);
-        $t4Left = $mathService::filter($t4Left);
-        $alfaRudLeft = $mathService::filter($alfaRudLeft);
-        $alfaRudRight = $mathService::filter($alfaRudRight);
-        $rndLeft = $mathService::filter($rndLeft);
-        $rndRight = $mathService::filter($rndRight);
-        $rvdLeft = $mathService::filter($rvdLeft);
-        $rvdRight = $mathService::filter($rvdRight);
-
-
         return $this->render('chart/index.html.twig', [
             'labels' => $labels,
             't4Right' => $t4Right,

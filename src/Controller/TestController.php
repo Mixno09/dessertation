@@ -47,11 +47,30 @@ class TestController extends AbstractController
             if ($filterAlfaRudLeft[$key] >= $filterAlfaRudLeft[$key - 1]) {
                 continue;
             }
-            $timeStop = $key;
+            $timeStopLeft = $key;
             break;
         }
         $alfaRudLeft = array_reverse($alfaRudLeft);
         $alfaRudRight = array_reverse($alfaRudRight);
+
+        $statement = $this->connection->executeQuery(
+            'SELECT rnd_left, time FROM flight_information WHERE departure_id = :id AND time >= :timeStopLeft AND rnd_left >= :rndLeft',
+            [
+                ':id' => $id,
+                ':timeStopLeft' => $timeStopLeft,
+                ':rndLeft' => 10,
+            ]);
+
+        $rndLefts = $statement->fetchAll();
+
+        $valueRndLeft = [];
+        $valueTimeRndLeft = [];
+        foreach ($rndLefts as $rndLeft) {
+            $valueRndLeft[] = $rndLeft['rnd_left'];
+            $valueTimeRndLeft[] = $rndLeft['time'];
+        }
+        $inf = $this->sortTimeByParams($valueTimeRndLeft, $valueRndLeft);
+        var_dump($inf);die();
         return $this->render('chart/test.html.twig', [
             'count' => array_reverse($labels),
             'alfa_rud_left' => $alfaRudLeft,
@@ -59,5 +78,22 @@ class TestController extends AbstractController
             'alfa_rud_right' => $alfaRudRight,
             'filter_alfa_rud_right' => array_values($filterAlfaRudRight),
         ]);
+    }
+
+    private function sortTimeByParams(array $times, array $values): array
+    {
+        $timeSort = [];
+        if (count($times) <= 5) {
+            return $timeSort;
+        }
+        $timeAndValue[] = $values[0];
+        for ($i = 1; $i < count($values); $i++) {
+            if ($values[$i] >= 10 && $values[$i] < $values[$i - 1]) {
+                $timeAndValue[] = $values[$i];
+                continue;
+            }
+            break;
+        }
+        return $timeAndValue;
     }
 }
