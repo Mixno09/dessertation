@@ -46,7 +46,6 @@ class ChartTimeRotorRightController extends AbstractController
         $timeRvdRight = [];
         $approximationTimeRndRight = [];
         $approximationTimeRvdRight = [];
-
         foreach ($departures as $departure) {
             $departureId = (int) $departure['id'];
             $number = $departure['departure'];

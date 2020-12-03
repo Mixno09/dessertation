@@ -30,51 +30,47 @@ class TestController extends AbstractController
      */
     public function test(int $id): Response
     {
-        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_left, alfa_rud_right FROM flight_information WHERE departure_id = :id', [':id' => $id]);
+        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_right FROM flight_information WHERE departure_id = :id', [':id' => $id]);
         $data = $statement->fetchAll();
-        $alfaRudLeft = [];
         $alfaRudRight = [];
         $labels = [];
         foreach ($data as $information) {
             $time = $information['time'];
-            $alfaRudLeft[$time] = $information['alfa_rud_left'];
             $alfaRudRight[$time] = $information['alfa_rud_right'];
             $labels[] = $time;
         }
-        $filterAlfaRudLeft = array_reverse(MathService::filter($alfaRudLeft), true);
         $filterAlfaRudRight = array_reverse(MathService::filter($alfaRudRight), true);
-        foreach ($filterAlfaRudLeft as $key => $value) {
-            if ($filterAlfaRudLeft[$key] >= $filterAlfaRudLeft[$key - 1]) {
+        foreach ($filterAlfaRudRight as $key => $value) {
+            if ($filterAlfaRudRight[$key] >= $filterAlfaRudRight[$key - 1]) {
                 continue;
             }
             $timeStopLeft = $key;
             break;
         }
-        $alfaRudLeft = array_reverse($alfaRudLeft);
         $alfaRudRight = array_reverse($alfaRudRight);
 
         $statement = $this->connection->executeQuery(
-            'SELECT rnd_left, time FROM flight_information WHERE departure_id = :id AND time >= :timeStopLeft AND rnd_left >= :rndLeft',
+            'SELECT rnd_right, time FROM flight_information WHERE departure_id = :id AND time >= :timeStopLeft AND rnd_right >= :rndRight',
             [
                 ':id' => $id,
                 ':timeStopLeft' => $timeStopLeft,
-                ':rndLeft' => 10,
+                ':rndRight' => 10,
             ]);
 
         $rndLefts = $statement->fetchAll();
 
-        $valueRndLeft = [];
         $valueTimeRndLeft = [];
+        $valueRndLeft = [];
         foreach ($rndLefts as $rndLeft) {
-            $valueRndLeft[] = $rndLeft['rnd_left'];
+            $valueRndLeft[] = $rndLeft['rnd_right'];
             $valueTimeRndLeft[] = $rndLeft['time'];
         }
         $inf = $this->sortTimeByParams($valueTimeRndLeft, $valueRndLeft);
-        var_dump($inf);die();
+
         return $this->render('chart/test.html.twig', [
             'count' => array_reverse($labels),
-            'alfa_rud_left' => $alfaRudLeft,
-            'filter_alfa_rud_left' => array_values($filterAlfaRudLeft),
+            'alfa_rud_left' => $alfaRudRight,
+            'filter_alfa_rud_left' => array_values($filterAlfaRudRight),
             'alfa_rud_right' => $alfaRudRight,
             'filter_alfa_rud_right' => array_values($filterAlfaRudRight),
         ]);

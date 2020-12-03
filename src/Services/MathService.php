@@ -52,7 +52,7 @@ class MathService
         $result = [];
         for ($key = 0; $key < count($data); $key++) {
             $values = [];
-            $offset = 10;
+            $offset = 3;
             $leftIndex = $key - $offset;
             while ($leftIndex < 0) {
                 $values[] = $data[$key];
