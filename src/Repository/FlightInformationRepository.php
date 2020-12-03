@@ -55,7 +55,7 @@ final class FlightInformationRepository
         $statement = $this->connection->executeQuery(
             'SELECT time, rnd_right FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rnd_right >= :rnd',
             [
-                ':id' => 10,
+                ':id' => $id,
                 ':timeStop' => $timeStop,
                 ':rnd' => 10,
             ]);
