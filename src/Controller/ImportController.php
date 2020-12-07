@@ -12,18 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportController extends AbstractController
 {
-    /**
-     * @var HandleRequest
-     */
-    private $handler;
+    private HandleRequest $handleRequest;
 
-    /**
-     * LoadFlightController constructor.
-     * @param $handler
-     */
-    public function __construct(HandleRequest $handler)
+    public function __construct(HandleRequest $handleRequest)
     {
-        $this->handler = $handler;
+        $this->handleRequest = $handleRequest;
     }
 
     /**
@@ -37,7 +30,7 @@ class ImportController extends AbstractController
         $form = $this->createForm(ImportFlightType::class, $command);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->handler->handle($command);
+            $this->handleRequest->handle($command);
             return $this->redirectToRoute('main');
         }
         return $this->render('import/index.html.twig', [

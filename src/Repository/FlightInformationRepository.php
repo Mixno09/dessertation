@@ -20,104 +20,116 @@ final class FlightInformationRepository
         $this->connection = $connection;
     }
 
-    public function findTimeRndLeftRotor(int $id): array
+    public function findAlfaRudLeft(int $departureId): array
     {
-        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_left FROM flight_information WHERE departure_id = :id', [':id' => $id]);
-        $data = $statement->fetchAll();
-
-        $timeStop = $this->getEngineStopTime($data);
-
-        $statement = $this->connection->executeQuery(
-            'SELECT time, rnd_left FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rnd_left >= :rnd',
-            [
-                ':id' => $id,
-                ':timeStop' => $timeStop,
-                ':rnd' => 10,
-            ]);
-        $rndLefts = $statement->fetchAll();
-
-        $valueRndLeft = [];
-        $valueTimeRndLeft = [];
-        foreach ($rndLefts as $rndLeft) {
-            $valueRndLeft[] = $rndLeft['rnd_left'];
-            $valueTimeRndLeft[] = $rndLeft['time'];
-        }
-        return $this->sortTimeByParams($valueTimeRndLeft, $valueRndLeft);
+        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_left FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
+//
+//        $timeStop = $this->getEngineStopTime($data);
+//
+//        $statement = $this->connection->executeQuery(
+//            'SELECT time, rnd_left FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rnd_left >= :rnd',
+//            [
+//                ':id' => $id,
+//                ':timeStop' => $timeStop,
+//                ':rnd' => 10,
+//            ]);
+//        $rndLefts = $statement->fetchAll();
+//
+//        $valueRndLeft = [];
+//        $valueTimeRndLeft = [];
+//        foreach ($rndLefts as $rndLeft) {
+//            $valueRndLeft[] = $rndLeft['rnd_left'];
+//            $valueTimeRndLeft[] = $rndLeft['time'];
+//        }
+//        return $this->sortTimeByParams($valueTimeRndLeft, $valueRndLeft);
     }
 
-    public function findTimeRndRightRotor(int $id): array
+    public function findAlfaRudRight(int $departureId): array
     {
-        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_right FROM flight_information WHERE departure_id = :id', [':id' => $id]);
-        $data = $statement->fetchAll();
+        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_right FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
 
-        $timeStop = $this->getEngineStopTime($data);
-
-        $statement = $this->connection->executeQuery(
-            'SELECT time, rnd_right FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rnd_right >= :rnd',
-            [
-                ':id' => $id,
-                ':timeStop' => $timeStop,
-                ':rnd' => 10,
-            ]);
-        $rndRights = $statement->fetchAll();
-
-        $valueRndRight = [];
-        $valueTimeRndRight = [];
-        foreach ($rndRights as $rndRight) {
-            $valueRndRight[] = $rndRight['rnd_right'];
-            $valueTimeRndRight[] = $rndRight['time'];
-        }
-        return $this->sortTimeByParams($valueTimeRndRight, $valueRndRight);
+//        $timeStop = $this->getEngineStopTime($data);
+//
+//        $statement = $this->connection->executeQuery(
+//            'SELECT time, rnd_right FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rnd_right >= :rnd',
+//            [
+//                ':id' => $departureId,
+//                ':timeStop' => $timeStop,
+//                ':rnd' => 10,
+//            ]);
+//        $rndRights = $statement->fetchAll();
+//
+//        $valueRndRight = [];
+//        $valueTimeRndRight = [];
+//        foreach ($rndRights as $rndRight) {
+//            $valueRndRight[] = $rndRight['rnd_right'];
+//            $valueTimeRndRight[] = $rndRight['time'];
+//        }
+//        return $this->sortTimeByParams($valueTimeRndRight, $valueRndRight);
     }
 
-    public function findTimeRvdLeftRotor(int $id): array
+    public function findRevsRndLeft(int $departureId): array
     {
-        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_left FROM flight_information WHERE departure_id = :id', [':id' => $id]);
-        $data = $statement->fetchAll();
+        $statement = $this->connection->executeQuery('SELECT time, rnd_left FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
 
-        $timeStop = $this->getEngineStopTime($data);
-
-        $statement = $this->connection->executeQuery(
-            'SELECT rvd_left, time FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rvd_left >= :rvd',
-            [
-                ':id' => $id,
-                ':timeStop' => $timeStop,
-                ':rvd' => 10,
-            ]);
-        $rvdLefts = $statement->fetchAll();
-
-        $valueRvdLeft = [];
-        $valueTimeRvdLeft = [];
-        foreach ($rvdLefts as $rvdLeft) {
-            $valueRvdLeft[] = $rvdLeft['rvd_left'];
-            $valueTimeRvdLeft[] = $rvdLeft['time'];
-        }
-        return $this->sortTimeByParams($valueTimeRvdLeft, $valueRvdLeft);
+//        $timeStop = $this->getEngineStopTime($data);
+//
+//        $statement = $this->connection->executeQuery(
+//            'SELECT rvd_left, time FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rvd_left >= :rvd',
+//            [
+//                ':id' => $departureId,
+//                ':timeStop' => $timeStop,
+//                ':rvd' => 10,
+//            ]);
+//        $rvdLefts = $statement->fetchAll();
+//
+//        $valueRvdLeft = [];
+//        $valueTimeRvdLeft = [];
+//        foreach ($rvdLefts as $rvdLeft) {
+//            $valueRvdLeft[] = $rvdLeft['rvd_left'];
+//            $valueTimeRvdLeft[] = $rvdLeft['time'];
+//        }
+//        return $this->sortTimeByParams($valueTimeRvdLeft, $valueRvdLeft);
     }
 
-    public function findTimeRvdRightRotor(int $id): array
+    public function findRevsRvdLeft(int $departureId): array
     {
-        $statement = $this->connection->executeQuery('SELECT time, alfa_rud_right FROM flight_information WHERE departure_id = :id', [':id' => $id]);
-        $data = $statement->fetchAll();
+        $statement = $this->connection->executeQuery('SELECT time, rvd_left FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
 
-        $timeStop = $this->getEngineStopTime($data);
+//        $timeStop = $this->getEngineStopTime($data);
+//
+//        $statement = $this->connection->executeQuery(
+//            'SELECT rvd_right, time FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rvd_right >= :rvd',
+//            [
+//                ':id' => $id,
+//                ':timeStop' => $timeStop,
+//                ':rvd' => 10,
+//            ]);
+//        $rvdRights = $statement->fetchAll();
+//
+//        $valueRvdRight = [];
+//        $valueTimeRvdRight = [];
+//        foreach ($rvdRights as $rvdRight) {
+//            $valueRvdRight[] = $rvdRight['rvd_right'];
+//            $valueTimeRvdRight[] = $rvdRight['time'];
+//        }
+//        return $this->sortTimeByParams($valueTimeRvdRight, $valueRvdRight);
+    }
 
-        $statement = $this->connection->executeQuery(
-            'SELECT rvd_right, time FROM flight_information WHERE departure_id = :id AND time >= :timeStop AND rvd_right >= :rvd',
-            [
-                ':id' => $id,
-                ':timeStop' => $timeStop,
-                ':rvd' => 10,
-            ]);
-        $rvdRights = $statement->fetchAll();
+    public function findRevsRndRight(int $departureId): array
+    {
+        $statement = $this->connection->executeQuery('SELECT time, rnd_right FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
+    }
 
-        $valueRvdRight = [];
-        $valueTimeRvdRight = [];
-        foreach ($rvdRights as $rvdRight) {
-            $valueRvdRight[] = $rvdRight['rvd_right'];
-            $valueTimeRvdRight[] = $rvdRight['time'];
-        }
-        return $this->sortTimeByParams($valueTimeRvdRight, $valueRvdRight);
+    public function findRevsRvdRight(int $departureId): array
+    {
+        $statement = $this->connection->executeQuery('SELECT time, rvd_right FROM flight_information WHERE departure_id = :id', [':id' => $departureId]);
+        return $statement->fetchAll();
     }
 
     private function sortTimeByParams(array $times, array $values): array

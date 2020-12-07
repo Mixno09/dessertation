@@ -49,8 +49,8 @@ class ChartTimeRotorRightController extends AbstractController
         foreach ($departures as $departure) {
             $departureId = (int) $departure['id'];
             $number = $departure['departure'];
-            $timeRndRightRotor = $flightInformationRepository->findTimeRndRightRotor($departureId);
-            $timeRvdRightRotor = $flightInformationRepository->findTimeRvdRightRotor($departureId);
+            $timeRndRightRotor = $flightInformationRepository->findAlfaRudRight($departureId);
+            $timeRvdRightRotor = $flightInformationRepository->findRevsRvdLeft($departureId);
             if (count($timeRndRightRotor) > 0) {
                 $timeRndRight[$number] = count($timeRndRightRotor);
             }
