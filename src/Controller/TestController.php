@@ -36,9 +36,9 @@ class TestController extends AbstractController
         $airplane = $this->airplaneRepository->findAirplanesById($id);
         foreach ($airplane as $data) {
             $departureId = (int) $data['id'];
-            $alfaLeft[] = $this->flightInformationRepository->findAlfaRudLeft($departureId);
+            $alfaLeft = $this->flightInformationRepository->findAlfaRudLeft($departureId);
             $alfaRight = $this->flightInformationRepository->findAlfaRudRight($departureId);
-            $revsRndLeft[] = $this->flightInformationRepository->findRevsRndLeft($departureId);
+            $revsRndLeft = $this->flightInformationRepository->findRevsRndLeft($departureId);
             $revsRvdLeft = $this->flightInformationRepository->findRevsRvdLeft($departureId);
             $revsRndRight = $this->flightInformationRepository->findRevsRndRight($departureId);
             $revsRvdRight = $this->flightInformationRepository->findRevsRvdRight($departureId);
@@ -47,7 +47,7 @@ class TestController extends AbstractController
             $changeRevs = new ChangeRevs($revsRndLeft);
             $stopRevs = $changeRevs->stopRevs($stopAlfaRUD);
         }
-
+var_dump($stopAlfaRUD, $stopRevs);
 //        return $this->render('chart/test.html.twig', [
 //            'count' => array_reverse($labels),
 //            'alfa_rud_left' => $alfaRudRight,

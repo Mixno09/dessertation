@@ -4,16 +4,27 @@ declare(strict_types=1);
 
 namespace App\Action;
 
-use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 
 final class Command
 {
-    public int $numberAirplane;
+    /**
+     * @var int
+     */
+    public $numberAirplane;
 
-    public DateTime $date;
+    /**
+     * @var \DateTime
+     */
+    public $date;
 
-    public int $numberFlight;
+    /**
+     * @var int
+     */
+    public $numberFlight;
 
-    public File $flightInformation;
+    /**
+     * @var File
+     */
+    public $flightInformation;
 }
