@@ -17,16 +17,7 @@ class ChangeAlfaRUD
 
     public function stopTime(): int
     {
-        $alfaRud = [];
-        foreach ($this->data as $information) {
-            $time = $information['time'];
-            if (array_key_exists('alfa_rud_left', $information)) {
-                $alfaRud[$time] = $information['alfa_rud_left'];
-            } else {
-                $alfaRud[$time] = $information['alfa_rud_right'];
-            }
-        }
-        $filterAlfaRud = array_reverse(MathService::filter($alfaRud), true);
+        $filterAlfaRud = array_reverse(MathService::filter($this->data), true);
         $key = '';
         foreach ($filterAlfaRud as $key => $value) {
             if ((float) $filterAlfaRud[$key] + 2 < ((float) $filterAlfaRud[$key - 1])) {

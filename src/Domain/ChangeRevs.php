@@ -15,21 +15,7 @@ class ChangeRevs
 
     public function stopRevs(int $stopTime): int
     {
-        $engineRevs = [];
-        foreach ($this->data as $revs) {
-            $time = $revs['time'];
-            if (array_key_exists('rnd_left', $revs)) {
-                $engineRevs[$time] = $revs['rnd_left'];
-            } elseif (array_key_exists('rvd_left', $revs)) {
-                $engineRevs[$time] = $revs['rvd_left'];
-            } elseif (array_key_exists('rnd_right', $revs)) {
-                $engineRevs[$time] = $revs['rnd_right'];
-            } elseif (array_key_exists('rvd_right', $revs)) {
-                $engineRevs[$time] = $revs['rvd_right'];
-            }
-        }
-
-        $engineRevs = array_slice($engineRevs, $stopTime, null, true);
+        $engineRevs = array_slice($this->data, $stopTime, null, true);
         $key = '';
         foreach ($engineRevs as $key => $value) {
             if ($engineRevs[$key] >= 11) {
@@ -40,8 +26,30 @@ class ChangeRevs
         return $key;
     }
 
-    public function approximation(int $stopTime, int $stopRevs): float
+    public function approximation(int $stopTime, int $stopRevs): ?float
     {
+        if ($this->data <= 0) {
+            return null;
+        }
 
+        $length = $stopRevs - $stopTime;
+        $engineRevs = array_slice($this->data, $stopTime, $length);
+
+        $n = count($engineRevs);
+        $sumXLnY = 0;
+        $sumX = 0;
+        $sumLnY = 0;
+        $sumX2 = 0;
+        foreach ($engineRevs as $x => $y) {
+            $y = (float) $y;
+            $sumXLnY += $x * log($y);
+            $sumX += $x;
+            $sumLnY += log($y);
+            $sumX2 += $x ** 2;
+        }
+
+        $b = ($n * $sumXLnY - $sumX * $sumLnY) / ($n * $sumX2 - $sumX ** 2);
+        $a = exp(($sumLnY - $b * $sumX) / $n);
+        return log(0.2 / $a) / $b;
     }
 }

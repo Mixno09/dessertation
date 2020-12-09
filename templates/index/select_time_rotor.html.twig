@@ -17,11 +17,11 @@
                     <tr class="d-flex">
                         <td class="col-md-2">{{ airplane.airplane }}</td>
                         <td class="col-md-10">
-                            <a href="{{ path('chart_time_left_rotor', {'airplaneId': airplane.airplane}) }}" target="_blank"
+                            <a href="{{ path('runout_rotor_left', {'id': airplane.airplane}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД левого двигателя
                             </a>
-                            <a href="{{ path('chart_time_right_rotor', {'airplaneId': airplane.airplane}) }}" target="_blank"
+                            <a href="{{ path('runout_rotor_right', {'id': airplane.airplane}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД правого двигателя
                             </a>
