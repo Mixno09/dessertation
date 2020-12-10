@@ -18,14 +18,14 @@ class AirplaneRepository
 
     public function getCount(): int
     {
-        $statement = $this->connection->executeQuery('SELECT count(DISTINCT airplane) FROM t_departures');
+        $statement = $this->connection->executeQuery('SELECT count(DISTINCT airplane) FROM departures');
         return (int) $statement->fetchColumn();
     }
 
     public function getItems(int $offset, int $limit): array
     {
         $statement = $this->connection->executeQuery(
-            'SELECT DISTINCT airplane FROM t_departures ORDER BY airplane LIMIT :limit OFFSET :offset',
+            'SELECT DISTINCT airplane FROM departures ORDER BY airplane LIMIT :limit OFFSET :offset',
             [
                 'offset' => $offset,
                 'limit' => $limit,
@@ -41,7 +41,7 @@ class AirplaneRepository
     public function findAirplanesById(int $airplaneId): array
     {
         return $this->connection->fetchAll(
-            'SELECT * FROM t_departures WHERE airplane = :airplane ORDER BY date',
+            'SELECT * FROM departures WHERE airplane = :airplane ORDER BY date',
             ['airplane' => $airplaneId]
         );
     }
