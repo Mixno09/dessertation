@@ -15,7 +15,7 @@
             data: {
                 labels: {{ labels|json_encode|raw }},
                 datasets: [{
-                    label: '{{ time_runout_rotor_rnd }}',
+                    label: {{ time_runout_rotor_rnd|json_encode|raw }},
                     backgroundColor: '#0000ff',
                     borderColor: '#0000ff',
                     data: {{ runout_rnd|json_encode|raw }},
@@ -23,7 +23,7 @@
                     fill: false,
                     yAxisID: 'y-time-rnd',
                 },{
-                    label: '{{ time_runout_rotor_rvd }}',
+                    label: {{ time_runout_rotor_rvd|json_encode|raw }},
                     backgroundColor: '#ff0000',
                     borderColor: '#ff0000',
                     data: {{ runout_rvd|json_encode|raw }},
@@ -31,7 +31,7 @@
                     fill: false,
                     yAxisID: 'y-time-rnd',
                 },{
-                    label: '{{ approximation_time_runout_rotor_rnd }}',
+                    label: {{ approximation_time_runout_rotor_rnd|json_encode|raw }},
                     backgroundColor: '#00ff00',
                     borderColor: '#00ff00',
                     data: {{ approximation_runout_rnd|json_encode|raw }},
@@ -39,7 +39,7 @@
                     fill: false,
                     yAxisID: 'y-approximation-time-rnd',
                 },{
-                    label: '{{ approximation_time_runout_rotor_rvd }}',
+                    label: {{ approximation_time_runout_rotor_rvd|json_encode|raw }},
                     backgroundColor: '#000000',
                     borderColor: '#000000',
                     data: {{ approximation_runout_rvd|json_encode|raw }},
