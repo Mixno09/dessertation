@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Domain;
+namespace App\Module\Dessertation\Domain\FlightInformation;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
 
-class DepartureId
+class FlightInformationId
 {
     private int $airplane;
     private DateTimeImmutable $date; //todo придумать формат

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Domain\ChangeAlfaRUD;
-use App\Domain\ChangeRevs;
+use App\Module\Dessertation\Domain\FlightInformation\ChangeAlfaRUD;
+use App\Module\Dessertation\Domain\FlightInformation\ChangeRevs;
 use App\Repository\AirplaneRepository;
 use App\Repository\FlightInformationRepository;
 use Doctrine\DBAL\Connection;
