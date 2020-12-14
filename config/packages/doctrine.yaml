@@ -19,6 +19,6 @@ doctrine:
             App\Module\Dessertation\Domain\FlightInformation:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Module/Dessertation/Infrostructure/Repository/Doctrine/Mapping/FlightInformation'
+                dir: '%kernel.project_dir%/src/Module/Dessertation/Infrastructure/Repository/Doctrine/Mapping/FlightInformation'
                 prefix: 'App\Module\Dessertation\Domain\FlightInformation'
                 alias: App\Module\Dessertation\Domain\FlightInformation

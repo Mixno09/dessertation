@@ -5,3 +5,7 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+
+dessertation_http:
+    resource: ../../src/Module/Dessertation/Infrastructure/Http/Controller/
+    type: annotation
