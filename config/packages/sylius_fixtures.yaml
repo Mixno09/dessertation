@@ -1,0 +1,7 @@
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                departures: ~
+            listeners:
+                departures_purger: ~
