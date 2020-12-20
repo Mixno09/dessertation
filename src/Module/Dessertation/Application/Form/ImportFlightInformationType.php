@@ -17,7 +17,7 @@ class ImportFlightInformationType extends AbstractType
         $builder
             ->add('numberAirplane', TextType::class, ['label' => 'Номер борта'])
             ->add('date', DateType::class, ['label' => 'Дата вылета', 'input' => 'datetime_immutable'])
-            ->add('numberFlight', TextType::class, ['label' => 'Номер вылета'])
+            ->add('departure', TextType::class, ['label' => 'Номер вылета'])
             ->add('flightInformation', FileType::class, ['label' => 'Выберите файл'])
             ->add('save', SubmitType::class, ['label' => 'Загрузить данные', 'attr' => ['class' => 'btn-primary']])
         ;

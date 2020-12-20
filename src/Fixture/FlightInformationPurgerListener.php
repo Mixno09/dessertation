@@ -9,7 +9,7 @@ use Sylius\Bundle\FixturesBundle\Listener\AbstractListener;
 use Sylius\Bundle\FixturesBundle\Listener\BeforeFixtureListenerInterface;
 use Sylius\Bundle\FixturesBundle\Listener\FixtureEvent;
 
-class DeparturePurgerListener extends AbstractListener implements BeforeFixtureListenerInterface
+class FlightInformationPurgerListener extends AbstractListener implements BeforeFixtureListenerInterface
 {
     private Connection $connection;
 
@@ -18,14 +18,14 @@ class DeparturePurgerListener extends AbstractListener implements BeforeFixtureL
         $this->connection = $connection;
     }
 
-    public function getName(): string
-    {
-        return 'departures_purger';
-    }
-
     public function beforeFixture(FixtureEvent $fixtureEvent, array $options): void
     {
-        $sql = 'TRUNCATE TABLE departures';
+        $sql = 'TRUNCATE TABLE flight_information';
         $this->connection->executeQuery($sql);
+    }
+
+    public function getName(): string
+    {
+        return 'flight_information_purger';
     }
 }

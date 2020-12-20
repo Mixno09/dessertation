@@ -23,14 +23,14 @@ class ImportFlightInformationFromXlsHandler
 
     public function handle(ImportFlightInformationFromXlsCommand $command): void
     {
-        $id = new FlightInformationId($command->airplane, $command->date, $command->departure);
+        $id = new FlightInformationId($command->numberAirplane, $command->date, $command->departure);
 
         $flightInformation = $this->repository->find($id);
         if ($flightInformation instanceof FlightInformation) {
             throw new Exception('Такие данные уже существуют в хранилище');
         }
 
-        $data = $this->parser->parse($command->file);
+        $data = $this->parser->parse($command->flightInformation);
 
         $flightInformation = new FlightInformation($id, $data);
         $this->repository->save($flightInformation);

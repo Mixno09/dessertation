@@ -1,7 +1,12 @@
 sylius_fixtures:
     suites:
-        default:
+        departures:
             fixtures:
                 departures: ~
             listeners:
                 departures_purger: ~
+        flight_information:
+            fixtures:
+                flight_information: ~
+            listeners:
+                flight_information_purger: ~
