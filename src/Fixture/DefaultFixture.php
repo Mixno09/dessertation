@@ -8,7 +8,7 @@ use Doctrine\DBAL\Connection;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 
-class DepartureFixture extends AbstractFixture implements FixtureInterface
+class DefaultFixture extends AbstractFixture implements FixtureInterface
 {
     private Connection $connection;
 
@@ -19,12 +19,21 @@ class DepartureFixture extends AbstractFixture implements FixtureInterface
 
     public function load(array $options): void
     {
-        $sql = file_get_contents(__DIR__ . '/departures.sql');
+        $sql = 'DELETE FROM flight_information';
+        $this->connection->executeQuery($sql);
+
+        $sql = 'DELETE FROM departures';
+        $this->connection->executeQuery($sql);
+
+        $sql = file_get_contents(__DIR__ . '/sql/departures.sql');
+        $this->connection->executeQuery($sql);
+
+        $sql = file_get_contents(__DIR__ . '/sql/flight_information.sql');
         $this->connection->executeQuery($sql);
     }
 
     public function getName(): string
     {
-        return 'departures';
+        return 'default';
     }
 }
