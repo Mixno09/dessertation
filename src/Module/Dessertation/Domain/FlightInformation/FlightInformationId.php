@@ -17,30 +17,40 @@ class FlightInformationId
     {
         $this->setAirplane($airplane);
         $this->setDeparture($departure);
-        $this->date = $date;
+        $this->setDate($date);
     }
 
     private function setAirplane(int $airplane): void
     {
-        if ($airplane >= 1) {
-            $this->airplane = $airplane;
+        if ($airplane < 1) {
+            throw new InvalidArgumentException('Неверный формат номера самолета');
         }
 
-        throw new InvalidArgumentException('Неверный формат номера самолета');
+        $this->airplane = $airplane;
+    }
+
+    public function setDate(DateTimeImmutable $date): void
+    {
+        $this->date = $date;
     }
 
     private function setDeparture(int $departure): void
     {
-        if ($departure >= 1) {
-            $this->departure = $departure;
+        if ($departure < 1) {
+            throw new InvalidArgumentException('Неверный формат номера вылета');
         }
 
-        throw new InvalidArgumentException('Неверный формат номера вылета');
+        $this->departure = $departure;
     }
 
     public function getAirplane(): int
     {
         return $this->airplane;
+    }
+
+    public function getDate(): DateTimeImmutable
+    {
+        return $this->date;
     }
 
     public function getDeparture(): int

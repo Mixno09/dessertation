@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ImportFlightInformationFromXlsCommand
 {
-    public int $numberAirplane;
+    public int $airplane;
     public DateTimeImmutable $date;
     public int $departure;
     public File $flightInformation;
