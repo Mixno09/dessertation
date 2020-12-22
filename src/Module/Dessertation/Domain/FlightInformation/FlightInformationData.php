@@ -13,7 +13,7 @@ class FlightInformationData
 
     public function __construct(array $points)
     {
-        $this->setPoints($points);
+        $this->setPoints(...$points);
     }
 
     private function setPoints(FlightInformationDataPoint ...$points): void

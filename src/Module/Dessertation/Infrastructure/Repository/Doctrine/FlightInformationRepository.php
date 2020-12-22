@@ -22,7 +22,6 @@ final class FlightInformationRepository implements FlightInformationRepositoryIn
 
     public function find(FlightInformationId $id): ?FlightInformation
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository->findOneBy([
             'id.airplane' => $id->getAirplane(),
             'id.date' => $id->getDate(),

@@ -9,8 +9,8 @@ use InvalidArgumentException;
 class FlightInformationDataPoint
 {
     private int $time;
-    private int $t4Left;
-    private int $t4Right;
+    private float $t4Left;
+    private float $t4Right;
     private float $alfaRUDLeft;
     private float $alfaRUDRight;
     private float $rndLeft;
@@ -20,8 +20,8 @@ class FlightInformationDataPoint
 
     public function __construct(
         int $time,
-        int $t4Left,
-        int $t4Right,
+        float $t4Left,
+        float $t4Right,
         float $alfaRUDLeft,
         float $alfaRUDRight,
         float $rndLeft,
@@ -47,10 +47,10 @@ class FlightInformationDataPoint
 
     private function setTime(int $time): void
     {
-        if ($time >= 0) {
-            $this->time = $time;
+        if ($time < 0) {
+            throw new InvalidArgumentException('Неверный формат времени');
         }
-        throw new InvalidArgumentException('Неверный формат времени');
+        $this->time = $time;
     }
 
     public function getT4Left(): float
@@ -58,7 +58,7 @@ class FlightInformationDataPoint
         return $this->t4Left;
     }
 
-    private function setT4Left(int $t4Left): void
+    private function setT4Left(float $t4Left): void
     {
         $this->t4Left = $t4Left;
     }
@@ -68,7 +68,7 @@ class FlightInformationDataPoint
         return $this->t4Right;
     }
 
-    private function setT4Right(int $t4Right): void
+    private function setT4Right(float $t4Right): void
     {
         $this->t4Right = $t4Right;
     }
