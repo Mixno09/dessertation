@@ -6,6 +6,7 @@ namespace App\Module\Dessertation\Domain\FlightInformation;
 
 class FlightInformationData
 {
+    private int $primaryKey;
     /**
      * @var FlightInformationDataPoint[]
      */

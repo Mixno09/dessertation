@@ -4,16 +4,11 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\Module\Dessertation\Domain\FlightInformation\FlightInformation" table="test">
-        <unique-constraints>
-            <unique-constraint columns="id_airplane,id_date,id_departure"/>
-        </unique-constraints>
-
+    <entity name="App\Module\Dessertation\Domain\FlightInformation\FlightInformationData">
         <id name="primaryKey" type="integer">
             <generator strategy="AUTO"/>
         </id>
 
-        <embedded name="id" class="App\Module\Dessertation\Domain\FlightInformation\FlightInformationId"/>
 
     </entity>
 </doctrine-mapping>
