@@ -15,5 +15,6 @@
 
         <embedded name="id" class="App\Module\Dessertation\Domain\FlightInformation\FlightInformationId"/>
 
+        <one-to-many field="points" target-entity="App\Module\Dessertation\Domain\FlightInformation\FlightInformationDataPoint" mapped-by="primaryKey" />
     </entity>
 </doctrine-mapping>

@@ -8,22 +8,25 @@ class FlightInformation
 {
     private $primaryKey;
     private FlightInformationId $id;
-    private FlightInformationData $data;
+    /**
+     * @var FlightInformationDataPoint[]
+     */
+    private array $points;
 
-    public function __construct(FlightInformationId $id, FlightInformationData $data)
+    public function __construct(FlightInformationId $id, array $points)
     {
         $this->setId($id);
-        $this->setData($data);
+        $this->setPoints(...$points);
     }
 
-    public function getData(): FlightInformationData
+    public function getPoints(): array
     {
-        return $this->data;
+        return $this->points;
     }
 
-    private function setData(FlightInformationData $data): void
+    private function setPoints(FlightInformationDataPoint ...$points): void
     {
-        $this->data = $data;
+        $this->points = $points;
     }
 
     private function setId(FlightInformationId $id): void

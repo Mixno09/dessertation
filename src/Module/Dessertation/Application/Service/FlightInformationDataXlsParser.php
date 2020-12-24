@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Dessertation\Application\Service;
 
-use App\Module\Dessertation\Domain\FlightInformation\FlightInformationData;
 use App\Module\Dessertation\Domain\FlightInformation\FlightInformationDataPoint;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Symfony\Component\HttpFoundation\File\File;
 
 class FlightInformationDataXlsParser
 {
-    public function parse(File $file): FlightInformationData
+    public function parse(File $file): array
     {
         $reader = ReaderEntityFactory::createXLSXReader();
         $reader->open($file->getRealPath());
@@ -42,6 +41,6 @@ class FlightInformationDataXlsParser
                 );
             }
         }
-        return new FlightInformationData($flightInformationDataPoint);
+        return $flightInformationDataPoint;
     }
 }

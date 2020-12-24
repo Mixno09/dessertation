@@ -8,6 +8,7 @@ use InvalidArgumentException;
 
 class FlightInformationDataPoint
 {
+    private $primaryKey;
     private int $time;
     private float $t4Left;
     private float $t4Right;

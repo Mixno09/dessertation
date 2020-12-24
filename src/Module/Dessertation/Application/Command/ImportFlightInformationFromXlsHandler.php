@@ -30,9 +30,9 @@ class ImportFlightInformationFromXlsHandler
             throw new Exception('Такие данные уже существуют в хранилище');
         }
 
-        $data = $this->parser->parse($command->flightInformation);
+        $points = $this->parser->parse($command->flightInformation);
 
-        $flightInformation = new FlightInformation($id, $data);
+        $flightInformation = new FlightInformation($id, $points);
         $this->repository->save($flightInformation);
     }
 }
