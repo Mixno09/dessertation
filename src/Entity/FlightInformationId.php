@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Domain\FlightInformation;
+namespace App\Entity;
 
 use DateTimeImmutable;
 use InvalidArgumentException;

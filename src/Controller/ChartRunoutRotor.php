@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Module\Dessertation\Domain\FlightInformation\ChangeAlfaRUD;
-use App\Module\Dessertation\Domain\FlightInformation\ChangeRevs;
+use App\Entity\ChangeAlfaRUD;
+use App\Entity\ChangeRevs;
 use App\Repository\AirplaneRepository;
 use App\Repository\FlightInformationRepository;
 use Doctrine\DBAL\Connection;
@@ -45,9 +45,9 @@ class ChartRunoutRotor extends AbstractController
             $airplaneId = (int) $data['id'];
             $departure = (int) $data['departure'];
             $labels[] = $data['departure'];
-            $alfaLeft = $this->flightInformationRepository->findAlfaRudLeft($airplaneId);
-            $revsRndLeft = $this->flightInformationRepository->findRevsRndLeft($airplaneId);
-            $revsRvdLeft = $this->flightInformationRepository->findRevsRvdLeft($airplaneId);
+            $alfaLeft = $this->flightInformationRepository->findAlfaRudLeft($airplaneId); //todo исправить
+            $revsRndLeft = $this->flightInformationRepository->findRevsRndLeft($airplaneId); //todo исправить
+            $revsRvdLeft = $this->flightInformationRepository->findRevsRvdLeft($airplaneId); //todo исправить
             $changeAlfaRUDLeft = new ChangeAlfaRUD($alfaLeft);
             $stopTimeLeft = $changeAlfaRUDLeft->stopTime();
             $changeRevsRndLeft = new ChangeRevs($revsRndLeft);
@@ -91,9 +91,9 @@ class ChartRunoutRotor extends AbstractController
             $airplaneId = (int) $data['id'];
             $departure = (int) $data['departure'];
             $labels[] = $data['departure'];
-            $alfaRight = $this->flightInformationRepository->findAlfaRudRight($airplaneId);
-            $revsRndRight = $this->flightInformationRepository->findRevsRndRight($airplaneId);
-            $revsRvdRight = $this->flightInformationRepository->findRevsRvdRight($airplaneId);
+            $alfaRight = $this->flightInformationRepository->findAlfaRudRight($airplaneId); //todo исправить
+            $revsRndRight = $this->flightInformationRepository->findRevsRndRight($airplaneId); //todo исправить
+            $revsRvdRight = $this->flightInformationRepository->findRevsRvdRight($airplaneId); //todo исправить
             $changeAlfaRUDRight = new ChangeAlfaRUD($alfaRight);
             $stopTimeRight = $changeAlfaRUDRight->stopTime();
             $changeRevsRndRight = new ChangeRevs($revsRndRight);

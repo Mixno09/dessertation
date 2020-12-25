@@ -12,13 +12,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
+                type: xml
+                dir: '%kernel.project_dir%/src/Repository/Mapping'
                 prefix: 'App\Entity'
                 alias: App
-            App\Module\Dessertation\Domain\FlightInformation:
-                is_bundle: false
-                type: xml
-                dir: '%kernel.project_dir%/src/Module/Dessertation/Infrastructure/Repository/Doctrine/Mapping/FlightInformation'
-                prefix: 'App\Module\Dessertation\Domain\FlightInformation'
-                alias: App\Module\Dessertation\Domain\FlightInformation

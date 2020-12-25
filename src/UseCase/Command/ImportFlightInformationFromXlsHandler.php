@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Application\Command;
+namespace App\UseCase\Command;
 
-use App\Module\Dessertation\Application\Service\FlightInformationDataXlsParser;
-use App\Module\Dessertation\Domain\FlightInformation\FlightInformation;
-use App\Module\Dessertation\Domain\FlightInformation\FlightInformationId;
-use App\Module\Dessertation\Domain\FlightInformation\FlightInformationRepositoryInterface;
+use App\Service\FlightInformationDataXlsParser;
+use App\Entity\FlightInformation;
+use App\Entity\FlightInformationId;
+use App\Repository\FlightInformationRepository;
 use Exception;
 
 class ImportFlightInformationFromXlsHandler
 {
-    private FlightInformationRepositoryInterface $repository;
+    private FlightInformationRepository $repository;
     private FlightInformationDataXlsParser $parser;
 
-    public function __construct(FlightInformationRepositoryInterface $repository, FlightInformationDataXlsParser $parser)
+    public function __construct(FlightInformationRepository $repository, FlightInformationDataXlsParser $parser)
     {
         $this->repository = $repository;
         $this->parser = $parser;

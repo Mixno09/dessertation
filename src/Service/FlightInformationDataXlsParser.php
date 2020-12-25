@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Application\Service;
+namespace App\Service;
 
-use App\Module\Dessertation\Domain\FlightInformation\FlightInformationDataPoint;
+use App\Entity\FlightInformationPoint;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -28,7 +28,7 @@ class FlightInformationDataXlsParser
                 $rndRight = $cells[6]->getValue();
                 $rvdLeft = $cells[7]->getValue();
                 $rvdRight = $cells[8]->getValue();
-                $flightInformationDataPoint[] = new FlightInformationDataPoint(
+                $flightInformationDataPoint[] = new FlightInformationPoint(
                     $time,
                     $t4left,
                     $t4Right,

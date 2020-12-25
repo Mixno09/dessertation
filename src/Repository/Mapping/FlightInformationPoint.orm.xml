@@ -4,39 +4,39 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\Module\Dessertation\Domain\FlightInformation\FlightInformationDataPoint">
+    <entity name="App\Entity\FlightInformationPoint" table="flight_information_point">
 
         <id name="primaryKey" type="integer">
-            <generator strategy="AUTO"/>
+            <generator/>
         </id>
 
-        <field name="time" column="time" type="integer" length="11">
+        <field name="time" column="time" type="integer">
             <options>
-                <option name="unsigned"/>
+                <option name="unsigned">true</option>
             </options>
         </field>
         <field name="t4Left" type="decimal" scale="1" precision="4"/>
         <field name="t4Right" type="decimal" scale="1" precision="4"/>
-        <field name="alfaRUDLeft" type="decimal" scale="1" precision="4"/>
-        <field name="alfaRUDRight" type="decimal" scale="1" precision="4"/>
+        <field name="alfaRUDLeft" type="decimal" column="alfa_rud_left" scale="1" precision="4"/>
+        <field name="alfaRUDRight" type="decimal" column="alfa_rud_right" scale="1" precision="4"/>
         <field name="rndLeft" type="decimal" scale="1" precision="4">
             <options>
-                <option name="unsigned"/>
+                <option name="unsigned">true</option>
             </options>
         </field>
         <field name="rndRight" type="decimal" scale="1" precision="4">
             <options>
-                <option name="unsigned"/>
+                <option name="unsigned">true</option>
             </options>
         </field>
         <field name="rvdLeft" type="decimal" scale="1" precision="4">
             <options>
-                <option name="unsigned"/>
+                <option name="unsigned">true</option>
             </options>
         </field>
         <field name="rvdRight" type="decimal" scale="1" precision="4">
             <options>
-                <option name="unsigned"/>
+                <option name="unsigned">true</option>
             </options>
         </field>
     </entity>

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Domain\FlightInformation;
+namespace App\Entity;
 
-use App\Services\MathService;
+use App\Service\MathService;
 
 class ChangeAlfaRUD
 {

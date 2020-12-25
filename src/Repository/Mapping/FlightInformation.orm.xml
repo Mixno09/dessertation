@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Entity\FlightInformation" table="flight_information">
+        <unique-constraints>
+            <unique-constraint columns="id_airplane,id_date,id_departure"/>
+        </unique-constraints>
+
+        <id name="primaryKey" type="integer">
+            <generator/>
+        </id>
+
+        <embedded name="id" class="App\Entity\FlightInformationId"/>
+
+        <many-to-many field="points" target-entity="App\Entity\FlightInformationPoint">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <join-table name="flight_informations_points">
+                <join-columns>
+                    <join-column name="flight_information" referenced-column-name="primary_key" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="point" referenced-column-name="primary_key" unique="true" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

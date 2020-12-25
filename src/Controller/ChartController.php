@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\FlightInformationRepository;
-use App\Services\MathService;
+use App\Service\MathService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,7 +27,7 @@ class ChartController extends AbstractController
      */
     public function index(int $id): Response
     {
-        $params = $this->flightInformationRepository->findInformationById($id);
+        $params = $this->flightInformationRepository->findInformationById($id); //todo исправить
 
         $labels = [];
         $t4Right = [];

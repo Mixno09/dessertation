@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Application\Command;
+namespace App\UseCase\Command;
 
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\File\File;

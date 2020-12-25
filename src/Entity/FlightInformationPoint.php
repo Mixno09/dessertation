@@ -1,14 +1,16 @@
 <?php
 
+/** @noinspection PhpUnusedPrivateFieldInspection */
+
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Domain\FlightInformation;
+namespace App\Entity;
 
 use InvalidArgumentException;
 
-class FlightInformationDataPoint
+class FlightInformationPoint
 {
-    private $primaryKey;
+    private int $primaryKey;
     private int $time;
     private float $t4Left;
     private float $t4Right;

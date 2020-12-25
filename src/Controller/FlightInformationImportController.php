@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Dessertation\Infrastructure\Http\Controller;
+namespace App\Controller;
 
-use App\Module\Dessertation\Application\Command\ImportFlightInformationFromXlsCommand;
-use App\Module\Dessertation\Application\Command\ImportFlightInformationFromXlsHandler;
-use App\Module\Dessertation\Application\Form\ImportFlightInformationType;
+use App\UseCase\Command\ImportFlightInformationFromXlsCommand;
+use App\UseCase\Command\ImportFlightInformationFromXlsHandler;
+use App\Form\ImportFlightInformationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
