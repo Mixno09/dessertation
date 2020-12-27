@@ -13,22 +13,20 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="d-flex">
-                    <th scope="col" class="col-md-1">ID</th>
                     <th scope="col" class="col-md-2">Номер самолета</th>
                     <th scope="col" class="col-md-3">Дата вылета</th>
                     <th scope="col" class="col-md-2">Номер вылета</th>
-                    <th scope="col" class="col-md-4">Действия</th>
+                    <th scope="col" class="col-md-5">Действия</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for departure in pagination %}
+                {% for flightInformation in pagination %}
                     <tr class="d-flex">
-                        <th scope="row" class="col-md-1">{{ departure.id }}</th>
-                        <td class="col-md-2">{{ departure.airplane }}</td>
-                        <td class="col-md-3">{{ departure.date }}</td>
-                        <td class="col-md-2">{{ departure.departure }}</td>
-                        <td class="col-md-4">
-                            <a href="{{ path('departure', {'id': departure.id}) }}" target="_blank"
+                        <td class="col-md-2">{{ flightInformation.id.airplane }}</td>
+                        <td class="col-md-3">{{ flightInformation.id.date|date("d-m-Y") }}</td>
+                        <td class="col-md-2">{{ flightInformation.id.departure }}</td>
+                        <td class="col-md-5">
+                            <a href="" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Просмотреть
                             </a>
