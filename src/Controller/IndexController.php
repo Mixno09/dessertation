@@ -21,8 +21,6 @@ final class IndexController extends AbstractController
 
     /**
      * @Route("/", name="main", methods="GET")
-     * @param Request $request
-     * @return Response
      */
     public function main(Request $request): Response
     {

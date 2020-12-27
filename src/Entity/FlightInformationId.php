@@ -29,7 +29,7 @@ class FlightInformationId
         $this->airplane = $airplane;
     }
 
-    public function setDate(DateTimeImmutable $date): void
+    private function setDate(DateTimeImmutable $date): void
     {
         $this->date = $date;
     }

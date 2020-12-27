@@ -31,6 +31,16 @@ class FlightInformationRepository
         return $flightInformation;
     }
 
+    public function findBySlug(string $slug): ?FlightInformation
+    {
+        $repository = $this->getRepository();
+        /** @var FlightInformation|null $flightInformation */
+        $flightInformation = $repository->findOneBy([
+            'slug' => $slug,
+        ]);
+        return $flightInformation;
+    }
+
     public function count(): int
     {
         $repository = $this->getRepository();
@@ -49,6 +59,9 @@ class FlightInformationRepository
             ->select()
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->addOrderBy('f.id.airplane')
+            ->addOrderBy('f.id.date')
+            ->addOrderBy('f.id.departure')
             ->getQuery()
             ->getResult();
     }

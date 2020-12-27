@@ -22,15 +22,10 @@ class FlightInformationPaginationFactory
 
     public function create(int $page, int $limit): PaginationInterface
     {
-        $count = function () {
-            return $this->repository->count();
-        };
-
-        $items = function ($offset, $limit) {
-            return $this->repository->items($offset, $limit);
-        };
-
-        $target = new CallbackPagination($count, $items);
+        $target = new CallbackPagination(
+            fn() => $this->repository->count(),
+            fn($offset, $limit) => $this->repository->items($offset, $limit)
+        );
 
         return $this->paginationInterface->paginate($target, $page, $limit);
     }

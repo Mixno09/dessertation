@@ -27,18 +27,15 @@ final class DeleteController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="delete", methods={"GET","POST"})
-     * @param int $id
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/delete/{slug}", name="delete", methods={"GET","POST"})
      */
-    public function delete(int $id, Request $request): Response
+    public function delete(string $slug, Request $request): Response
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $query = $queryBuilder
             ->select('*')
             ->from('departures')
-            ->where('id = ' . $queryBuilder->createPositionalParameter($id));
+            ->where('id = ' . $queryBuilder->createPositionalParameter($slug));
         $statement = $query->execute();
         $departure = $statement->fetch();
         $form = $this->createFormBuilder()->getForm();
@@ -47,7 +44,7 @@ final class DeleteController extends AbstractController
             $queryBuilder = $this->connection->createQueryBuilder();
             $query = $queryBuilder
                 ->delete('departures')
-                ->where('id = ' . $queryBuilder->createPositionalParameter($id));
+                ->where('id = ' . $queryBuilder->createPositionalParameter($slug));
             $query->execute();
             return $this->redirectToRoute('main');
         }

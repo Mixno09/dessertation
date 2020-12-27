@@ -14,13 +14,18 @@ class FlightInformation
     private int $primaryKey;
     private FlightInformationId $id;
     private Collection $points;
+    private string $slug;
 
     public function __construct(FlightInformationId $id, array $points)
     {
         $this->setId($id);
         $this->setPoints(...$points);
+        $this->setSlug($id);
     }
 
+    /**
+     * @return FlightInformationPoint[]
+     */
     public function getPoints(): array
     {
         return $this->points->toArray();
@@ -39,5 +44,19 @@ class FlightInformation
     public function getId(): FlightInformationId
     {
         return $this->id;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    private function setSlug(FlightInformationId $id): void
+    {
+        $this->slug = implode('_', [
+            $id->getAirplane(),
+            $id->getDate()->format('Y-m-d'),
+            $id->getDeparture()
+        ]);
     }
 }

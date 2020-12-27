@@ -22,7 +22,7 @@ class FlightInformationImportController extends AbstractController
     }
 
     /**
-     * @Route("/test", name="test", methods={"GET","POST"})
+     * @Route("/flight-informations/import", name="flight_information_import", methods={"GET","POST"})
      */
     public function __invoke(Request $request): Response
     {

@@ -27,6 +27,11 @@
                     <join-column name="point" referenced-column-name="primary_key" unique="true" />
                 </inverse-join-columns>
             </join-table>
+            <order-by>
+                <order-by-field name="time" direction="ASC" />
+            </order-by>
         </many-to-many>
+
+        <field name="slug" type="string" unique="true"/>
     </entity>
 </doctrine-mapping>
