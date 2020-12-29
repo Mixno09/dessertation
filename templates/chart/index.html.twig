@@ -121,10 +121,7 @@
                             labelString: 'Положение РУД, °'
                         },
                         id: 'y-alfa-rud',
-                        ticks: {
-                            min: -160,
-                            max: 160,
-                        }
+                        ticks: {{ viewModel.alfaRudTicks|json_encode|raw }}
                     }, {
                         display: true,
                         scaleLabel: {
@@ -133,10 +130,7 @@
                         },
                         position: 'right',
                         id: 'y-rnd',
-                        ticks: {
-                            min: -120,
-                            max: 360,
-                        }
+                        ticks: {{ viewModel.rndTicks|json_encode|raw }}
                     }, {
                         display: true,
                         scaleLabel: {
@@ -145,10 +139,7 @@
                         },
                         position: 'right',
                         id: 'y-rvd',
-                        ticks: {
-                            min: 0,
-                            max: 400,
-                        }
+                        ticks: {{ viewModel.rvdTicks|json_encode|raw }}
                     }]
                 }
             }

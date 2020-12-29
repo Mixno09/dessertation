@@ -15,26 +15,26 @@
                 <option name="unsigned">true</option>
             </options>
         </field>
-        <field name="t4Left" type="decimal" scale="1" precision="4"/>
-        <field name="t4Right" type="decimal" scale="1" precision="4"/>
+        <field name="t4Left" type="decimal" scale="1" precision="5"/>
+        <field name="t4Right" type="decimal" scale="1" precision="5"/>
         <field name="alfaRUDLeft" type="decimal" column="alfa_rud_left" scale="1" precision="4"/>
         <field name="alfaRUDRight" type="decimal" column="alfa_rud_right" scale="1" precision="4"/>
-        <field name="rndLeft" type="decimal" scale="1" precision="4">
+        <field name="rndLeft" type="decimal" scale="1" precision="5">
             <options>
                 <option name="unsigned">true</option>
             </options>
         </field>
-        <field name="rndRight" type="decimal" scale="1" precision="4">
+        <field name="rndRight" type="decimal" scale="1" precision="5">
             <options>
                 <option name="unsigned">true</option>
             </options>
         </field>
-        <field name="rvdLeft" type="decimal" scale="1" precision="4">
+        <field name="rvdLeft" type="decimal" scale="1" precision="5">
             <options>
                 <option name="unsigned">true</option>
             </options>
         </field>
-        <field name="rvdRight" type="decimal" scale="1" precision="4">
+        <field name="rvdRight" type="decimal" scale="1" precision="5">
             <options>
                 <option name="unsigned">true</option>
             </options>
