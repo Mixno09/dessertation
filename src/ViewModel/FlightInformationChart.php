@@ -100,60 +100,64 @@ class FlightInformationChart
         }
         $min = (int) (floor($min / 100) * 100);
         $max = (int) (ceil($max / 100) * 100);
-        $min -= (abs($min) + $max) * 3;
+        $scale = $max - $min;
+        $min -= $scale * 3;
         return ['min' => $min, 'max' => $max];
     }
 
     public function alfaRudTicks(): array
     {
-        $floorMin = 0;
-        $ceilMax = 0;
+        $min = 0;
+        $max = 0;
         $points = $this->flightInformation->getPoints();
         foreach ($points as $point) {
             $t4Right = $point->getAlfaRUDRight();
             $t4Left = $point->getAlfaRUDLeft();
-            $floorMin = min($t4Right, $t4Left, $floorMin);
-            $ceilMax = max($t4Right, $t4Left, $ceilMax);
+            $min = min($t4Right, $t4Left, $min);
+            $max = max($t4Right, $t4Left, $max);
         }
-        $floorMin = (int) (floor($floorMin / 10) * 10);
-        $ceilMax = (int) (ceil($ceilMax / 10) * 10);
-        $max = ($ceilMax + abs($floorMin)) * 2;
-        $min = -(abs($floorMin) + $ceilMax) * 2;
+        $min = (int) (floor($min / 10) * 10);
+        $max = (int) (ceil($max / 10) * 10);
+        $scale = $max - $min;
+        $max += $scale;
+        $min -= $scale * 2;
         return ['min' => $min, 'max' => $max];
     }
 
     public function rndTicks(): array
     {
-        $floorMin = 0;
-        $ceilMax = 0;
+        $min = 0;
+        $max = 0;
         $points = $this->flightInformation->getPoints();
         foreach ($points as $point) {
             $t4Right = $point->getRndRight();
             $t4Left = $point->getRndLeft();
-            $floorMin = min($t4Right, $t4Left, $floorMin);
-            $ceilMax = max($t4Right, $t4Left, $ceilMax);
+            $min = min($t4Right, $t4Left, $min);
+            $max = max($t4Right, $t4Left, $max);
         }
-        $floorMin = (int) (floor($floorMin / 100) * 100);
-        $ceilMax = (int) (ceil($ceilMax / 100) * 100);
-        $max = ($ceilMax + abs($floorMin)) * 3;
-        $min = -(abs($floorMin) + $ceilMax);
+        $min = (int) (floor($min / 25) * 25);
+        $max = (int) (ceil($max / 25) * 25);
+        $scale = $max - $min;
+        $max += $scale * 2;
+        $min -= $scale;
         return ['min' => $min, 'max' => $max];
     }
 
     public function rvdTicks(): array
     {
         $min = 0;
-        $ceilMax = 0;
+        $max = 0;
         $points = $this->flightInformation->getPoints();
         foreach ($points as $point) {
             $t4Right = $point->getRvdRight();
             $t4Left = $point->getRvdLeft();
             $min = min($t4Right, $t4Left, $min);
-            $ceilMax = max($t4Right, $t4Left, $ceilMax);
+            $max = max($t4Right, $t4Left, $max);
         }
-        $min = (int) (floor($min / 100) * 100);
-        $ceilMax = (int) (ceil($ceilMax / 100) * 100);
-        $max = ($ceilMax + abs($min)) * 4;
+        $min = (int) (floor($min / 25) * 25);
+        $max = (int) (ceil($max / 25) * 25);
+        $scale = $max - $min;
+        $max += $scale * 3;
         return ['min' => $min, 'max' => $max];
     }
 }

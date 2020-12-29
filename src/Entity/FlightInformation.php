@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
 
 class FlightInformation
 {
-    private int $primaryKey;
+    private $primaryKey;
     private FlightInformationId $id;
     private Collection $points;
     private string $slug;

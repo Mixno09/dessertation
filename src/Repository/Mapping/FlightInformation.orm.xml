@@ -21,10 +21,10 @@
             </cascade>
             <join-table name="flight_informations_points">
                 <join-columns>
-                    <join-column name="flight_information" referenced-column-name="primary_key" />
+                    <join-column name="flight_information" referenced-column-name="primary_key" on-delete="CASCADE"/>
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column name="point" referenced-column-name="primary_key" unique="true" />
+                    <join-column name="point" referenced-column-name="primary_key" unique="true" on-delete="CASCADE"/>
                 </inverse-join-columns>
             </join-table>
             <order-by>

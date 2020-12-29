@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace App\UseCase\Command;
 
+use App\Entity\FlightInformation;
 use App\Repository\FlightInformationRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class DeleteFlightInformationHandler
 {
     private FlightInformationRepository $repository;
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, FlightInformationRepository $repository)
+    public function __construct(FlightInformationRepository $repository)
     {
-        $this->entityManager = $entityManager;
         $this->repository = $repository;
     }
 
     public function handle(DeleteFlightInformationCommand $command)
     {
        $flightInformation = $this->repository->findBySlug($command->slug);
-       $this->entityManager->remove($flightInformation);
-       $this->entityManager->flush();
+
+        if (! $flightInformation instanceof FlightInformation) {
+            throw new Exception(); //todo написать сообщение
+        }
+
+        $this->repository->delete($flightInformation);
     }
 }

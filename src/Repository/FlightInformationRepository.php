@@ -18,7 +18,7 @@ class FlightInformationRepository
         $this->entityManager = $entityManager;
     }
 
-    public function find(FlightInformationId $id): ?FlightInformation
+    public function find(FlightInformationId $id): ?FlightInformation //todo сделать исключение
     {
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */
@@ -31,7 +31,7 @@ class FlightInformationRepository
         return $flightInformation;
     }
 
-    public function findBySlug(string $slug): ?FlightInformation
+    public function findBySlug(string $slug): ?FlightInformation //todo сделать исключение
     {
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */
@@ -45,7 +45,7 @@ class FlightInformationRepository
     {
         $repository = $this->getRepository();
         return (int) $repository
-            ->createQueryBuilder('f')
+            ->createQueryBuilder('f') //todo заменить на dql
             ->select('count(f.primaryKey)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -54,7 +54,7 @@ class FlightInformationRepository
     public function items(int $offset, int $limit): array
     {
         $repository = $this->getRepository();
-        return $repository
+        return $repository //todo заменить на dql
             ->createQueryBuilder('f')
             ->select()
             ->setFirstResult($offset)
@@ -69,7 +69,13 @@ class FlightInformationRepository
     public function save(FlightInformation $flightInformation): void
     {
         $this->entityManager->persist($flightInformation);
-        $this->entityManager->flush();
+        $this->entityManager->flush(); //todo заменить на транзакцию
+    }
+
+    public function delete(FlightInformation $flightInformation): void
+    {
+        $this->entityManager->remove($flightInformation);
+        $this->entityManager->flush(); //todo заменить на транзакцию
     }
 
     private function getRepository(): EntityRepository

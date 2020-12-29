@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\FlightInformation;
 use App\Repository\FlightInformationRepository;
 use App\UseCase\Command\DeleteFlightInformationCommand;
 use App\UseCase\Command\DeleteFlightInformationHandler;
@@ -24,32 +25,26 @@ class FlightInformationDeleteController extends AbstractController
     }
 
     /**
-     * @Route("/flight_information/{slug}/delete", name="flight_information_delete", methods={"GET","POST"})
+     * @Route("/flight_informations/{slug}/delete", name="flight_information_delete", methods={"GET","POST"})
      */
     public function delete(string $slug, Request $request): Response
     {
-        $command = new DeleteFlightInformationCommand();
-
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('*')
-            ->from('departures')
-            ->where('id = ' . $queryBuilder->createPositionalParameter($slug));
-        $statement = $query->execute();
-        $departure = $statement->fetch();
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $queryBuilder = $this->connection->createQueryBuilder();
-            $query = $queryBuilder
-                ->delete('departures')
-                ->where('id = ' . $queryBuilder->createPositionalParameter($slug));
-            $query->execute();
+            $command = new DeleteFlightInformationCommand();
+            $command->slug = $slug;
+            $this->handler->handle($command);
             return $this->redirectToRoute('main');
         }
+        $flightInformation = $this->repository->findBySlug($slug);
+        if (! $flightInformation instanceof FlightInformation) {
+            throw $this->createNotFoundException(); //todo написать сообщение
+        }
+
         return $this->render('index/delete.html.twig', [
             'form' => $form->createView(),
-            'departures' => $departure,
+            'flightInformation' => $flightInformation,
         ]);
 
     }
