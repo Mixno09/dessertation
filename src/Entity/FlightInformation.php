@@ -23,6 +23,11 @@ class FlightInformation
         $this->setSlug($id);
     }
 
+    public function getRunOutRotor(): FlightInformationRunOutRotor
+    {
+        return new FlightInformationRunOutRotor($this->getPoints());
+    }
+
     /**
      * @return FlightInformationPoint[]
      */

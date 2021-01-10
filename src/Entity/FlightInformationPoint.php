@@ -12,34 +12,34 @@ class FlightInformationPoint
 {
     private $primaryKey;
     private int $time;
-    private float $t4Left;
     private float $t4Right;
+    private float $t4Left;
     private float $alfaRUDLeft;
     private float $alfaRUDRight;
     private float $rndLeft;
-    private float $rndRight;
     private float $rvdLeft;
+    private float $rndRight;
     private float $rvdRight;
 
     public function __construct(
         int $time,
-        float $t4Left,
         float $t4Right,
+        float $t4Left,
         float $alfaRUDLeft,
         float $alfaRUDRight,
         float $rndLeft,
-        float $rndRight,
         float $rvdLeft,
+        float $rndRight,
         float $rvdRight
     ) {
         $this->setTime($time);
-        $this->setT4Left($t4Left);
         $this->setT4Right($t4Right);
+        $this->setT4Left($t4Left);
         $this->setAlfaRUDLeft($alfaRUDLeft);
         $this->setAlfaRUDRight($alfaRUDRight);
         $this->setRndLeft($rndLeft);
-        $this->setRndRight($rndRight);
         $this->setRvdLeft($rvdLeft);
+        $this->setRndRight($rndRight);
         $this->setRvdRight($rvdRight);
     }
 
