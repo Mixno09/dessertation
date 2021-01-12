@@ -8,6 +8,7 @@ use App\Service\MathService;
 
 class FlightInformationRunOutRotor
 {
+    private $primaryKey;
     private float $rndLeftRaw;
     private float $rndRightRaw;
     private float $rvdLeftRaw;
