@@ -14,10 +14,10 @@ class FlightInformation
     private $primaryKey;
     private FlightInformationId $id;
     private Collection $points;
-    private FlightInformationRunOutRotor $runOutRotor;
+    private FlightInformationRunOutRotor $runOutRotor; //todo сделать через embedded
     private string $slug;
 
-    public function __construct(FlightInformationId $id, array $points, FlightInformationRunOutRotor $runOutRotor) //todo Если я описываю отношения many to many у меня обязательно должно полле быть массивом или коллекцией???
+    public function __construct(FlightInformationId $id, array $points, FlightInformationRunOutRotor $runOutRotor) // todo убрать runOutRotor
     {
         $this->setId($id);
         $this->setPoints(...$points);

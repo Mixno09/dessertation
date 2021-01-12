@@ -19,16 +19,19 @@ class DefaultFixture extends AbstractFixture implements FixtureInterface
 
     public function load(array $options): void
     {
+        $sql = 'DELETE FROM flight_informations_points';
+        $this->connection->executeQuery($sql);
+
+        $sql = 'DELETE FROM flight_information_point';
+        $this->connection->executeQuery($sql);
+
         $sql = 'DELETE FROM flight_information';
         $this->connection->executeQuery($sql);
 
         $sql = 'DELETE FROM flight_information_run_out_rotor';
         $this->connection->executeQuery($sql);
 
-        $sql = 'DELETE FROM flight_informations_points';
-        $this->connection->executeQuery($sql);
-
-        $sql = 'DELETE FROM flight_information_point';
+        $sql = file_get_contents(__DIR__ . '/sql/flight_informaiton_run_out_rotor.sql');
         $this->connection->executeQuery($sql);
 
         $sql = file_get_contents(__DIR__ . '/sql/flight_information.sql');
@@ -38,9 +41,6 @@ class DefaultFixture extends AbstractFixture implements FixtureInterface
         $this->connection->executeQuery($sql);
 
         $sql = file_get_contents(__DIR__ . '/sql/flight_information_points.sql');
-        $this->connection->executeQuery($sql);
-
-        $sql = file_get_contents(__DIR__ . '/sql/flight_informaiton_run_out_rotor.sql');
         $this->connection->executeQuery($sql);
     }
 

@@ -4,9 +4,9 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY --from=composer:1.10.16 /usr/bin/composer /usr/bin/composer
 
-COPY --from=mlocati/php-extension-installer:1.0.1 /usr/bin/install-php-extensions /usr/bin/
+COPY --from=mlocati/php-extension-installer:1.1.30 /usr/bin/install-php-extensions /usr/bin/
 RUN install-php-extensions opcache
-RUN install-php-extensions xdebug
+RUN install-php-extensions xdebug-2.9.8
 RUN install-php-extensions apcu
 RUN install-php-extensions intl
 RUN install-php-extensions pdo_mysql

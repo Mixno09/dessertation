@@ -21,7 +21,7 @@ class FlightInformationRunOutRotor
     /**
      * @param FlightInformationPoint[] $points
      */
-    public function __construct(array $points)
+    public function __construct(array $points) //todo сделать статическую фабрику fromPoints и приватн констр
     {
         $this->setRndLeft(...$points);
         $this->setRndRight(...$points);
