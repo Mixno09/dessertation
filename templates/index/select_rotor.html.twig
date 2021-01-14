@@ -8,20 +8,24 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="d-flex">
-                    <th scope="col" class="col-md-2">Номер самолета</th>
-                    <th scope="col" class="col-md-10">Действия</th>
+                    <th scope="col" class="col-md-1">Номер самолета</th>
+                    <th scope="col" class="col-md-2">Дата</th>
+                    <th scope="col" class="col-md-1">Номер вылета</th>
+                    <th scope="col" class="col-md-8">Действия</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for airplane in pagination %}
+                {% for flightInformation in pagination %}
                     <tr class="d-flex">
-                        <td class="col-md-2">{{ airplane.airplane }}</td>
-                        <td class="col-md-10">
-                            <a href="{{ path('runout_rotor_left', {'id': airplane.airplane}) }}" target="_blank"
+                        <td class="col-md-1">{{ flightInformation.id.airplane }}</td>
+                        <td class="col-md-2">{{ flightInformation.id.date|date('d-m-Y') }}</td>
+                        <td class="col-md-1">{{ flightInformation.id.departure }}</td>
+                        <td class="col-md-8">
+                            <a href="{{ path('flight_information_chart_run_out_left', {'airplane': flightInformation.id.airplane}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД левого двигателя
                             </a>
-                            <a href="{{ path('runout_rotor_right', {'id': airplane.airplane}) }}" target="_blank"
+                            <a href="{{ path('flight_information_chart_run_out_right', {'airplane': flightInformation.id.airplane}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД правого двигателя
                             </a>

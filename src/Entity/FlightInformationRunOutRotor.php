@@ -8,7 +8,6 @@ use App\Service\MathService;
 
 class FlightInformationRunOutRotor
 {
-    private $primaryKey;
     private float $rndLeftRaw;
     private float $rndRightRaw;
     private float $rvdLeftRaw;
@@ -18,64 +17,71 @@ class FlightInformationRunOutRotor
     private float $rvdLeftCalc;
     private float $rvdRightCalc;
 
-    /**
-     * @param FlightInformationPoint[] $points
-     */
-    public function __construct(array $points) //todo сделать статическую фабрику fromPoints и приватн констр
+    private function __construct(
+        array $rudLeft,
+        array $rudRight,
+        array $rndLeft,
+        array $rndRight,
+        array $rvdLeft,
+        array $rvdRight
+    )
     {
-        $this->setRndLeft(...$points);
-        $this->setRndRight(...$points);
-        $this->setRvdLeft(...$points);
-        $this->setRvdRight(...$points);
-    }
-
-    private function setRndLeft(FlightInformationPoint ...$points): void
-    {
-        [$this->rndLeftRaw, $this->rndLeftCalc] = $this->calcRunOutValues(
-            $points,
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getAlfaRUDLeft()],
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getRndLeft()]
-        );
-    }
-
-    private function setRndRight(FlightInformationPoint ...$points): void
-    {
-        [$this->rndRightRaw, $this->rndRightCalc] = $this->calcRunOutValues(
-            $points,
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getAlfaRUDRight()],
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getRndRight()]
-        );
-    }
-
-    private function setRvdLeft(FlightInformationPoint ...$points): void
-    {
-        [$this->rvdLeftRaw, $this->rvdLeftCalc] = $this->calcRunOutValues(
-            $points,
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getAlfaRUDLeft()],
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getRvdLeft()]
-        );
-    }
-
-    private function setRvdRight(FlightInformationPoint ...$points): void
-    {
-        [$this->rvdRightRaw, $this->rvdRightCalc] = $this->calcRunOutValues(
-            $points,
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getAlfaRUDRight()],
-            fn(FlightInformationPoint $point) => [$point->getTime() => $point->getRvdRight()]
-        );
+        $this->setRndLeft($rudLeft, $rndLeft);
+        $this->setRndRight($rudRight, $rndRight);
+        $this->setRvdLeft($rudLeft, $rvdLeft);
+        $this->setRvdRight($rudRight, $rvdRight);
     }
 
     /**
      * @param FlightInformationPoint[] $points
      */
-    private function calcRunOutValues(array $points, callable $rudPointCallback, callable $enginePointCallback): array
+    public static function fromPoints(array $points): self
     {
-        $rudPoints = $this->arrayMapWithKey($rudPointCallback, $points);
-        $stopTime = $this->findStopTime($rudPoints);
+        $rudLeft = [];
+        $rudRight = [];
+        $rndLeftRaw = [];
+        $rndRightRaw = [];
+        $rvdLeftRaw = [];
+        $rvdRightRaw = [];
 
-        $enginePoints = $this->arrayMapWithKey($enginePointCallback, $points);
-        $engineRangePoints = $this->findEngineRange($stopTime, $enginePoints);
-        
+        foreach ($points as $point) {
+            $time = $point->getTime();
+            $rudLeft[$time] = $point->getAlfaRUDLeft();
+            $rudRight[$time] = $point->getAlfaRUDRight();
+            $rndLeftRaw[$time] = $point->getRndLeft();
+            $rndRightRaw[$time] = $point->getRndRight();
+            $rvdLeftRaw[$time] = $point->getRvdLeft();
+            $rvdRightRaw[$time] = $point->getRvdRight();
+        }
+        return new self($rudLeft, $rudRight, $rndLeftRaw, $rndRightRaw, $rvdLeftRaw, $rvdRightRaw);
+    }
+
+    private function setRndLeft(array $alfaRUD, array $revs): void
+    {
+        [$this->rndLeftRaw, $this->rndLeftCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function setRndRight(array $alfaRUD, array $revs): void
+    {
+        [$this->rndRightRaw, $this->rndRightCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function setRvdLeft(array $alfaRUD, array $revs): void
+    {
+        [$this->rvdLeftRaw, $this->rvdLeftCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function setRvdRight(array $alfaRUD, array $revs): void
+    {
+        [$this->rvdRightRaw, $this->rvdRightCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function calcRunOutValues(array $alfaRUD, array $revs): array
+    {
+        $stopTime = $this->findStopTime($alfaRUD);
+
+        $engineRangePoints = $this->findEngineRange($stopTime, $revs);
+
         $rawValue = $this->calcRawValue($engineRangePoints);
         $calcValue = $this->calcApproximateValue($engineRangePoints);
 
@@ -87,7 +93,7 @@ class FlightInformationRunOutRotor
         $filterAlfaRud = array_reverse(MathService::filter($rudPoints), true);
         $stopTime = -1;
         foreach ($filterAlfaRud as $stopTime => $value) {
-            if ((float) $filterAlfaRud[$stopTime] + 2 < ((float) $filterAlfaRud[$stopTime - 1])) {
+            if ((float)$filterAlfaRud[$stopTime] + 2 < ((float)$filterAlfaRud[$stopTime - 1])) {
                 break;
             }
             continue;
@@ -139,7 +145,7 @@ class FlightInformationRunOutRotor
         $sumLnY = 0;
         $sumX2 = 0;
         foreach ($engineRangePoints as $x => $y) {
-            $y = (float) $y;
+            $y = (float)$y;
             $sumXLnY += $x * log($y);
             $sumX += $x;
             $sumLnY += log($y);
@@ -149,16 +155,6 @@ class FlightInformationRunOutRotor
         $b = ($n * $sumXLnY - $sumX * $sumLnY) / ($n * $sumX2 - $sumX ** 2);
         $a = exp(($sumLnY - $b * $sumX) / $n);
         return log(0.2 / $a) / $b;
-    }
-
-    private function arrayMapWithKey(callable $callback, array $data): array
-    {
-        $result = [];
-        foreach ($data as $value) {
-            $value = call_user_func($callback, $value);
-            $result = array_merge($result, $value);
-        }
-        return $result;
     }
 
     public function getRndLeftRaw(): float

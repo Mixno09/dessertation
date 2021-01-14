@@ -34,7 +34,7 @@ class SelectTimeRotorController extends AbstractController
 
         $pagination = $this->paginator->paginate($target, $page, 10);
 
-        return $this->render('index/select_time_rotor.html.twig', [
+        return $this->render('select_rotor.html.twig', [
             'pagination' => $pagination,
         ]);
     }

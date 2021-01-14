@@ -13,7 +13,7 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {{ labels|json_encode|raw }},
+                labels: {{ viewModel|labels|json_encode|raw }},
                 datasets: [{
                     label: {{ time_runout_rotor_rnd|json_encode|raw }},
                     backgroundColor: '#0000ff',

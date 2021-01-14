@@ -28,12 +28,6 @@ class DefaultFixture extends AbstractFixture implements FixtureInterface
         $sql = 'DELETE FROM flight_information';
         $this->connection->executeQuery($sql);
 
-        $sql = 'DELETE FROM flight_information_run_out_rotor';
-        $this->connection->executeQuery($sql);
-
-        $sql = file_get_contents(__DIR__ . '/sql/flight_informaiton_run_out_rotor.sql');
-        $this->connection->executeQuery($sql);
-
         $sql = file_get_contents(__DIR__ . '/sql/flight_information.sql');
         $this->connection->executeQuery($sql);
 

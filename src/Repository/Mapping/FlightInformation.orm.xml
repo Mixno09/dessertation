@@ -15,12 +15,7 @@
 
         <embedded name="id" class="App\Entity\FlightInformationId"/>
 
-        <one-to-one field="runOutRotor" target-entity="App\Entity\FlightInformationRunOutRotor">
-            <cascade>
-                <cascade-all/>
-            </cascade>
-            <join-column name="primary_key" referenced-column-name="primary_key" />
-        </one-to-one>
+        <embedded name="runOutRotor" class="FlightInformationRunOutRotor"/>
 
         <many-to-many field="points" target-entity="App\Entity\FlightInformationPoint">
             <cascade>

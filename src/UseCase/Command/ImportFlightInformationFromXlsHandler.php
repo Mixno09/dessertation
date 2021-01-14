@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\UseCase\Command;
 
-use App\Entity\FlightInformationRunOutRotor;
-use App\Service\FlightInformationDataXlsParser;
 use App\Entity\FlightInformation;
 use App\Entity\FlightInformationId;
 use App\Repository\FlightInformationRepository;
+use App\Service\FlightInformationDataXlsParser;
 use Exception;
 
 class ImportFlightInformationFromXlsHandler
@@ -32,9 +31,8 @@ class ImportFlightInformationFromXlsHandler
         }
 
         $points = $this->parser->parse($command->flightInformation);
-        $runOutRotor = new FlightInformationRunOutRotor($points);
 
-        $flightInformation = new FlightInformation($id, $points, $runOutRotor);
+        $flightInformation = new FlightInformation($id, $points);
 
         $this->repository->save($flightInformation);
     }

@@ -14,14 +14,14 @@ class FlightInformation
     private $primaryKey;
     private FlightInformationId $id;
     private Collection $points;
-    private FlightInformationRunOutRotor $runOutRotor; //todo сделать через embedded
+    private FlightInformationRunOutRotor $runOutRotor;
     private string $slug;
 
-    public function __construct(FlightInformationId $id, array $points, FlightInformationRunOutRotor $runOutRotor) // todo убрать runOutRotor
+    public function __construct(FlightInformationId $id, array $points)
     {
         $this->setId($id);
         $this->setPoints(...$points);
-        $this->setRunOutRotor($runOutRotor);
+        $this->runOutRotor = FlightInformationRunOutRotor::fromPoints($points);
         $this->setSlug($id);
     }
 
@@ -33,11 +33,6 @@ class FlightInformation
     private function setPoints(FlightInformationPoint ...$points): void
     {
         $this->points = new ArrayCollection($points);
-    }
-
-    private function setRunOutRotor(FlightInformationRunOutRotor $runOutRotor): void
-    {
-        $this->runOutRotor = $runOutRotor;
     }
 
     private function setSlug(FlightInformationId $id): void
