@@ -9,24 +9,13 @@ use InvalidArgumentException;
 
 class FlightInformationId
 {
-    private int $airplane;
     private DateTimeImmutable $date; //todo придумать формат
     private int $departure;
 
-    public function __construct(int $airplane, DateTimeImmutable $date, int $departure) //todo отвалидировать дату и придумать формат времени
+    public function __construct(DateTimeImmutable $date, int $departure) //todo отвалидировать дату и придумать формат времени
     {
-        $this->setAirplane($airplane);
         $this->setDeparture($departure);
         $this->setDate($date);
-    }
-
-    private function setAirplane(int $airplane): void
-    {
-        if ($airplane < 1) {
-            throw new InvalidArgumentException('Неверный формат номера самолета');
-        }
-
-        $this->airplane = $airplane;
     }
 
     private function setDate(DateTimeImmutable $date): void
@@ -43,11 +32,6 @@ class FlightInformationId
         $this->departure = $departure;
     }
 
-    public function getAirplane(): int
-    {
-        return $this->airplane;
-    }
-
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
@@ -56,5 +40,10 @@ class FlightInformationId
     public function getDeparture(): int
     {
         return $this->departure;
+    }
+
+    public function equals(self $id): bool
+    {
+        return $this == $id;
     }
 }
