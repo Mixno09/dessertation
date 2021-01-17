@@ -48,7 +48,7 @@ class FlightInformationRepository
         return $this->entityManager
             ->createQuery($dql)
             ->setParameter(':airplane', $airplane)
-            ->getResult();
+            ->getArrayResult();
 //        return $repository->findBy(['id.airplane' => $airplane]);
     }
 

@@ -38,6 +38,7 @@ class FlightInformation
     private function setSlug(FlightInformationId $id): void
     {
         $this->slug = implode('_', [
+            $id->getAirplane(),
             $id->getDate()->format('Y-m-d'),
             $id->getDeparture()
         ]);

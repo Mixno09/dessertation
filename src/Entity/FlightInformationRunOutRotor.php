@@ -17,24 +17,19 @@ class FlightInformationRunOutRotor
     private float $rvdLeftCalc;
     private float $rvdRightCalc;
 
-    public function __construct(
-        float $rndLeftRaw,
-        float $rndRightRaw,
-        float $rvdLeftRaw,
-        float $rvdRightRaw,
-        float $rndLeftCalc,
-        float $rndRightCalc,
-        float $rvdLeftCalc,
-        float $rvdRightCalc
-    ) {
-        $this->rndLeftRaw = $rndLeftRaw;
-        $this->rndRightRaw = $rndRightRaw;
-        $this->rvdLeftRaw = $rvdLeftRaw;
-        $this->rvdRightRaw = $rvdRightRaw;
-        $this->rndLeftCalc = $rndLeftCalc;
-        $this->rndRightCalc = $rndRightCalc;
-        $this->rvdLeftCalc = $rvdLeftCalc;
-        $this->rvdRightCalc = $rvdRightCalc;
+    private function __construct(
+        array $rudLeft,
+        array $rudRight,
+        array $rndLeft,
+        array $rndRight,
+        array $rvdLeft,
+        array $rvdRight
+    )
+    {
+        $this->setRndLeft($rudLeft, $rndLeft);
+        $this->setRndRight($rudRight, $rndRight);
+        $this->setRvdLeft($rudLeft, $rvdLeft);
+        $this->setRvdRight($rudRight, $rvdRight);
     }
 
     /**
@@ -44,51 +39,56 @@ class FlightInformationRunOutRotor
     {
         $rudLeft = [];
         $rudRight = [];
-        $rndLeft = [];
-        $rndRight = [];
-        $rvdLeft = [];
-        $rvdRight = [];
+        $rndLeftRaw = [];
+        $rndRightRaw = [];
+        $rvdLeftRaw = [];
+        $rvdRightRaw = [];
 
         foreach ($points as $point) {
             $time = $point->getTime();
             $rudLeft[$time] = $point->getAlfaRUDLeft();
             $rudRight[$time] = $point->getAlfaRUDRight();
-            $rndLeft[$time] = $point->getRndLeft();
-            $rndRight[$time] = $point->getRndRight();
-            $rvdLeft[$time] = $point->getRvdLeft();
-            $rvdRight[$time] = $point->getRvdRight();
+            $rndLeftRaw[$time] = $point->getRndLeft();
+            $rndRightRaw[$time] = $point->getRndRight();
+            $rvdLeftRaw[$time] = $point->getRvdLeft();
+            $rvdRightRaw[$time] = $point->getRvdRight();
         }
-
-        [$rndLeftRaw, $rndLeftCalc] = self::calcRunOutValues($rudLeft, $rndLeft);
-        [$rndRightRaw, $rndRightCalc] = self::calcRunOutValues($rudRight, $rndRight);
-        [$rvdLeftRaw, $rvdLeftCalc] = self::calcRunOutValues($rudLeft, $rvdLeft);
-        [$rvdRightRaw, $rvdRightCalc] = self::calcRunOutValues($rudRight, $rvdRight);
-
-        return new self(
-            $rndLeftRaw,
-            $rndRightRaw,
-            $rvdLeftRaw,
-            $rvdRightRaw,
-            $rndLeftCalc,
-            $rndRightCalc,
-            $rvdLeftCalc,
-            $rvdRightCalc
-        );
+        return new self($rudLeft, $rudRight, $rndLeftRaw, $rndRightRaw, $rvdLeftRaw, $rvdRightRaw);
     }
 
-    private static function calcRunOutValues(array $alfaRUD, array $revs): array
+    private function setRndLeft(array $alfaRUD, array $revs): void
     {
-        $stopTime = self::findStopTime($alfaRUD);
+        [$this->rndLeftRaw, $this->rndLeftCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
 
-        $engineRangePoints = self::findEngineRange($stopTime, $revs);
+    private function setRndRight(array $alfaRUD, array $revs): void
+    {
+        [$this->rndRightRaw, $this->rndRightCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
 
-        $rawValue = self::calcRawValue($engineRangePoints);
-        $calcValue = self::calcApproximateValue($engineRangePoints);
+    private function setRvdLeft(array $alfaRUD, array $revs): void
+    {
+        [$this->rvdLeftRaw, $this->rvdLeftCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function setRvdRight(array $alfaRUD, array $revs): void
+    {
+        [$this->rvdRightRaw, $this->rvdRightCalc] = $this->calcRunOutValues($alfaRUD, $revs);
+    }
+
+    private function calcRunOutValues(array $alfaRUD, array $revs): array
+    {
+        $stopTime = $this->findStopTime($alfaRUD);
+
+        $engineRangePoints = $this->findEngineRange($stopTime, $revs);
+
+        $rawValue = $this->calcRawValue($engineRangePoints);
+        $calcValue = $this->calcApproximateValue($engineRangePoints);
 
         return [$rawValue, $calcValue];
     }
 
-    private static function findStopTime(array $rudPoints): int
+    private function findStopTime(array $rudPoints): int
     {
         $filterAlfaRud = array_reverse(MathService::filter($rudPoints), true);
         $stopTime = -1;
@@ -101,7 +101,7 @@ class FlightInformationRunOutRotor
         return $stopTime;
     }
 
-    private static function findEngineRange(int $stopTime, array $enginePoints): array
+    private function findEngineRange(int $stopTime, array $enginePoints): array
     {
         if ($stopTime < 0) {
             return [];
@@ -123,7 +123,7 @@ class FlightInformationRunOutRotor
         );
     }
 
-    private static function calcRawValue(array $engineRangePoints): float
+    private function calcRawValue(array $engineRangePoints): float
     {
         if (count($engineRangePoints) < 2) {
             return -1;
@@ -131,7 +131,7 @@ class FlightInformationRunOutRotor
         return array_key_last($engineRangePoints) - array_key_first($engineRangePoints);
     }
 
-    private static function calcApproximateValue(array $engineRangePoints): float
+    private function calcApproximateValue(array $engineRangePoints): float
     {
         $engineRangePoints = array_values($engineRangePoints);
 
