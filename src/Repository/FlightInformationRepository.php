@@ -52,31 +52,6 @@ class FlightInformationRepository
 //        return $repository->findBy(['id.airplane' => $airplane]);
     }
 
-    public function count(): int
-    {
-        $repository = $this->getRepository();
-        return (int) $repository
-            ->createQueryBuilder('f') //todo заменить на dql
-            ->select('count(f.primaryKey)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-    public function items(int $offset, int $limit): array
-    {
-        $repository = $this->getRepository();
-        return $repository //todo заменить на dql
-            ->createQueryBuilder('f')
-            ->select()
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
-            ->addOrderBy('f.id.airplane')
-            ->addOrderBy('f.id.date')
-            ->addOrderBy('f.id.departure')
-            ->getQuery()
-            ->getResult();
-    }
-
     public function save(FlightInformation $flightInformation): void
     {
         $this->entityManager->persist($flightInformation);

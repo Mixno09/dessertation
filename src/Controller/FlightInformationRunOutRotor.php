@@ -13,12 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class FlightInformationRunOutRotor extends AbstractController
 {
 
-    private FlightInformationPaginationFactory $paginationFactory;
-
-    public function __construct(FlightInformationPaginationFactory $paginationFactory)
-    {
-        $this->paginationFactory = $paginationFactory;
-    }
 
     /**
      * @Route("/select-rotor", name="select_rotor", methods={"GET"})
