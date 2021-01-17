@@ -6,7 +6,7 @@
 
     <entity name="App\Entity\FlightInformation" table="flight_information">
         <unique-constraints>
-            <unique-constraint columns="id_airplane,id_date,id_departure"/>
+            <unique-constraint columns="id_date,id_departure"/>
         </unique-constraints>
 
         <id name="primaryKey" type="integer">
