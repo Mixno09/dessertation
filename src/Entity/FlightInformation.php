@@ -39,7 +39,7 @@ class FlightInformation
     {
         $this->slug = implode('_', [
             $id->getDate()->format('Y-m-d'),
-            $id->getDeparture(),
+            $id->getDeparture()
         ]);
     }
 

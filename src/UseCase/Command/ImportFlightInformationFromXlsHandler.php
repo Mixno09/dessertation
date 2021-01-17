@@ -28,14 +28,13 @@ class ImportFlightInformationFromXlsHandler
     {
         $airplaneId = new AirplaneId($command->airplane);
         $airplane = $this->repository->find($airplaneId);
-        if ($airplane instanceof Airplane) {
-            throw new Exception('Борт с номером ' . $command->airplane . ' Уже существует в базе данных');
+        if (! $airplane instanceof Airplane) {
+            throw new Exception('Такого самолета не существует');
         }
 
         $id = new FlightInformationId($command->date, $command->departure);
         $points = $this->parser->parse($command->flightInformation);
         $flightInformation = new FlightInformation($id, $points);
-        $airplane = new Airplane($airplaneId);
         $airplane->addFlightInformation($flightInformation);
 
         $this->repository->save($airplane);

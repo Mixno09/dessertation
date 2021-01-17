@@ -9,10 +9,10 @@ use InvalidArgumentException;
 
 class FlightInformationId
 {
-    private DateTimeImmutable $date;
+    private DateTimeImmutable $date; //todo придумать формат
     private int $departure;
 
-    public function __construct(DateTimeImmutable $date, int $departure)
+    public function __construct(DateTimeImmutable $date, int $departure) //todo отвалидировать дату и придумать формат времени
     {
         $this->setDeparture($departure);
         $this->setDate($date);
