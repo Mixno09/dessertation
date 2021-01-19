@@ -13,12 +13,9 @@ class FlightInformationChartController extends AbstractController
 {
     private FlightInformationRepository $repository;
 
-    private MathService $mathService;
-
-    public function __construct(FlightInformationRepository $repository, MathService $mathService)
+    public function __construct(FlightInformationRepository $repository)
     {
         $this->repository = $repository;
-        $this->mathService = $mathService;
     }
 
     /**
