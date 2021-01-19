@@ -6,7 +6,7 @@ namespace App\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class FlightInformationFetcher
+class AirplaneFetcher
 {
     private EntityManagerInterface $entityManager;
 
@@ -18,14 +18,14 @@ class FlightInformationFetcher
     public function count(): int
     {
         return (int) $this->entityManager
-            ->createQuery('SELECT count(f) FROM App\Entity\FlightInformation f')
+            ->createQuery('SELECT DISTINCT count(f.id.airplane) FROM App\Entity\FlightInformation f ')
             ->getSingleScalarResult();
     }
 
     public function items(int $offset, int $limit): array
     {
         return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation f ORDER BY f.id.airplane, f.id.date, f.id.departure')
+            ->createQuery('SELECT DISTINCT f.id.airplane FROM App\Entity\FlightInformation f ORDER BY f.id.airplane')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getResult();
