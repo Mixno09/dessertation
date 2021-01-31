@@ -39,13 +39,13 @@ class FlightInformationDeleteController extends AbstractController
         }
         $flightInformation = $this->repository->findBySlug($slug);
         if (! $flightInformation instanceof FlightInformation) {
-            throw $this->createNotFoundException(); //todo написать сообщение
+            throw $this->createNotFoundException(
+                'Данных борта ' . $flightInformation->getId()->getAirplane() . ' с вылетом ' . $flightInformation->getId()->getDeparture() . ' не существует');
         }
 
         return $this->render('index/delete.html.twig', [
             'form' => $form->createView(),
             'flightInformation' => $flightInformation,
         ]);
-
     }
 }

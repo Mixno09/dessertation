@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class IndexController extends AbstractController
+class IndexController extends AbstractController
 {
     private FlightInformationListHandler $handler;
 
@@ -28,10 +28,10 @@ final class IndexController extends AbstractController
         $query = new FlightInformationListQuery();
         $query->page = $request->query->getInt('page', 1);
         $query->limit = 6;
-        $pagination = $this->handler->handle($query);
+        $flightInformationList = $this->handler->handle($query);
 
         return $this->render('index/index.html.twig', [
-            'pagination' => $pagination,
+            'pagination' => $flightInformationList->pagination,
         ]);
 
     }

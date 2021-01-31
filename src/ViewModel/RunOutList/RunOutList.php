@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\ViewModel\AirplaneList;
+namespace App\ViewModel\RunOutList;
 
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
-class AirplaneList
+class RunOutList
 {
     public PaginationInterface $pagination;
 }

@@ -5,28 +5,31 @@ declare(strict_types=1);
 namespace App\UseCase\Query;
 
 use App\Fetcher\FlightInformationFetcher;
+use App\ViewModel\FlightInformationList\FlightInformationList;
 use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
-use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 class FlightInformationListHandler
 {
-    private FlightInformationFetcher $fetcher;
+    private FlightInformationFetcher $flightInformationFetcher;
     private PaginatorInterface $paginator;
 
-    public function __construct(FlightInformationFetcher $fetcher, PaginatorInterface $paginator)
+    public function __construct(FlightInformationFetcher $flightInformationFetcher, PaginatorInterface $paginator)
     {
-        $this->fetcher = $fetcher;
+        $this->flightInformationFetcher = $flightInformationFetcher;
         $this->paginator = $paginator;
     }
 
-    public function handle(FlightInformationListQuery $query): PaginationInterface
+    public function handle(FlightInformationListQuery $query): FlightInformationList
     {
         $target = new CallbackPagination(
-            fn() => $this->fetcher->count(),
-            fn($offset, $limit) => $this->fetcher->items($offset, $limit)
+            fn() => $this->flightInformationFetcher->count(),
+            fn($offset, $limit) => $this->flightInformationFetcher->items($offset, $limit)
         );
 
-        return $this->paginator->paginate($target, $query->page, $query->limit);
+        $flightInformationList = new FlightInformationList();
+        $flightInformationList->pagination = $this->paginator->paginate($target, $query->page, $query->limit);
+
+        return $flightInformationList;
     }
 }

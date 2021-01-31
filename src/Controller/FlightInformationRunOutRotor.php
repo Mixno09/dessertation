@@ -28,10 +28,10 @@ class FlightInformationRunOutRotor extends AbstractController
         $query = new RunOutListQuery();
         $query->page = $request->query->getInt('page', 1);
         $query->limit = 6;
-        $airplaneList = $this->handler->handle($query);
+        $runOutList = $this->handler->handle($query);
 
-        return $this->render('index/select_rotor.html.twig', [
-            'pagination' => $airplaneList->pagination,
+        return $this->render('index/select_run_out.html.twig', [
+            'pagination' => $runOutList->pagination,
         ]);
     }
 }

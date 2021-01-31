@@ -2,20 +2,19 @@
 
 namespace App\Controller;
 
-use App\Repository\FlightInformationRepository;
-use App\Service\MathService;
-use App\ViewModel\FlightInformationChart;
+use App\UseCase\Query\FlightInformationChartHandler;
+use App\UseCase\Query\FlightInformationChartQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationChartController extends AbstractController
 {
-    private FlightInformationRepository $repository;
+    private FlightInformationChartHandler $handle;
 
-    public function __construct(FlightInformationRepository $repository)
+    public function __construct(FlightInformationChartHandler $handle)
     {
-        $this->repository = $repository;
+        $this->handle = $handle;
     }
 
     /**
@@ -23,11 +22,12 @@ class FlightInformationChartController extends AbstractController
      */
     public function index(string $slug): Response
     {
-        $flightInformation = $this->repository->findBySlug($slug);
-        $viewModel = new FlightInformationChart($flightInformation);
-
+        $query = new FlightInformationChartQuery();
+        $query->slug = $slug;
+        $flightInformationChart = $this->handle->handle($query);
+        
         return $this->render('chart/index.html.twig', [
-            'viewModel' => $viewModel,
+            'flightInformationChart' => $flightInformationChart,
         ]);
     }
 }
