@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\UseCase\Query\RunOutChartQuery;
 use App\UseCase\Query\RunOutHandler;
+use App\UseCase\Query\RunOutLeftChartQuery;
+use App\UseCase\Query\RunOutLeftHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,10 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class FlightInformationChartRunOutController extends AbstractController
 {
     private RunOutHandler $handler;
+    private RunOutLeftHandler $leftHandler;
 
-    public function __construct(RunOutHandler $handler)
+    public function __construct(RunOutHandler $handler, RunOutLeftHandler $leftHandler)
     {
         $this->handler = $handler;
+        $this->leftHandler = $leftHandler;
     }
 
     /**
@@ -22,11 +26,9 @@ class FlightInformationChartRunOutController extends AbstractController
      */
     public function runOutLeft(string $airplane): Response
     {
-        $query = new RunOutChartQuery();
-        $query->airplane = $airplane;
-        $runOut = $this->handler->handle($query);
-        $runOutRotor = $runOut['left'];
-        
+        $query = new RunOutLeftChartQuery($airplane);
+        $runOutRotor = $this->leftHandler->handle($query);
+
         return $this->render('chart/runout_rotor.twig', [
             'runOutRotor' => $runOutRotor,
             'time_runout_rotor_rnd' => 'Время выбега ротора РНД левого двигателя',

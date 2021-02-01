@@ -25,7 +25,7 @@ class RunOutHandler
         $runOutRightChart = new RunOutRightChart();
 
         foreach ($runOutRotors as $runOutRotor) {
-            $runOutLeftChart->labels[] = $runOutRotor['id.departure']; //todo ПОЧЕМУ ПОДСВЕЧИВАЕТ ide
+            $runOutLeftChart->labels[] = $runOutRotor['id.departure'];
             $runOutRightChart->labels[] = $runOutRotor['id.departure'];
             $runOutLeftChart->rndRaw[] = $runOutRotor['runOutRotor.rndLeftRaw'];
             $runOutRightChart->rndRaw[] = $runOutRotor['runOutRotor.rndRightRaw'];

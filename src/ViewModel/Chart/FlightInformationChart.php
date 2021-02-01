@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\ViewModel\Chart;
 
-class FlightInformationChart
+class FlightInformationChart //todo сделать инициализацию через конструктор
 {
     public array $labels;
     public array $t4Right;
@@ -20,7 +20,7 @@ class FlightInformationChart
     public array $rndTicks;
     public array $rvdTicks;
 
-    public function setTicks(): void
+    public function ticks(): void
     {
         $this->t4Ticks = $this->t4Ticks();
         $this->alfaRudTicks = $this->alfaRudTicks();
@@ -32,11 +32,13 @@ class FlightInformationChart
     {
         $min = 0;
         $max = 0;
-        foreach ($this->t4Right as $t4Right) { //todo ЭТО НОРМАЛЬНО???
-            foreach ($this->t4Left as $t4Left) {
-                $min = min($t4Right, $t4Left, $min);
-                $max = max($t4Right, $t4Left, $max);
-            }
+        foreach ($this->t4Right as $t4Right) {
+            $min = min($t4Right, $min);
+            $max = max($t4Right, $max);
+        }
+        foreach ($this->t4Left as $t4Left) {
+            $min = min($t4Left, $min);
+            $max = max($t4Left, $max);
         }
         $min = (int)(floor($min / 100) * 100);
         $max = (int)(ceil($max / 100) * 100);
@@ -50,10 +52,12 @@ class FlightInformationChart
         $min = 0;
         $max = 0;
         foreach ($this->alfaRight as $alfaRight) {
-            foreach ($this->alfaLeft as $alfaLeft) {
-                $min = min($alfaRight, $alfaLeft, $min);
-                $max = max($alfaRight, $alfaLeft, $max);
-            }
+            $min = min($alfaRight, $min);
+            $max = max($alfaRight, $max);
+        }
+        foreach ($this->alfaLeft as $alfaLeft) {
+            $min = min($alfaLeft, $min);
+            $max = max($alfaLeft, $max);
         }
         $min = (int)(floor($min / 10) * 10);
         $max = (int)(ceil($max / 10) * 10);
@@ -68,10 +72,12 @@ class FlightInformationChart
         $min = 0;
         $max = 0;
         foreach ($this->rndRight as $rndRight) {
-            foreach ($this->rndLeft as $rndLeft) {
-                $min = min($rndRight, $rndLeft, $min);
-                $max = max($rndRight, $rndLeft, $max);
-            }
+            $min = min($rndRight, $min);
+            $max = max($rndRight, $max);
+        }
+        foreach ($this->rndLeft as $rndLeft) {
+            $min = min($rndLeft, $min);
+            $max = max($rndLeft, $max);
         }
         $min = (int)(floor($min / 25) * 25);
         $max = (int)(ceil($max / 25) * 25);
@@ -86,10 +92,12 @@ class FlightInformationChart
         $min = 0;
         $max = 0;
         foreach ($this->rvdRight as $rvdRight) {
-            foreach ($this->rvdLeft as $rvdLeft) {
-                $min = min($rvdRight, $rvdLeft, $min);
-                $max = max($rvdRight, $rvdLeft, $max);
-            }
+            $min = min($rvdRight, $min);
+            $max = max($rvdRight, $max);
+        }
+        foreach ($this->rvdLeft as $rvdLeft) {
+            $min = min($rvdLeft, $min);
+            $max = max($rvdLeft, $max);
         }
         $min = (int)(floor($min / 25) * 25);
         $max = (int)(ceil($max / 25) * 25);

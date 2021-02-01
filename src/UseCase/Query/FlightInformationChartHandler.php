@@ -22,7 +22,7 @@ class FlightInformationChartHandler
         $points = $this->informationChartFetcher->findBySlug($query->slug);
         $flightInformationChart = new FlightInformationChart();
         /** @var FlightInformationPoint $point */
-        foreach ($points as $point) {
+        foreach ($points as $point) { //todo инициализировать переменные
             $labels[] = $point->getTime();
             $t4Right[] = $point->getT4Right();
             $t4Left[] = $point->getT4Left();
@@ -42,7 +42,7 @@ class FlightInformationChartHandler
         $flightInformationChart->rndLeft = $rndLeft;
         $flightInformationChart->rvdRight = $rvdRight;
         $flightInformationChart->rvdLeft = $rvdLeft;
-        $flightInformationChart->setTicks(); //todo как сделать по другому
+        $flightInformationChart->ticks(); //todo как сделать по другому
         
         return $flightInformationChart;
     }
