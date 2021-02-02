@@ -20,81 +20,33 @@ class FlightInformationChart
     public array $rndTicks;
     public array $rvdTicks;
 
-    public function setTicks(): void
-    {
-        $this->t4Ticks = $this->t4Ticks();
-        $this->alfaRudTicks = $this->alfaRudTicks();
-        $this->rndTicks = $this->rndTicks();
-        $this->rvdTicks = $this->rvdTicks();
-    }
-
-    private function t4Ticks(): array
-    {
-        $min = 0;
-        $max = 0;
-        foreach ($this->t4Right as $t4Right) { //todo ЭТО НОРМАЛЬНО???
-            foreach ($this->t4Left as $t4Left) {
-                $min = min($t4Right, $t4Left, $min);
-                $max = max($t4Right, $t4Left, $max);
-            }
-        }
-        $min = (int)(floor($min / 100) * 100);
-        $max = (int)(ceil($max / 100) * 100);
-        $scale = $max - $min;
-        $min -= $scale * 3;
-        return ['min' => $min, 'max' => $max];
-    }
-
-    private function alfaRudTicks(): array
-    {
-        $min = 0;
-        $max = 0;
-        foreach ($this->alfaRight as $alfaRight) {
-            foreach ($this->alfaLeft as $alfaLeft) {
-                $min = min($alfaRight, $alfaLeft, $min);
-                $max = max($alfaRight, $alfaLeft, $max);
-            }
-        }
-        $min = (int)(floor($min / 10) * 10);
-        $max = (int)(ceil($max / 10) * 10);
-        $scale = $max - $min;
-        $max += $scale;
-        $min -= $scale * 2;
-        return ['min' => $min, 'max' => $max];
-    }
-
-    private function rndTicks(): array
-    {
-        $min = 0;
-        $max = 0;
-        foreach ($this->rndRight as $rndRight) {
-            foreach ($this->rndLeft as $rndLeft) {
-                $min = min($rndRight, $rndLeft, $min);
-                $max = max($rndRight, $rndLeft, $max);
-            }
-        }
-        $min = (int)(floor($min / 25) * 25);
-        $max = (int)(ceil($max / 25) * 25);
-        $scale = $max - $min;
-        $max += $scale * 2;
-        $min -= $scale;
-        return ['min' => $min, 'max' => $max];
-    }
-
-    private function rvdTicks(): array
-    {
-        $min = 0;
-        $max = 0;
-        foreach ($this->rvdRight as $rvdRight) {
-            foreach ($this->rvdLeft as $rvdLeft) {
-                $min = min($rvdRight, $rvdLeft, $min);
-                $max = max($rvdRight, $rvdLeft, $max);
-            }
-        }
-        $min = (int)(floor($min / 25) * 25);
-        $max = (int)(ceil($max / 25) * 25);
-        $scale = $max - $min;
-        $max += $scale * 3;
-        return ['min' => $min, 'max' => $max];
+    public function __construct(
+        array $labels,
+        array $t4Right,
+        array $t4Left,
+        array $alfaRight,
+        array $alfaLeft,
+        array $rndRight,
+        array $rndLeft,
+        array $rvdRight,
+        array $rvdLeft,
+        array $t4Ticks,
+        array $alfaRudTicks,
+        array $rndTicks,
+        array $rvdTicks
+    ) {
+        $this->labels = $labels;
+        $this->t4Right = $t4Right;
+        $this->t4Left = $t4Left;
+        $this->alfaRight = $alfaRight;
+        $this->alfaLeft = $alfaLeft;
+        $this->rndRight = $rndRight;
+        $this->rndLeft = $rndLeft;
+        $this->rvdRight = $rvdRight;
+        $this->rvdLeft = $rvdLeft;
+        $this->t4Ticks = $t4Ticks;
+        $this->alfaRudTicks = $alfaRudTicks;
+        $this->rndTicks = $rndTicks;
+        $this->rvdTicks = $rvdTicks;
     }
 }

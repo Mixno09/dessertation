@@ -22,7 +22,7 @@ class DeleteFlightInformationHandler
        $flightInformation = $this->repository->findBySlug($command->slug);
 
         if (! $flightInformation instanceof FlightInformation) {
-            throw new Exception(); //todo написать сообщение
+            throw new Exception('Информации о самолете с № ' . $flightInformation->getId()->getAirplane() . ' с вылетом № ' . $flightInformation->getId()->getDeparture() . ' не существует.');
         }
 
         $this->repository->delete($flightInformation);

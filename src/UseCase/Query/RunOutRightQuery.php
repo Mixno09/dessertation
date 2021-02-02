@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\Query;
 
-class RunOutChartQuery
+class RunOutRightQuery
 {
     public int $airplane;
 }

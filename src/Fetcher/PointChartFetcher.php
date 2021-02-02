@@ -6,7 +6,7 @@ namespace App\Fetcher;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class RunOutRotorFetcher
+class PointChartFetcher
 {
     private EntityManagerInterface $entityManager;
 
@@ -15,11 +15,11 @@ class RunOutRotorFetcher
         $this->entityManager = $entityManager;
     }
 
-    public function findByAirplane(int $airplane): array
+    public function findBySlug(string $slug): array
     {
         return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation f WHERE f.id.airplane = :airplane')
-            ->setParameter('airplane', $airplane)
-            ->getArrayResult();
+            ->createQuery('SELECT p FROM App\Entity\FlightInformationPoint p, App\Entity\FlightInformation f WHERE f.slug = :slug AND p MEMBER OF f.points')
+            ->setParameter('slug', $slug)
+            ->getResult();
     }
 }

@@ -43,13 +43,11 @@ class FlightInformationRepository
 
     public function findByAirplane(int $airplane): array
     {
-//        $dql = 'SELECT f.runOutRotor FROM App\Entity\FlightInformation f WHERE f.id.airplane = :airplane'; // todo можно ли извлечь embedded из flightInformation??
         $dql = 'SELECT f FROM App\Entity\FlightInformation f WHERE f.id.airplane = :airplane';
         return $this->entityManager
             ->createQuery($dql)
             ->setParameter(':airplane', $airplane)
             ->getArrayResult();
-//        return $repository->findBy(['id.airplane' => $airplane]);
     }
 
     public function save(FlightInformation $flightInformation): void

@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
-use App\UseCase\Query\RunOutChartQuery;
-use App\UseCase\Query\RunOutHandler;
+use App\UseCase\Query\RunOutLeftHandler;
+use App\UseCase\Query\RunOutLeftQuery;
+use App\UseCase\Query\RunOutRightQuery;
+use App\UseCase\Query\RunOutRightHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationChartRunOutController extends AbstractController
 {
-    private RunOutHandler $handler;
+    private RunOutLeftHandler $handlerLeft;
+    private RunOutRightHandler $handlerRight;
 
-    public function __construct(RunOutHandler $handler)
+    public function __construct(RunOutLeftHandler $handlerLeft, RunOutRightHandler $handlerRight)
     {
-        $this->handler = $handler;
+        $this->handlerLeft = $handlerLeft;
+        $this->handlerRight = $handlerRight;
     }
 
     /**
@@ -22,11 +26,10 @@ class FlightInformationChartRunOutController extends AbstractController
      */
     public function runOutLeft(string $airplane): Response
     {
-        $query = new RunOutChartQuery();
+        $query = new RunOutLeftQuery();
         $query->airplane = $airplane;
-        $runOut = $this->handler->handle($query);
-        $runOutRotor = $runOut['left'];
-        
+        $runOutRotor = $this->handlerLeft->handle($query);
+
         return $this->render('chart/runout_rotor.twig', [
             'runOutRotor' => $runOutRotor,
             'time_runout_rotor_rnd' => 'Время выбега ротора РНД левого двигателя',
@@ -41,10 +44,9 @@ class FlightInformationChartRunOutController extends AbstractController
      */
     public function runOutRight(string $airplane)
     {
-        $query = new RunOutChartQuery();
+        $query = new RunOutRightQuery();
         $query->airplane = $airplane;
-        $runOut = $this->handler->handle($query);
-        $runOutRotor = $runOut['right'];
+        $runOutRotor = $this->handlerRight->handle($query);
 
         return $this->render('chart/runout_rotor.twig', [
             'runOutRotor' => $runOutRotor,
