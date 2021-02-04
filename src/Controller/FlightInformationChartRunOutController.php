@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\UseCase\Query\RunOutLeftHandler;
 use App\UseCase\Query\RunOutLeftQuery;
-use App\UseCase\Query\RunOutRightQuery;
 use App\UseCase\Query\RunOutRightHandler;
+use App\UseCase\Query\RunOutRightQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,7 +53,7 @@ class FlightInformationChartRunOutController extends AbstractController
             'time_runout_rotor_rnd' => 'Время выбега ротора РНД правого двигателя',
             'time_runout_rotor_rvd' => 'Время выбега ротора РВД правого двигателя',
             'approximation_time_runout_rotor_rnd' => 'Аппроксимированное время выбега ротора РНД правого двигателя',
-            'approximation_time_runout_rotor_rvd' => 'Аппроксимированное время выбега ротора РНД правого двигателя',
+            'approximation_time_runout_rotor_rvd' => 'Аппроксимированное время выбега ротора РВД правого двигателя',
         ]);
     }
 }
