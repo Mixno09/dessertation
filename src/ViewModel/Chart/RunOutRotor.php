@@ -11,7 +11,7 @@ class RunOutRotor
     public array $rvdRaw;
     public array $rndCalc;
     public array $rvdCalc;
-    public array $error;
+    public array $errors;
 
     public function __construct(
         array $labels,
@@ -19,13 +19,13 @@ class RunOutRotor
         array $rvdRaw,
         array $rndCalc,
         array $rvdCalc,
-        array $error
+        array $errors
     ) {
         $this->labels = $labels;
         $this->rndRaw = $rndRaw;
         $this->rvdRaw = $rvdRaw;
         $this->rndCalc = $rndCalc;
         $this->rvdCalc = $rvdCalc;
-        $this->error = $error;
+        $this->errors = $errors;
     }
 }

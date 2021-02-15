@@ -20,33 +20,27 @@ class RunOutLeftHandler
 
     public function handle(RunOutleftQuery $query): RunOutRotor
     {
-        $runOutRotors = $this->fetcher->findByAirplane($query->airplane);
+        $flightInformations = $this->fetcher->findByAirplane($query->airplane);
 
         $labels = [];
         $rndRaw = [];
         $rvdRaw = [];
         $rndCalc = [];
         $rvdCalc = [];
-        $error = [];
-        /** @var FlightInformation $runOutRotor */
-        foreach ($runOutRotors as $runOutRotor) {
-            try {
-                if ($runOutRotor->getRunOutRotor()->getRndLeftRaw() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRvdLeftRaw() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRndLeftCalc() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRvdLeftCalc() <= 0) {
-                    throw new Exception('Самолет с № ' . $runOutRotor->getId()->getAirplane() . ', вылетом № ' . $runOutRotor->getId()->getDeparture() . ' нужно проверить в ручную!');
-                }
-                $labels[] = $runOutRotor->getId()->getDeparture();
-                $rndRaw[] = $runOutRotor->getRunOutRotor()->getRndLeftRaw();
-                $rvdRaw[] = $runOutRotor->getRunOutRotor()->getRvdLeftRaw();
-                $rndCalc[] = $runOutRotor->getRunOutRotor()->getRndLeftCalc();
-                $rvdCalc[] = $runOutRotor->getRunOutRotor()->getRvdLeftCalc();
-            } catch (Exception $exception) {
-                $error[] = $exception->getMessage();
+        $errors = [];
+        /** @var FlightInformation $flightInformation */
+        foreach ($flightInformations as $flightInformation) {
+            if ($flightInformation->isLeftError()) {
+                $errors[] = 'Самолет с № ' . $flightInformation->getId()->getAirplane() . ', вылетом № ' . $flightInformation->getId()->getDeparture() . ' нужно проверить в ручную!';
+                continue;
             }
+            $labels[] = $flightInformation->getId()->getDeparture();
+            $rndRaw[] = $flightInformation->getRunOutRotor()->getRndLeftRaw();
+            $rvdRaw[] = $flightInformation->getRunOutRotor()->getRvdLeftRaw();
+            $rndCalc[] = $flightInformation->getRunOutRotor()->getRndLeftCalc();
+            $rvdCalc[] = $flightInformation->getRunOutRotor()->getRvdLeftCalc();
         }
 
-        return new RunOutRotor($labels, $rndRaw, $rvdRaw, $rndCalc, $rvdCalc, $error);
+        return new RunOutRotor($labels, $rndRaw, $rvdRaw, $rndCalc, $rvdCalc, $errors);
     }
 }

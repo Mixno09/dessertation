@@ -44,6 +44,28 @@ class FlightInformation
         ]);
     }
 
+    public function isLeftError(): bool
+    {
+        return (
+            $this->runOutRotor->getRndLeftRaw() <= 0 ||
+            $this->runOutRotor->getRndLeftCalc() <= 0 ||
+            $this->runOutRotor->getRvdLeftRaw() <= 0 ||
+            $this->runOutRotor->getRvdLeftRaw() <= 0
+        );
+    }
+
+    public function isRightError(): bool
+    {
+        return (
+            $this->runOutRotor->getRndRightRaw() <= 0 ||
+            $this->runOutRotor->getRvdRightRaw() <= 0 ||
+            $this->runOutRotor->getRndRightCalc() <= 0 ||
+            $this->runOutRotor->getRvdRightCalc() <= 0 ||
+            $this->runOutRotor->getRndRightCalc() >= 100 ||
+            $this->runOutRotor->getRvdRightCalc() >= 100
+        );
+    }
+
     public function getId(): FlightInformationId
     {
         return $this->id;

@@ -7,7 +7,6 @@ namespace App\UseCase\Query;
 use App\Entity\FlightInformation;
 use App\Fetcher\FlightInformationFetcher;
 use App\ViewModel\Chart\RunOutRotor;
-use Exception;
 
 class RunOutRightHandler
 {
@@ -27,28 +26,20 @@ class RunOutRightHandler
         $rvdRaw = [];
         $rndCalc = [];
         $rvdCalc = [];
-        $error = [];
+        $errors = [];
         /** @var FlightInformation $runOutRotor */
         foreach ($runOutRotors as $runOutRotor) {
-            try {
-                if ($runOutRotor->getRunOutRotor()->getRndRightRaw() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRvdRightRaw() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRndRightCalc() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRvdRightCalc() <= 0 ||
-                    $runOutRotor->getRunOutRotor()->getRndRightCalc() >= 100 ||
-                    $runOutRotor->getRunOutRotor()->getRvdRightCalc() >= 100) {
-                    throw new Exception('Самолет с № ' . $runOutRotor->getId()->getAirplane() . ', вылетом № ' . $runOutRotor->getId()->getDeparture() . ' нужно проверить в ручную!');
-                }
-                $labels[] = $runOutRotor->getId()->getDeparture();
-                $rndRaw[] = $runOutRotor->getRunOutRotor()->getRndRightRaw();
-                $rvdRaw[] = $runOutRotor->getRunOutRotor()->getRvdRightRaw();
-                $rndCalc[] = $runOutRotor->getRunOutRotor()->getRndRightCalc();
-                $rvdCalc[] = $runOutRotor->getRunOutRotor()->getRvdRightCalc();
-            } catch (Exception $exception) {
-                $error[] = $exception->getMessage();
+            if ($runOutRotor->isRightError()) {
+                $errors[] = 'Самолет с № ' . $runOutRotor->getId()->getAirplane() . ', вылетом № ' . $runOutRotor->getId()->getDeparture() . ' нужно проверить в ручную!';
+                continue;
             }
+            $labels[] = $runOutRotor->getId()->getDeparture();
+            $rndRaw[] = $runOutRotor->getRunOutRotor()->getRndRightRaw();
+            $rvdRaw[] = $runOutRotor->getRunOutRotor()->getRvdRightRaw();
+            $rndCalc[] = $runOutRotor->getRunOutRotor()->getRndRightCalc();
+            $rvdCalc[] = $runOutRotor->getRunOutRotor()->getRvdRightCalc();
         }
 
-        return new RunOutRotor($labels, $rndRaw, $rvdRaw, $rndCalc, $rvdCalc, $error);
+        return new RunOutRotor($labels, $rndRaw, $rvdRaw, $rndCalc, $rvdCalc, $errors);
     }
 }
