@@ -67,20 +67,20 @@
             </div>
         </nav>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main role="main" class="col-md-10 ml-sm-auto px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">{% block h1 %}Просмотр данных{% endblock %}</h1>
                 {% block h1_after %}{% endblock %}
             </div>
             {% block content %}{% endblock %}
+            <main role="main" class="container">
+                {% block body %}{% endblock %}
+                {% block javascripts %}{% endblock %}
+            </main>
         </main>
     </div>
 </div>
-<main role="main" class="container">
-    {% block body %}{% endblock %}
-</main>
 <script src="{{ asset('jquery.min.js', 'jquery') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
-{% block javascripts %}{% endblock %}
 </body>
 </html>
