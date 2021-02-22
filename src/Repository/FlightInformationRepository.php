@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\FlightInformation;
-use App\Entity\FlightInformationId;
+use App\Entity\FlightInformation\FlightInformation;
+use App\Entity\FlightInformation\FlightInformationId;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -23,9 +23,9 @@ class FlightInformationRepository
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */
         $flightInformation = $repository->findOneBy([
-            'id.airplane' => $id->getAirplane(),
-            'id.date' => $id->getDate(),
-            'id.departure' => $id->getDeparture(),
+            'flightInformationId.airplaneNumber' => $id->getAirplaneNumber(),
+            'flightInformationId.flightDate' => $id->getFlightDate(),
+            'flightInformationId.flightNumber' => $id->getFlightNumber(),
         ]);
 
         return $flightInformation;
@@ -39,15 +39,6 @@ class FlightInformationRepository
             'slug' => $slug,
         ]);
         return $flightInformation;
-    }
-
-    public function findByAirplane(int $airplane): array
-    {
-        $dql = 'SELECT f FROM App\Entity\FlightInformation f WHERE f.id.airplane = :airplane';
-        return $this->entityManager
-            ->createQuery($dql)
-            ->setParameter(':airplane', $airplane)
-            ->getArrayResult();
     }
 
     public function save(FlightInformation $flightInformation): void

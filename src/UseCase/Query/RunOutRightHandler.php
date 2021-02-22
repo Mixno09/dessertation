@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\Query;
 
-use App\Entity\FlightInformation;
+use App\Entity\FlightInformation\FlightInformation;
 use App\Fetcher\FlightInformationFetcher;
 use App\ViewModel\Chart\RunOutRotor;
 
@@ -30,10 +30,10 @@ class RunOutRightHandler
         /** @var FlightInformation $runOutRotor */
         foreach ($runOutRotors as $runOutRotor) {
             if ($runOutRotor->isRightError()) {
-                $errors[] = 'Самолет с № ' . $runOutRotor->getId()->getAirplane() . ', вылетом № ' . $runOutRotor->getId()->getDeparture() . ' нужно проверить в ручную!';
+                $errors[] = 'Самолет с № ' . $runOutRotor->getFlightInformationId()->getAirplaneNumber() . ', вылетом № ' . $runOutRotor->getFlightInformationId()->getFlightNumber() . ' нужно проверить в ручную!';
                 continue;
             }
-            $labels[] = $runOutRotor->getId()->getDeparture();
+            $labels[] = $runOutRotor->getFlightInformationId()->getFlightNumber();
             $rndRaw[] = $runOutRotor->getRunOutRotor()->getRndRightRaw();
             $rvdRaw[] = $runOutRotor->getRunOutRotor()->getRvdRightRaw();
             $rndCalc[] = $runOutRotor->getRunOutRotor()->getRndRightCalc();

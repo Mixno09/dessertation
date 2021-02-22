@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\Query;
 
-use App\Entity\FlightInformationPoint;
+use App\Entity\FlightInformation\FlightInformationPoint;
 use App\Fetcher\PointChartFetcher;
 use App\ViewModel\Chart\FlightInformationChart;
 

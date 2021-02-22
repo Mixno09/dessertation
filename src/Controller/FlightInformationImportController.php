@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\UseCase\Command\ImportFlightInformationFromXlsCommand;
-use App\UseCase\Command\ImportFlightInformationFromXlsHandler;
+use App\Service\FlightInformationImportXlsParser;
+use App\UseCase\Command\CreateFlightInformationCommand;
+use App\UseCase\Command\CreateFlightInformationHandler;
 use App\Form\ImportFlightInformationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationImportController extends AbstractController
 {
-    private ImportFlightInformationFromXlsHandler $handler;
+    private CreateFlightInformationHandler $handler;
+    private FlightInformationImportXlsParser $parser;
 
-    public function __construct(ImportFlightInformationFromXlsHandler $handler)
+    public function __construct(CreateFlightInformationHandler $handler, FlightInformationImportXlsParser $parser)
     {
         $this->handler = $handler;
+        $this->parser = $parser;
     }
 
     /**
@@ -26,10 +29,25 @@ class FlightInformationImportController extends AbstractController
      */
     public function __invoke(Request $request): Response
     {
-        $command = new ImportFlightInformationFromXlsCommand();
-        $form = $this->createForm(ImportFlightInformationType::class, $command);
+        $form = $this->createForm(ImportFlightInformationType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $result = $this->parser->parse($data['flightInformation']);
+            $command = new CreateFlightInformationCommand(
+                $data['airplane'],
+                $data['date'],
+                $data['departure'],
+                $result->getTime(),
+                $result->getT4Right(),
+                $result->getT4Left(),
+                $result->getAlfaRudLeft(),
+                $result->getAlfaRudRight(),
+                $result->getRndLeft(),
+                $result->getRvdLeft(),
+                $result->getRndRight(),
+                $result->getRvdRight()
+            );
             $this->handler->handle($command);
             return $this->redirectToRoute('main');
         }

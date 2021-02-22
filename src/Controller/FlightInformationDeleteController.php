@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\FlightInformation;
+use App\Entity\FlightInformation\FlightInformation;
 use App\Repository\FlightInformationRepository;
 use App\UseCase\Command\DeleteFlightInformationCommand;
 use App\UseCase\Command\DeleteFlightInformationHandler;
@@ -40,7 +40,7 @@ class FlightInformationDeleteController extends AbstractController
         $flightInformation = $this->repository->findBySlug($slug);
         if (! $flightInformation instanceof FlightInformation) {
             throw $this->createNotFoundException(
-                'Данных борта ' . $flightInformation->getId()->getAirplane() . ' с вылетом ' . $flightInformation->getId()->getDeparture() . ' не существует');
+                'Данных борта ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' с вылетом ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' не существует');
         }
 
         return $this->render('index/delete.html.twig', [

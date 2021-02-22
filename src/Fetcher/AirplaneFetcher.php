@@ -19,14 +19,14 @@ class AirplaneFetcher
     public function count(): int
     {
         return (int) $this->entityManager
-            ->createQuery('SELECT COUNT(DISTINCT f.id.airplane) FROM App\Entity\FlightInformation f')
+            ->createQuery('SELECT COUNT(DISTINCT f.id.airplane) FROM App\Entity\FlightInformation\FlightInformation f')
             ->getSingleScalarResult();
     }
 
     public function items(int $offset, int $limit): array
     {
         $rows = $this->entityManager
-            ->createQuery('SELECT DISTINCT f.id.airplane FROM App\Entity\FlightInformation f ORDER BY f.id.airplane')
+            ->createQuery('SELECT DISTINCT f.id.airplane FROM App\Entity\FlightInformation\FlightInformation f ORDER BY f.id.airplane')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getArrayResult();

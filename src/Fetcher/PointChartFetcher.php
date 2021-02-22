@@ -18,7 +18,7 @@ class PointChartFetcher
     public function findBySlug(string $slug): array
     {
         return $this->entityManager
-            ->createQuery('SELECT p FROM App\Entity\FlightInformationPoint p, App\Entity\FlightInformation f WHERE f.slug = :slug AND p MEMBER OF f.points')
+            ->createQuery('SELECT p FROM App\Entity\FlightInformation\FlightInformationPoint p, App\Entity\FlightInformation\FlightInformation f WHERE f.slug = :slug AND p MEMBER OF f.points')
             ->setParameter('slug', $slug)
             ->getResult();
     }
