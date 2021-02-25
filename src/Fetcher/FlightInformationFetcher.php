@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Fetcher;
 
+use App\Entity\FlightInformation\EngineParameter;
+use App\Entity\FlightInformation\FlightInformation;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FlightInformationFetcher
@@ -22,12 +24,37 @@ class FlightInformationFetcher
             ->getSingleScalarResult();
     }
 
+    /**
+     * @return FlightInformation[]
+     */
     public function items(int $offset, int $limit): array
     {
         return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f ORDER BY f.id.airplane, f.id.date, f.id.departure')
+            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f ORDER BY f.flightInformationId.airplaneNumber, f.flightInformationId.flightDate, f.flightInformationId.flightNumber')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->getResult();
+    }
+
+    /**
+     * @return EngineParameter[]
+     */
+    public function getLeftEngineParametersBySlug(string $slug): array //todo переписать запрос на голый sql + гидратор doctrine
+    {
+        return $this->entityManager
+            ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
+            ->setParameter('slug', $slug)
+            ->getResult();
+    }
+
+    /**
+     * @return EngineParameter[]
+     */
+    public function getRightEngineParametersBySlug(string $slug): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.rightEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
+            ->setParameter('slug', $slug)
             ->getResult();
     }
 
@@ -38,4 +65,6 @@ class FlightInformationFetcher
             ->setParameter('airplane', $airplane)
             ->getResult();
     }
+
+
 }

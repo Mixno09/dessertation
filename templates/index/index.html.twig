@@ -22,9 +22,9 @@
                 <tbody>
                 {% for flightInformation in pagination %}
                     <tr class="d-flex">
-                        <td class="col-md-2">{{ flightInformation.id.airplane }}</td>
-                        <td class="col-md-3">{{ flightInformation.id.date|date('d-m-Y') }}</td>
-                        <td class="col-md-2">{{ flightInformation.id.departure }}</td>
+                        <td class="col-md-2">{{ flightInformation.flightInformationId.airplaneNumber }}</td>
+                        <td class="col-md-3">{{ flightInformation.flightInformationId.flightDate|date('d-m-Y') }}</td>
+                        <td class="col-md-2">{{ flightInformation.flightInformationId.flightNumber }}</td>
                         <td class="col-md-5">
                             <a href="{{ path('flight_information_chart', { 'slug': flightInformation.slug }) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">

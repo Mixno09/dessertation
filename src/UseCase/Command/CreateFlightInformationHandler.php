@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\Command;
 
+use App\Entity\FlightInformation\AverageEngineParameter;
 use App\Entity\FlightInformation\EngineParameter;
 use App\Entity\FlightInformation\EngineParameterCollection;
 use App\Entity\FlightInformation\FlightInformation;
@@ -52,12 +53,23 @@ class CreateFlightInformationHandler
             );
         }
 
+        $leftAverageParameter = $this->calcAverageParameter($leftEngineParameters);
+        $rightAverageParameter = $this->calcAverageParameter($rightEngineParameters);
+
         $flightInformation = new FlightInformation(
             $flightInformationId,
-            new EngineParameterCollection($leftEngineParameters),
-            new EngineParameterCollection($rightEngineParameters)
+            new EngineParameterCollection($leftEngineParameters, $leftAverageParameter),
+            new EngineParameterCollection($rightEngineParameters, $rightAverageParameter)
         );
 
         $this->repository->save($flightInformation);
+    }
+
+    /**
+     * @param EngineParameter[] $engineParameters
+     */
+    private function calcAverageParameter(array $engineParameters): AverageEngineParameter
+    {
+        return new AverageEngineParameter(10, 8, 4); //todo сделать реализацию
     }
 }

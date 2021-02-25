@@ -11,13 +11,15 @@ class EngineParameterCollection
 {
     private int $id;
     private Collection $collection;
+    private AverageEngineParameter $averageParameter;
 
     /**
      * @param EngineParameter[] $engineParameters
      */
-    public function __construct(array $engineParameters)
+    public function __construct(array $engineParameters, AverageEngineParameter $averageParameter)
     {
         $this->setCollection($engineParameters);
+        $this->averageParameter = $averageParameter;
     }
 
     /**
@@ -30,6 +32,6 @@ class EngineParameterCollection
 
     public function averageParameter(): AverageEngineParameter
     {
-        return new AverageEngineParameter(10, 58, 59);
+        return $this->averageParameter; //todo сделать реализацию
     }
 }
