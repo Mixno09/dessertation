@@ -31,4 +31,30 @@ class EngineParameter
         }
         $this->time = $time;
     }
+
+    public function getTime(): int
+    {
+        return $this->time;
+    }
+
+    public function getT4(): float
+    {
+        return $this->t4;
+    }
+
+    public function getAlfaRUD(): float
+    {
+        return $this->alfaRUD;
+    }
+
+    public function getRnd(): float
+    {
+        return $this->rnd;
+    }
+
+    public function getRvd(): float
+    {
+        return $this->rvd;
+    }
+
 }
