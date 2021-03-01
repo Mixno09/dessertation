@@ -8,7 +8,7 @@ namespace App\Entity\FlightInformation;
 
 class FlightInformation
 {
-    private int $id;
+    private ?int $id;
     private FlightInformationId $flightInformationId;
     private EngineParameterCollection $leftEngineParameters;
     private EngineParameterCollection $rightEngineParameters;

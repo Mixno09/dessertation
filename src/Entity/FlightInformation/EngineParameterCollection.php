@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 class EngineParameterCollection
 {
-    private int $id;
+    private ?int $id;
     private Collection $collection;
     private AverageEngineParameter $averageParameter;
 

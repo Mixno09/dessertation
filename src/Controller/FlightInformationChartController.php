@@ -36,165 +36,27 @@ class FlightInformationChartController extends AbstractController
      */
     private function createChartJsConfig(array $leftEngineParameters, array $rightEngineParameters): array
     {
-//        {
-//            type: 'line',
-//            data: {
-//            labels: {{ flightInformationChart.labels|json_encode|raw }},
-//            datasets: [{
-//                label: 'Температура правого двигателя',
-//                    backgroundColor: '#0000ff',
-//                    borderColor: '#0000ff',
-//                    data: {{ flightInformationChart.t4Right|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-temp-engine',
-//                }, {
-//                label: 'Температура левого двигателя',
-//                    backgroundColor: '#ff0000',
-//                    borderColor: '#ff0000',
-//                    data: {{ flightInformationChart.t4Left|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-temp-engine',
-//                }, {
-//                label: 'Положение РУД правого двигателя',
-//                    backgroundColor: '#00ff00',
-//                    borderColor: '#00ff00',
-//                    data: {{ flightInformationChart.alfaRight|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-alfa-rud',
-//                }, {
-//                label: 'Положение РУД левого двигателя',
-//                    backgroundColor: '#000000',
-//                    borderColor: '#000000',
-//                    data: {{ flightInformationChart.alfaLeft|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-alfa-rud',
-//                }, {
-//                label: 'Обороты РНД правого двигателя',
-//                    backgroundColor: '#999900',
-//                    data: {{ flightInformationChart.rndRight|json_encode|raw }},
-//                    borderColor: '#999900',
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-rnd',
-//                }, {
-//                label: 'Обороты РНД левого двигателя',
-//                    backgroundColor: '#ff8000',
-//                    borderColor: '#ff8000',
-//                    data: {{ flightInformationChart.rndLeft|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-rnd',
-//                }, {
-//                label: 'Обороты РВД правого двигателя',
-//                    backgroundColor: '#b300b3',
-//                    borderColor: '#b300b3',
-//                    data: {{ flightInformationChart.rvdRight|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-rvd',
-//                }, {
-//                label: 'Обороты РВД левого двигателя',
-//                    backgroundColor: '#00b38f',
-//                    borderColor: '#00b38f',
-//                    data: {{ flightInformationChart.rvdLeft|json_encode|raw }},
-//                    borderWidth: 1,
-//                    fill: false,
-//                    yAxisID: 'y-rvd',
-//                }]
-//            },
-//            options: {
-//            elements: {
-//                point: {
-//                    radius: 0
-//                    }
-//            },
-//            title: {
-//                display: true,
-//                    text: 'Параметры полета'
-//                },
-//            tooltips: {
-//                mode: 'index',
-//                    intersect: false,
-//                },
-//            hover: {
-//                mode: 'nearest',
-//                    intersect: true
-//                },
-//            scales: {
-//                xAxes: [{
-//                    display: true,
-//                        scaleLabel: {
-//                        display: true,
-//                            labelString: 'Время, с'
-//                        }
-//                    }],
-//                    yAxes: [{
-//                    display: true,
-//                        scaleLabel: {
-//                          display: true,
-//                            labelString: 'Температура, °C'
-//                        },
-//                          id: 'y-temp-engine',
-//                          ticks: {{ flightInformationChart.t4Ticks|json_encode|raw }}
-//                    }, {
-//                    display: true,
-//                        scaleLabel: {
-//                        display: true,
-//                            labelString: 'Положение РУД, °'
-//                        },
-//                        id: 'y-alfa-rud',
-//                        ticks: {{ flightInformationChart.alfaRudTicks|json_encode|raw }}
-//                    }, {
-//                    display: true,
-//                        scaleLabel: {
-//                        display: true,
-//                            labelString: 'Обороты РНД, %'
-//                        },
-//                        position: 'right',
-//                        id: 'y-rnd',
-//                        ticks: {{ flightInformationChart.rndTicks|json_encode|raw }}
-//                    }, {
-//                    display: true,
-//                        scaleLabel: {
-//                        display: true,
-//                            labelString: 'Обороты РВД, %'
-//                        },
-//                        position: 'right',
-//                        id: 'y-rvd',
-//                        ticks: {{ flightInformationChart.rvdTicks|json_encode|raw }}
-//                    }]
-//                }
-//        }
-//        }
         $time = [];
-        $timeRight = [];
         $t4Right = [];
         $alfaRight = [];
         $rvdRight = [];
         $rndRight = [];
         foreach ($rightEngineParameters as $rightEngineParameter) {
             $time[] = $rightEngineParameter->getTime();
-            $timeRight = $rightEngineParameter->getTime();
-            $t4Right[$timeRight] = $rightEngineParameter->getT4();
-            $alfaRight[$timeRight] = $rightEngineParameter->getAlfaRUD();
-            $rvdRight[$timeRight] = $rightEngineParameter->getRvd();
-            $rndRight[$timeRight] = $rightEngineParameter->getRnd();
+            $t4Right[] = $rightEngineParameter->getT4();
+            $alfaRight[] = $rightEngineParameter->getAlfaRUD();
+            $rvdRight[] = $rightEngineParameter->getRvd();
+            $rndRight[] = $rightEngineParameter->getRnd();
         }
-        $timeLeft = 0;
         $t4Left = [];
         $alfaLeft = [];
         $rvdLeft = [];
         $rndLeft = [];
         foreach ($leftEngineParameters as $leftEngineParameter) {
-            $timeLeft = $leftEngineParameter->getTime();
-            $t4Left[$timeLeft] = $leftEngineParameter->getT4();
-            $alfaLeft[$timeLeft] = $leftEngineParameter->getAlfaRUD();
-            $rvdLeft[$timeLeft] = $leftEngineParameter->getRvd();
-            $rndLeft[$timeLeft] = $leftEngineParameter->getRnd();
+            $t4Left[] = $leftEngineParameter->getT4();
+            $alfaLeft[] = $leftEngineParameter->getAlfaRUD();
+            $rvdLeft[] = $leftEngineParameter->getRvd();
+            $rndLeft[] = $leftEngineParameter->getRnd();
         }
 
         $config = [
@@ -237,7 +99,7 @@ class FlightInformationChartController extends AbstractController
                     'label' => 'Обороты РНД правого двигателя',
                     'backgroundColor' => '#999900',
                     'borderColor' => '#999900',
-                    'data' => $rvdRight,
+                    'data' => $rndRight,
                     'borderWidth' => 1,
                     'fill' => false,
                     'yAxisID' => 'y-rnd',
@@ -287,49 +149,53 @@ class FlightInformationChartController extends AbstractController
                 ],
                 'scales' => [
                     'xAxes' => [
-                        'display' => true,
-                        'scaleLabel' => [
+                        [
                             'display' => true,
-                            'labelString' => 'Время, с',
-                        ]
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Время, с',
+                            ]
+                        ],
                     ],
                     'yAxes' => [
-                        'display' => true,
-                        'scaleLabel' => [
+                        [
                             'display' => true,
-                            'labelString' => 'Температура, °C',
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Температура, °C',
+                            ],
+                            'id' => 'y-temp-engine',
+                            'ticks' => $this->configTicks(1, 100, $t4Right, $t4Left),
                         ],
-                        'id' => 'y-temp-engine',
-                        'ticks' => $this->t4Ticks($rightEngineParameters, $leftEngineParameters),
-                    ],
-                    [
-                        'display' => true,
-                        'scaleLabel' => [
+                        [
                             'display' => true,
-                            'labelString' => 'Положение РУД, °',
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Положение РУД, °',
+                            ],
+                            'id' => 'y-alfa-rud',
+                            'ticks' => $this->configTicks(2, 10, $alfaRight, $alfaLeft),
                         ],
-                        'id' => 'y-alfa-rud',
-                        'ticks' => $this->alfaRudTicks($rightEngineParameters, $leftEngineParameters),
-                    ],
-                    [
-                        'display' => true,
-                        'scaleLabel' => [
+                        [
                             'display' => true,
-                            'labelString' => 'Обороты РНД, %',
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Обороты РНД, %',
+                            ],
+                            'position' => 'right',
+                            'id' => 'y-rnd',
+                            'ticks' => $this->configTicks(3, 25, $rndRight, $rndLeft),
                         ],
-                        'position' => 'right',
-                        'id' => 'y-rnd',
-                        'ticks' => $this->rndTicks($rightEngineParameters, $leftEngineParameters),
-                    ],
-                    [
-                        'display' => true,
-                        'scaleLabel' => [
+                        [
                             'display' => true,
-                            'labelString' => 'Обороты РВД, %',
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Обороты РВД, %',
+                            ],
+                            'position' => 'right',
+                            'id' => 'y-rvd',
+                            'ticks' => $this->configTicks(4, 25, $rvdRight, $rvdLeft),
                         ],
-                        'position' => 'right',
-                        'id' => 'y-rvd',
-                        'ticks' => $this->rvdTicks($rightEngineParameters, $leftEngineParameters),
                     ]
                 ]
             ]
@@ -338,132 +204,26 @@ class FlightInformationChartController extends AbstractController
     }
 
     /**
-     * @param EngineParameter[] $rightEngineParameters
-     * @param EngineParameter[] $leftEngineParameters
+     * @param float[] $rightParameters
+     * @param float[] $leftParameters
      */
-    private function t4Ticks(array $rightEngineParameters, array $leftEngineParameters): array
+    private function configTicks(int $position, int $step, array $rightParameters, array $leftParameters): array
     {
-        $t4Right = [];
-        foreach ($rightEngineParameters as $rightEngineParameter) {
-            $t4Right[] = $rightEngineParameter->getT4();
-        }
-        $t4Left = [];
-        foreach ($leftEngineParameters as $leftEngineParameter) {
-            $t4Left[] = $leftEngineParameter->getT4();
-        }
+        $min = min(
+            min($rightParameters),
+            min($leftParameters)
+        );
+        $max = max(
+            max($rightParameters),
+            max($leftParameters)
+        );
+        $min = (int)(floor($min / $step) * $step);
+        $max = (int)(ceil($max / $step) * $step);
 
-        $min = 0;
-        $max = 0;
-        foreach ($t4Right as $right) {
-            $min = min($right, $min);
-            $max = max($right, $max);
-        }
-        foreach ($t4Left as $left) {
-            $min = min($left, $min);
-            $max = max($left, $max);
-        }
-        $min = (int)(floor($min / 100) * 100);
-        $max = (int)(ceil($max / 100) * 100);
         $scale = $max - $min;
-        $min -= $scale * 3;
-        return ['min' => $min, 'max' => $max];
-    }
+        $min -= $scale * (4 - $position);
+        $max += $scale * ($position - 1);
 
-    /**
-     * @param EngineParameter[] $rightEngineParameters
-     * @param EngineParameter[] $leftEngineParameters
-     */
-    private function alfaRudTicks(array $rightEngineParameters, array $leftEngineParameters): array
-    {
-        $alfaRight = [];
-        foreach ($rightEngineParameters as $rightEngineParameter) {
-            $alfaRight[] = $rightEngineParameter->getAlfaRUD();
-        }
-        $alfaLeft = [];
-        foreach ($leftEngineParameters as $leftEngineParameter) {
-            $alfaLeft[] = $leftEngineParameter->getAlfaRUD();
-        }
-
-        $min = 0;
-        $max = 0;
-        foreach ($alfaRight as $right) {
-            $min = min($right, $min);
-            $max = max($right, $max);
-        }
-        foreach ($alfaLeft as $left) {
-            $min = min($left, $min);
-            $max = max($left, $max);
-        }
-        $min = (int)(floor($min / 10) * 10);
-        $max = (int)(ceil($max / 10) * 10);
-        $scale = $max - $min;
-        $max += $scale;
-        $min -= $scale * 2;
-        return ['min' => $min, 'max' => $max];
-    }
-
-    /**
-     * @param EngineParameter[] $rightEngineParameters
-     * @param EngineParameter[] $leftEngineParameters
-     */
-    private function rndTicks(array $rightEngineParameters, array $leftEngineParameters): array
-    {
-        $rndRight = [];
-        foreach ($rightEngineParameters as $rightEngineParameter) {
-            $rndRight[] = $rightEngineParameter->getRnd();
-        }
-        $rndLeft = [];
-        foreach ($leftEngineParameters as $leftEngineParameter) {
-            $rndLeft[] = $leftEngineParameter->getRnd();
-        }
-
-        $min = 0;
-        $max = 0;
-        foreach ($rndRight as $right) {
-            $min = min($right, $min);
-            $max = max($right, $max);
-        }
-        foreach ($rndLeft as $left) {
-            $min = min($left, $min);
-            $max = max($left, $max);
-        }
-        $min = (int)(floor($min / 25) * 25);
-        $max = (int)(ceil($max / 25) * 25);
-        $scale = $max - $min;
-        $max += $scale * 2;
-        $min -= $scale;
-        return ['min' => $min, 'max' => $max];
-    }
-
-    /**
-     * @param EngineParameter[] $rightEngineParameters
-     * @param EngineParameter[] $leftEngineParameters
-     */
-    private function rvdTicks(array $rightEngineParameters, array $leftEngineParameters): array
-    {
-        $rvdRight = [];
-        foreach ($rightEngineParameters as $rightEngineParameter) {
-            $rvdRight[] = $rightEngineParameter->getRvd();
-        }
-        $rvdLeft = [];
-        foreach ($leftEngineParameters as $leftEngineParameter) {
-            $rvdLeft[] = $leftEngineParameter->getRvd();
-        }
-
-        $min = 0;
-        $max = 0;
-        foreach ($rvdRight as $right) {
-            $min = min($right, $min);
-            $max = max($right, $max);
-        }
-        foreach ($rvdLeft as $left) {
-            $min = min($left, $min);
-            $max = max($left, $max);
-        }
-        $min = (int)(floor($min / 25) * 25);
-        $max = (int)(ceil($max / 25) * 25);
-        $scale = $max - $min;
-        $max += $scale * 3;
         return ['min' => $min, 'max' => $max];
     }
 }

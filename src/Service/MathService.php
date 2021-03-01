@@ -26,7 +26,8 @@ class MathService
     public static function filter(array $data): array
     {
         $result = [];
-        for ($key = 0; $key < count($data); $key++) {
+        $count = count($data);
+        for ($key = 0; $key < $count; $key++) {
             $values = [];
             $offset = 5;
             $leftIndex = $key - $offset;

@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 class EngineParameter
 {
-    private int $id;
+    private ?int $id;
     private int $time;
     private float $t4;
     private float $alfaRUD;
