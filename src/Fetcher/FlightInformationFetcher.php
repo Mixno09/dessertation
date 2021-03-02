@@ -58,10 +58,10 @@ class FlightInformationFetcher
             ->getResult();
     }
 
-    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array // todo положить в AirplaneFetcher
     {
         return $this->entityManager
-            ->createQuery('SELECT f, ap FROM App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters ap WHERE f.flightInformationId.airplaneNumber = :airplaneNumber') //todo как сделать по другому?
+            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.leftEngineParameters = epc')
             ->setParameter('airplaneNumber', $airplaneNumber)
             ->getResult();
     }
