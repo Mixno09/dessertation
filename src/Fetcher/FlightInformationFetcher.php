@@ -39,7 +39,7 @@ class FlightInformationFetcher
     /**
      * @return EngineParameter[]
      */
-    public function getLeftEngineParametersBySlug(string $slug): array //todo переписать запрос на голый sql + гидратор doctrine
+    public function getLeftEngineParametersBySlug(string $slug): array
     {
         return $this->entityManager
             ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
@@ -58,6 +58,14 @@ class FlightInformationFetcher
             ->getResult();
     }
 
+    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT f, ap FROM App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters ap WHERE f.flightInformationId.airplaneNumber = :airplaneNumber') //todo как сделать по другому?
+            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->getResult();
+    }
+
     public function findByAirplane(int $airplane): array
     {
         return $this->entityManager
@@ -65,6 +73,4 @@ class FlightInformationFetcher
             ->setParameter('airplane', $airplane)
             ->getResult();
     }
-
-
 }

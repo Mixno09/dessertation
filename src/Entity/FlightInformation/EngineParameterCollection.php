@@ -32,6 +32,6 @@ class EngineParameterCollection
 
     public function averageParameter(): AverageEngineParameter
     {
-        return $this->averageParameter; //todo сделать реализацию
+        return $this->averageParameter;
     }
 }

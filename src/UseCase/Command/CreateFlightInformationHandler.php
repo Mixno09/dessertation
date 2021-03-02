@@ -70,6 +70,22 @@ class CreateFlightInformationHandler
      */
     private function calcAverageParameter(array $engineParameters): AverageEngineParameter
     {
-        return new AverageEngineParameter(10, 8, 4); //todo сделать реализацию
+        $t4 = [];
+        $rnd = [];
+        $rvd = [];
+        foreach ($engineParameters as $parameter) {
+            if ($parameter->getRnd() > 31 && $parameter->getRnd() < 34) {
+                $time = $parameter->getTime();
+                $t4[$time] = $parameter->getT4();
+                $rnd[$time] = $parameter->getRnd();
+                $rvd[$time] = $parameter->getRvd();
+            }
+        }
+
+        $averageT4 = array_sum($t4) / count($t4);
+        $averageRnd = array_sum($rnd) / count($rnd);
+        $averageRvd = array_sum($rvd) / count($rvd);
+
+        return new AverageEngineParameter($averageT4, $averageRnd, $averageRvd);
     }
 }

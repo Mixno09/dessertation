@@ -16,4 +16,19 @@ class AverageEngineParameter
         $this->rnd = $rnd;
         $this->rvd = $rvd;
     }
+
+    public function getT4(): float
+    {
+        return $this->t4;
+    }
+
+    public function getRnd(): float
+    {
+        return $this->rnd;
+    }
+
+    public function getRvd(): float
+    {
+        return $this->rvd;
+    }
 }

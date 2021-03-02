@@ -17,11 +17,11 @@
                     <tr class="d-flex">
                         <td class="col-md-2">{{ airplaneNumber }}</td>
                         <td class="col-md-10">
-                            <a href="{{ path('flight_information_chart_run_out_left', {'airplane': airplaneNumber}) }}" target="_blank"
+                            <a href="{{ path('flight_information_chart_average_left', {'airplane': airplaneNumber}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД левого двигателя
                             </a>
-                            <a href="{{ path('flight_information_chart_run_out_right', {'airplane': airplaneNumber}) }}" target="_blank"
+                            <a href="{{ path('flight_information_chart_average_right', {'airplane': airplaneNumber}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Выбег ротора РНД и РВД правого двигателя
                             </a>
