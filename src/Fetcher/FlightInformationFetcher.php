@@ -58,14 +58,6 @@ class FlightInformationFetcher
             ->getResult();
     }
 
-    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array // todo положить в AirplaneFetcher
-    {
-        return $this->entityManager
-            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.leftEngineParameters = epc')
-            ->setParameter('airplaneNumber', $airplaneNumber)
-            ->getResult();
-    }
-
     public function findByAirplane(int $airplane): array
     {
         return $this->entityManager

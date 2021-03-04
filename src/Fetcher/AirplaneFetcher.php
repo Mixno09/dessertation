@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Fetcher;
 
-use App\ViewModel\RunOutList\Airplane;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AirplaneFetcher
@@ -14,6 +13,30 @@ class AirplaneFetcher
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.leftEngineParameters = epc')
+            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->getResult();
+    }
+
+    public function getRightAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.rightEngineParameters = epc')
+            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->getResult();
+    }
+
+    public function getFlightNumberByAirplaneNumber(int $airplaneNumber): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT f.flightInformationId.flightNumber FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber') //todo как получить flightInformationId
+            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->getResult();
     }
 
     public function count(): int

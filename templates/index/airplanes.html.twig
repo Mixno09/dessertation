@@ -5,6 +5,7 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12">
+            {% block h1 %}Список самолетов{% endblock %}
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="d-flex">
@@ -17,13 +18,13 @@
                     <tr class="d-flex">
                         <td class="col-md-2">{{ airplaneNumber }}</td>
                         <td class="col-md-10">
-                            <a href="{{ path('flight_information_chart_average_left', {'airplane': airplaneNumber}) }}" target="_blank"
+                            <a href="{{ path('airplane_average_left', {'airplane': airplaneNumber}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
-                                <span data-feather="eye"></span> Выбег ротора РНД и РВД левого двигателя
+                                <span data-feather="eye"></span> Левый двигатель
                             </a>
-                            <a href="{{ path('flight_information_chart_average_right', {'airplane': airplaneNumber}) }}" target="_blank"
+                            <a href="{{ path('airplane_average_right', {'airplane': airplaneNumber}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
-                                <span data-feather="eye"></span> Выбег ротора РНД и РВД правого двигателя
+                                <span data-feather="eye"></span> Правый двигатель
                             </a>
                         </td>
                     </tr>
