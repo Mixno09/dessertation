@@ -2,19 +2,19 @@
 
 {% block title %}Оперативный контроль{% endblock %}
 
-{% block body %}
+{% block content %}
     <canvas class="my-4 w-100" id="averageAll"></canvas>
-    <canvas class="my-4 w-100" id="scatterT4Rnd"></canvas>
+    <canvas class="my-4 w-100" id="t4Rnd"></canvas>
 {% endblock %}
 
 {% block javascripts %}
     <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
     <script>
         var ctx = document.getElementById('averageAll');
-        new Chart(ctx, {{ average|json_encode|raw }})
-    </script>
-    <script>
-        var ctx = document.getElementById('scatterT4Rnd');
-        new Chart(ctx, {{ scatterT4Rnd|json_encode|raw }})
+        new Chart(ctx, {{ average|json_encode|raw }});
+
+        var ctx1 = document.getElementById('t4Rnd');
+        new Chart(ctx1, {{ t4Rnd|json_encode|raw }});
+
     </script>
 {% endblock %}

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Fetcher;
 
+use App\Entity\FlightInformation\FlightInformation;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class AirplaneFetcher
 {
@@ -15,15 +17,19 @@ class AirplaneFetcher
         $this->entityManager = $entityManager;
     }
 
-    public function getLeftAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    /**
+     * @return FlightInformation[]
+     */
+    public function getItemsWithLeftEngineParametersByAirplaneNumber(int $airplaneNumber): array
     {
         return $this->entityManager
-            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.leftEngineParameters = epc')
+            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate')
             ->setParameter('airplaneNumber', $airplaneNumber)
+            ->setFetchMode(FlightInformation::class, 'leftEngineParameters', ClassMetadataInfo::FETCH_EAGER)
             ->getResult();
     }
 
-    public function getRightAverageParameterByAirplaneNumber(int $airplaneNumber): array
+    public function getRightAverageParameterByAirplaneNumber(int $airplaneNumber): array //todo указать тип
     {
         return $this->entityManager
             ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.rightEngineParameters = epc')
@@ -31,10 +37,10 @@ class AirplaneFetcher
             ->getResult();
     }
 
-    public function getFlightNumberByAirplaneNumber(int $airplaneNumber): array
+    public function getFlightNumberByAirplaneNumber(int $airplaneNumber): array //todo указать тип
     {
         return $this->entityManager
-            ->createQuery('SELECT f.flightInformationId.flightNumber FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber') //todo как получить flightInformationId
+            ->createQuery('SELECT f.flightInformationId.flightNumber FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber')
             ->setParameter('airplaneNumber', $airplaneNumber)
             ->getResult();
     }

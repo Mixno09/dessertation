@@ -22,12 +22,17 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function runOutLeft(int $airplane): Response
     {
-        $engineParameterCollection = $this->fetcher->getLeftAverageParameterByAirplaneNumber($airplane);
+        $engineParameterCollection = [];
+        $flightInformations = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
+        dump($flightInformations);
+        foreach ($flightInformations as $flightInformation) {
+            $engineParameterCollection[] = $flightInformation->getLeftEngineParameters();
+        }
         $flightNumber = $this->fetcher->getFlightNumberByAirplaneNumber($airplane);
 
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($engineParameterCollection, $flightNumber),
-            'scatterT4Rnd' => $this->createChartJsConfigForT4Rnd($engineParameterCollection, $flightNumber),
+            't4Rnd' => $this->createChartJsConfigForT4Rnd($engineParameterCollection),
         ]);
     }
 
@@ -36,7 +41,7 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function runOutRight(int $airplane)
     {
-        $engineParameterCollection = $this->fetcher->getLeftAverageParameterByAirplaneNumber($airplane);
+        $engineParameterCollection = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
         $flightNumber = $this->fetcher->getFlightNumberByAirplaneNumber($airplane);
 
         return $this->render('chart/average.html.twig', [
@@ -157,31 +162,33 @@ class FlightInformationChartAverage extends AbstractController
     }
 
     /**
-     * @param EngineParameterCollection[] $engineParameterCollection
+     * @param EngineParameterCollection[] $engineParameterCollections
      */
-    private function createChartJsConfigForT4Rnd(array $engineParameterCollection, array $flight): array
+    private function createChartJsConfigForT4Rnd(array $engineParameterCollections): array
     {
+        $data = [];
+
+        foreach ($engineParameterCollections as $engineParameterCollection) {
+            $data[] = [
+                'x' => $engineParameterCollection->averageParameter()->getT4(),
+                'y' => $engineParameterCollection->averageParameter()->getRnd()
+            ];
+        }
+
         return [
             'type' => 'scatter',
             'data' => [
                 'datasets' => [[
                     'label' => 'Scatter Dataset',
-                    'data' => [[
-                        'x' => -5,
-                        'y' => -5
-                    ], [
-                        'x' => 0,
-                        'y' => 10
-                    ], [
-                        'x' => 10,
-                        'y' => 5
-                    ]]
+                    'backgroundColor' => '#0000ff',
+                    'borderColor' => '#0000ff',
+                    'data' => $data
                 ]]
             ],
             'options' => [
                 'elements' => [
                     'point' => [
-                        'radius' => 10,
+                        'radius' => 5,
                     ]
                 ],
                 'scales' => [
