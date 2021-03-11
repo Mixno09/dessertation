@@ -3,8 +3,12 @@
 {% block title %}Оперативный контроль{% endblock %}
 
 {% block content %}
+    {% for error in errors %}
+        <div class="text-center"><h3>{{ error }}</h3></div>
+    {% endfor %}
     <canvas class="my-4 w-100" id="averageAll"></canvas>
     <canvas class="my-4 w-100" id="t4Rnd"></canvas>
+    <canvas class="my-4 w-100" id="t4Rvd"></canvas>
 {% endblock %}
 
 {% block javascripts %}
@@ -16,5 +20,7 @@
         var ctx1 = document.getElementById('t4Rnd');
         new Chart(ctx1, {{ t4Rnd|json_encode|raw }});
 
+        var ctx2 = document.getElementById('t4Rvd');
+        new Chart(ctx2, {{ t4Rvd|json_encode|raw }});
     </script>
 {% endblock %}

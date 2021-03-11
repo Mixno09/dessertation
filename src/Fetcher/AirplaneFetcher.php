@@ -23,25 +23,21 @@ class AirplaneFetcher
     public function getItemsWithLeftEngineParametersByAirplaneNumber(int $airplaneNumber): array
     {
         return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate')
+            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate, f.flightInformationId.flightNumber')
             ->setParameter('airplaneNumber', $airplaneNumber)
             ->setFetchMode(FlightInformation::class, 'leftEngineParameters', ClassMetadataInfo::FETCH_EAGER)
             ->getResult();
     }
 
-    public function getRightAverageParameterByAirplaneNumber(int $airplaneNumber): array //todo указать тип
+    /**
+     * @return FlightInformation[]
+     */
+    public function getItemsWithRightEngineParametersByAirplaneNumber(int $airplaneNumber): array
     {
         return $this->entityManager
-            ->createQuery('SELECT epc FROM App\Entity\FlightInformation\EngineParameterCollection epc, App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.rightEngineParameters = epc')
+            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate')
             ->setParameter('airplaneNumber', $airplaneNumber)
-            ->getResult();
-    }
-
-    public function getFlightNumberByAirplaneNumber(int $airplaneNumber): array //todo указать тип
-    {
-        return $this->entityManager
-            ->createQuery('SELECT f.flightInformationId.flightNumber FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber')
-            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->setFetchMode(FlightInformation::class, 'rightEngineParameters', ClassMetadataInfo::FETCH_EAGER)
             ->getResult();
     }
 

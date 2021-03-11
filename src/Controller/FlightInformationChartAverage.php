@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\FlightInformation\EngineParameterCollection;
+use App\Entity\FlightInformation\FlightInformation;
 use App\Fetcher\AirplaneFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,54 +20,70 @@ class FlightInformationChartAverage extends AbstractController
     /**
      * @Route("/airplane/average/{airplane}/left", name="airplane_average_left", methods={"GET"})
      */
-    public function runOutLeft(int $airplane): Response
+    public function averageLeft(int $airplane): Response
     {
-        $engineParameterCollection = [];
         $flightInformations = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
-        dump($flightInformations);
-        foreach ($flightInformations as $flightInformation) {
-            $engineParameterCollection[] = $flightInformation->getLeftEngineParameters();
-        }
-        $flightNumber = $this->fetcher->getFlightNumberByAirplaneNumber($airplane);
 
+        $flightNumber = [];
+        $averageT4 = [];
+        $averageRnd = [];
+        $averageRvd = [];
+        $errors = [];
+        /** @var  FlightInformation $flightInformation */
+        foreach ($flightInformations as $flightInformation) {
+            if ($flightInformation->getLeftEngineParameters()->averageParameter()->getT4() == 1) {
+                $errors[] = 'Проверь самолет с номером ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' и вылетом номер ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' на целостность данных';
+                continue;
+            }
+            $flightNumber[] = $flightInformation->getFlightInformationId()->getFlightNumber();
+            $averageT4[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getT4();
+            $averageRnd[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getRnd();
+            $averageRvd[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getRvd();
+        }
+
+        dump($flightInformations[0]->getRightEngineParameters()->averageParameter()); //todo я могу получить доступ к прокси только при обращении к нему?
         return $this->render('chart/average.html.twig', [
-            'average' => $this->createChartJsConfigForAverage($engineParameterCollection, $flightNumber),
-            't4Rnd' => $this->createChartJsConfigForT4Rnd($engineParameterCollection),
+            'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
+            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
+            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd),
+            'errors' => $errors,
         ]);
     }
 
     /**
      * @Route("/airplane/average/{airplane}/right", name="airplane_average_right", methods={"GET"})
      */
-    public function runOutRight(int $airplane)
+    public function averageRight(int $airplane)
     {
-        $engineParameterCollection = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
-        $flightNumber = $this->fetcher->getFlightNumberByAirplaneNumber($airplane);
+        $flightInformations = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
 
-        return $this->render('chart/average.html.twig', [
-            'average' => $this->createChartJsConfigForAverage($engineParameterCollection, $flightNumber),
-        ]);
-    }
-
-    /**
-     * @param EngineParameterCollection[] $engineParameterCollections
-     */
-    private function createChartJsConfigForAverage(array $engineParameterCollections, array $flights): array
-    {
         $flightNumber = [];
-        foreach ($flights as $flightNumbers) {
-            $flightNumber[] = $flightNumbers['flightInformationId.flightNumber'];
-        }
         $averageT4 = [];
         $averageRnd = [];
         $averageRvd = [];
-        /** @var EngineParameterCollection $engineParameter */
-        foreach ($engineParameterCollections as $engineParameterCollection) {
-            $averageT4[] = $engineParameterCollection->averageParameter()->getT4();
-            $averageRnd[] = $engineParameterCollection->averageParameter()->getRnd();
-            $averageRvd[] = $engineParameterCollection->averageParameter()->getRvd();
+        $errors = [];
+        /** @var  FlightInformation $flightInformation */
+        foreach ($flightInformations as $flightInformation) {
+            if ($flightInformation->getRightEngineParameters()->averageParameter()->getT4() == 1) {
+                $errors[] = 'Проверь самолет с номером ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' и вылетом номер ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' на целостность данных';
+                continue;
+            }
+            $flightNumber[] = $flightInformation->getFlightInformationId()->getFlightNumber();
+            $averageT4[] = $flightInformation->getRightEngineParameters()->averageParameter()->getT4();
+            $averageRnd[] = $flightInformation->getRightEngineParameters()->averageParameter()->getRnd();
+            $averageRvd[] = $flightInformation->getRightEngineParameters()->averageParameter()->getRvd();
         }
 
+        return $this->render('chart/average.html.twig', [
+            'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
+            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
+            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd),
+            'errors' => $errors,
+        ]);
+    }
+
+    private function createChartJsConfigForAverage(array $flightNumber, array $averageT4, array $averageRnd, array $averageRvd): array
+    {
         return [
             'type' => 'line',
             'data' => [
@@ -161,25 +177,15 @@ class FlightInformationChartAverage extends AbstractController
         ];
     }
 
-    /**
-     * @param EngineParameterCollection[] $engineParameterCollections
-     */
-    private function createChartJsConfigForT4Rnd(array $engineParameterCollections): array
+    private function createChartJsConfigForT4Rnd(array $averageT4, array $averageRnd): array
     {
-        $data = [];
-
-        foreach ($engineParameterCollections as $engineParameterCollection) {
-            $data[] = [
-                'x' => $engineParameterCollection->averageParameter()->getT4(),
-                'y' => $engineParameterCollection->averageParameter()->getRnd()
-            ];
-        }
+        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageT4, $averageRnd);
 
         return [
             'type' => 'scatter',
             'data' => [
                 'datasets' => [[
-                    'label' => 'Scatter Dataset',
+                    'label' => 'Зависимость Т4 от РНД',
                     'backgroundColor' => '#0000ff',
                     'borderColor' => '#0000ff',
                     'data' => $data
@@ -188,14 +194,131 @@ class FlightInformationChartAverage extends AbstractController
             'options' => [
                 'elements' => [
                     'point' => [
-                        'radius' => 5,
+                        'radius' => 2,
                     ]
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false,
                 ],
                 'scales' => [
                     'xAxes' => [[
                         'type' => 'linear',
-                        'position' => 'bottom'
-                    ]]
+                        'position' => 'bottom',
+                        'display' => true,
+                        'scaleLabel' => [
+                            'display' => true,
+                            'labelString' => 'Средняя температура, °C на режиме МГ',
+                        ],
+                        'ticks' => ['min' => 150, 'max' => 600],
+                    ]],
+                    'yAxes' =>
+                        [[
+                            'type' => 'linear',
+                            'position' => 'bottom',
+                            'display' => true,
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Средние обороты РНД на режиме МГ',
+                            ],
+                            'ticks' => ['min' => 20, 'max' => 50],
+                        ]]
+                ]
+            ]];
+    }
+
+    private function createChartJsConfigForT4Rvd(array $averageT4, array $averageRvd): array
+    {
+        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageT4, $averageRvd);
+
+        return [
+            'type' => 'scatter',
+            'data' => [
+                'datasets' => [[
+                    'label' => 'Зависимость Т4 от РВД',
+                    'backgroundColor' => '#ff0000',
+                    'borderColor' => '#ff0000',
+                    'data' => $data
+                ]]
+            ],
+            'options' => [
+                'elements' => [
+                    'point' => [
+                        'radius' => 2,
+                    ]
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false,
+                ],
+                'scales' => [
+                    'xAxes' => [[
+                        'type' => 'linear',
+                        'position' => 'bottom',
+                        'display' => true,
+                        'scaleLabel' => [
+                            'display' => true,
+                            'labelString' => 'Средняя температура, °C на режиме МГ',
+                        ],
+                        'ticks' => ['min' => 150, 'max' => 600],
+                    ]],
+                    'yAxes' =>
+                        [[
+                            'display' => true,
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Средние обороты РВД на режиме МГ',
+                            ],
+                            'ticks' => ['min' => 20, 'max' => 70],
+                        ]]
+                ]
+            ]];
+    }
+
+    public function createChartJsConfigForRndRvd(array $averageRnd, array $averageRvd): array
+    {
+        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageRnd, $averageRvd);
+
+        return [
+            'type' => 'scatter',
+            'data' => [
+                'datasets' => [[
+                    'label' => 'Зависимость РНД от РВД',
+                    'backgroundColor' => '#ff0000',
+                    'borderColor' => '#ff0000',
+                    'data' => $data
+                ]]
+            ],
+            'options' => [
+                'elements' => [
+                    'point' => [
+                        'radius' => 2,
+                    ]
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false,
+                ],
+                'scales' => [
+                    'xAxes' => [[
+                        'type' => 'linear',
+                        'position' => 'bottom',
+                        'display' => true,
+                        'scaleLabel' => [
+                            'display' => true,
+                            'labelString' => 'Средняя температура, °C на режиме МГ',
+                        ],
+                        'ticks' => ['min' => 150, 'max' => 600],
+                    ]],
+                    'yAxes' =>
+                        [[
+                            'display' => true,
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Средние обороты РВД на режиме МГ',
+                            ],
+                            'ticks' => ['min' => 20, 'max' => 70],
+                        ]]
                 ]
             ]];
     }
