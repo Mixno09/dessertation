@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\FlightInformation\AverageEngineParameter;
-use App\Entity\FlightInformation\FlightInformation;
 use App\Fetcher\AirplaneFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +32,7 @@ class FlightInformationChartAverage extends AbstractController
         foreach ($flightInformationList as $flightInformation) {
             $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
-            if (! $averageParameter instanceof AverageEngineParameter) { //todo доделать проверку остальных параметров
+            if (! $averageParameter instanceof AverageEngineParameter) {
                 $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
@@ -64,16 +63,17 @@ class FlightInformationChartAverage extends AbstractController
         $averageRvd = [];
         $errors = [];
         foreach ($flightInformationList as $flightInformation) {
-            if ($flightInformation->getRightEngineParameters()->averageParameter()->getT4() === null) { //todo доделать проверку остальных параметров
-                $errors[] = 'Проверь самолет с номером ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' и вылетом номер ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' на целостность данных';
+            $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
+            $flightInformationId = $flightInformation->getFlightInformationId();
+            if (!$averageParameter instanceof AverageEngineParameter) {
+                $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
-            $flightNumber[] = $flightInformation->getFlightInformationId()->getFlightNumber();
-            $averageT4[] = $flightInformation->getRightEngineParameters()->averageParameter()->getT4();
-            $averageRnd[] = $flightInformation->getRightEngineParameters()->averageParameter()->getRnd();
-            $averageRvd[] = $flightInformation->getRightEngineParameters()->averageParameter()->getRvd();
+            $flightNumber[] = $flightInformationId->getFlightNumber();
+            $averageT4[] = $averageParameter->getT4();
+            $averageRnd[] = $averageParameter->getRnd();
+            $averageRvd[] = $averageParameter->getRvd();
         }
-
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
@@ -179,7 +179,7 @@ class FlightInformationChartAverage extends AbstractController
 
     private function createChartJsConfigForT4Rnd(array $averageT4, array $averageRnd): array
     {
-        $data = array_map( //todo сделать тоже в других методах
+        $data = array_map(
             static fn($t4, $rnd) => ['x' => $t4, 'y' => $rnd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
             $averageT4,
             $averageRnd
@@ -233,7 +233,11 @@ class FlightInformationChartAverage extends AbstractController
 
     private function createChartJsConfigForT4Rvd(array $averageT4, array $averageRvd): array
     {
-        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageT4, $averageRvd);
+        $data = array_map(
+            static fn($t4, $rvd) => ['x' => $t4, 'y' => $rvd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            $averageT4,
+            $averageRvd
+        );
 
         return [
             'type' => 'scatter',
@@ -281,7 +285,11 @@ class FlightInformationChartAverage extends AbstractController
 
     public function createChartJsConfigForRndRvd(array $averageRnd, array $averageRvd): array
     {
-        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageRnd, $averageRvd);
+        $data = array_map(
+            static fn($t4, $rnd) => ['x' => $t4, 'y' => $rnd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            $averageRnd,
+            $averageRvd
+        );
 
         return [
             'type' => 'scatter',
