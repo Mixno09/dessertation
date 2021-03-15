@@ -11,6 +11,8 @@
 
         <embedded name="averageParameter" class="App\Entity\FlightInformation\AverageEngineParameter"/>
 
+        <field name="averageParameterError" type="boolean"/>
+
         <many-to-many field="collection" target-entity="App\Entity\FlightInformation\EngineParameter">
             <cascade>
                 <cascade-all/>

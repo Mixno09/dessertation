@@ -12,14 +12,15 @@ class EngineParameterCollection
     private ?int $id;
     private Collection $collection;
     private AverageEngineParameter $averageParameter;
+    private bool $averageParameterError;
 
     /**
      * @param EngineParameter[] $engineParameters
      */
-    public function __construct(array $engineParameters, AverageEngineParameter $averageParameter)
+    public function __construct(array $engineParameters, ?AverageEngineParameter $averageParameter)
     {
         $this->setCollection($engineParameters);
-        $this->averageParameter = $averageParameter;
+        $this->setAverageParameter($averageParameter);
     }
 
     /**
@@ -30,8 +31,22 @@ class EngineParameterCollection
         $this->collection = new ArrayCollection($engineParameters);
     }
 
-    public function averageParameter(): AverageEngineParameter
+    private function setAverageParameter(?AverageEngineParameter $averageParameter): void
     {
-        return $this->averageParameter;
+        if ($averageParameter instanceof AverageEngineParameter) {
+            $this->averageParameter = $averageParameter;
+            $this->averageParameterError = false;
+        } else {
+            $this->averageParameter = new AverageEngineParameter(0, 0, 0);
+            $this->averageParameterError = true;
+        }
+    }
+
+    /**
+     * @return AverageEngineParameter|null Возвращает null в случае невозможности расчета
+     */
+    public function averageParameter(): ?AverageEngineParameter
+    {
+        return ($this->averageParameterError ? null : $this->averageParameter);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\FlightInformation\AverageEngineParameter;
 use App\Entity\FlightInformation\FlightInformation;
 use App\Fetcher\AirplaneFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,26 +23,26 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageLeft(int $airplane): Response
     {
-        $flightInformations = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
 
         $flightNumber = [];
         $averageT4 = [];
         $averageRnd = [];
         $averageRvd = [];
         $errors = [];
-        /** @var  FlightInformation $flightInformation */
-        foreach ($flightInformations as $flightInformation) {
-            if ($flightInformation->getLeftEngineParameters()->averageParameter()->getT4() == 1) {
-                $errors[] = 'Проверь самолет с номером ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' и вылетом номер ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' на целостность данных';
+        foreach ($flightInformationList as $flightInformation) {
+            $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
+            $flightInformationId = $flightInformation->getFlightInformationId();
+            if (! $averageParameter instanceof AverageEngineParameter) { //todo доделать проверку остальных параметров
+                $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
-            $flightNumber[] = $flightInformation->getFlightInformationId()->getFlightNumber();
-            $averageT4[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getT4();
-            $averageRnd[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getRnd();
-            $averageRvd[] = $flightInformation->getLeftEngineParameters()->averageParameter()->getRvd();
+            $flightNumber[] = $flightInformationId->getFlightNumber();
+            $averageT4[] = $averageParameter->getT4();
+            $averageRnd[] = $averageParameter->getRnd();
+            $averageRvd[] = $averageParameter->getRvd();
         }
 
-        dump($flightInformations[0]->getRightEngineParameters()->averageParameter()); //todo я могу получить доступ к прокси только при обращении к нему?
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
@@ -55,16 +56,15 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageRight(int $airplane)
     {
-        $flightInformations = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
 
         $flightNumber = [];
         $averageT4 = [];
         $averageRnd = [];
         $averageRvd = [];
         $errors = [];
-        /** @var  FlightInformation $flightInformation */
-        foreach ($flightInformations as $flightInformation) {
-            if ($flightInformation->getRightEngineParameters()->averageParameter()->getT4() == 1) {
+        foreach ($flightInformationList as $flightInformation) {
+            if ($flightInformation->getRightEngineParameters()->averageParameter()->getT4() === null) { //todo доделать проверку остальных параметров
                 $errors[] = 'Проверь самолет с номером ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' и вылетом номер ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' на целостность данных';
                 continue;
             }
@@ -179,7 +179,11 @@ class FlightInformationChartAverage extends AbstractController
 
     private function createChartJsConfigForT4Rnd(array $averageT4, array $averageRnd): array
     {
-        $data = array_map(function ($x, $y) {return ['x' => $x, 'y' => $y];}, $averageT4, $averageRnd);
+        $data = array_map( //todo сделать тоже в других методах
+            static fn($t4, $rnd) => ['x' => $t4, 'y' => $rnd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            $averageT4,
+            $averageRnd
+        );
 
         return [
             'type' => 'scatter',

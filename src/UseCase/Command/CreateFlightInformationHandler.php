@@ -68,23 +68,28 @@ class CreateFlightInformationHandler
     /**
      * @param EngineParameter[] $engineParameters
      */
-    private function calcAverageParameter(array $engineParameters): AverageEngineParameter
+    private function calcAverageParameter(array $engineParameters): ?AverageEngineParameter
     {
         $t4 = [];
         $rnd = [];
         $rvd = [];
         foreach ($engineParameters as $parameter) {
-            if ($parameter->getRnd() > 31 && $parameter->getRnd() < 36.5) {
+            $parameterRnd = $parameter->getRnd();
+            if ($parameterRnd > 31 && $parameterRnd < 36.5) {
                 $time = $parameter->getTime();
                 $t4[$time] = $parameter->getT4();
-                $rnd[$time] = $parameter->getRnd();
+                $rnd[$time] = $parameterRnd;
                 $rvd[$time] = $parameter->getRvd();
             }
         }
 
-        $averageT4 = (count($t4) === 0) ? 1 : array_sum($t4) / count($t4);
-        $averageRnd = (count($rnd) === 0) ? 1 : array_sum($rnd) / count($rnd);
-        $averageRvd = (count($rvd) === 0) ? 1 : array_sum($rvd) / count($rvd);
+        if (count($t4) === 0 || count($rnd) === 0 || count($rvd) === 0) {
+            return null;
+        }
+
+        $averageT4 = array_sum($t4) / count($t4);
+        $averageRnd = array_sum($rnd) / count($rnd);
+        $averageRvd = array_sum($rvd) / count($rvd);
 
         return new AverageEngineParameter($averageT4, $averageRnd, $averageRvd);
     }

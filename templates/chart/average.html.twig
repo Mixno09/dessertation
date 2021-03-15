@@ -4,7 +4,7 @@
 
 {% block content %}
     {% for error in errors %}
-        <div class="text-center"><h3>{{ error }}</h3></div>
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
     {% endfor %}
     <canvas class="my-4 w-100" id="averageAll"></canvas>
     <canvas class="my-4 w-100" id="t4Rnd"></canvas>
@@ -18,7 +18,20 @@
         new Chart(ctx, {{ average|json_encode|raw }});
 
         var ctx1 = document.getElementById('t4Rnd');
-        new Chart(ctx1, {{ t4Rnd|json_encode|raw }});
+        var config1 = {{ t4Rnd|json_encode|raw }};
+        config1.options.tooltips.callbacks = {
+            label: function(tooltipItem, data) {
+                var label = '';
+                var item = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                var date = new Date(item.flightDate);
+                label += new Intl.DateTimeFormat('ru').format(date);
+                label += ' ' + item.flightNumber;
+                label += ': (' + tooltipItem.label + ', ' + tooltipItem.value + ')';
+                label = `${tooltipItem.label}`;
+                return label;
+            }
+        };
+        new Chart(ctx1, config1);
 
         var ctx2 = document.getElementById('t4Rvd');
         new Chart(ctx2, {{ t4Rvd|json_encode|raw }});
