@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\FlightInformation\AverageEngineParameter;
+use App\Entity\FlightInformation\FlightInformationId;
 use App\Fetcher\AirplaneFetcher;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,10 +30,11 @@ class FlightInformationChartAverage extends AbstractController
         $averageRnd = [];
         $averageRvd = [];
         $errors = [];
+        $flightInformationIds = [];
         foreach ($flightInformationList as $flightInformation) {
             $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
-            if (! $averageParameter instanceof AverageEngineParameter) {
+            if (!$averageParameter instanceof AverageEngineParameter) {
                 $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
@@ -40,11 +42,12 @@ class FlightInformationChartAverage extends AbstractController
             $averageT4[] = $averageParameter->getT4();
             $averageRnd[] = $averageParameter->getRnd();
             $averageRvd[] = $averageParameter->getRvd();
+            $flightInformationIds[] = $flightInformationId;
         }
 
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
-            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
+            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
             't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd),
             'errors' => $errors,
         ]);
@@ -177,12 +180,23 @@ class FlightInformationChartAverage extends AbstractController
         ];
     }
 
-    private function createChartJsConfigForT4Rnd(array $averageT4, array $averageRnd): array
+    /**
+     * @param float[] $averageT4
+     * @param float[] $averageRnd
+     * @param FlightInformationId[] $flightInformationIds
+     */
+    private function createChartJsConfigForT4Rnd(array $averageT4, array $averageRnd, array $flightInformationIds): array
     {
         $data = array_map(
-            static fn($t4, $rnd) => ['x' => $t4, 'y' => $rnd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            static fn($t4, $rnd, $id) => /** @var FlightInformationId $id */ [
+                'x' => $t4,
+                'y' => $rnd,
+                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightNumber' => $id->getFlightNumber(),
+            ],
             $averageT4,
-            $averageRnd
+            $averageRnd,
+            $flightInformationIds
         );
 
         return [

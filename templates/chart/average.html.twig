@@ -14,37 +14,33 @@
 {% block javascripts %}
     <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
     <script>
-        var ctx = document.getElementById('averageAll');
-        new Chart(ctx, {{ average|json_encode|raw }});
+        (function () {
+            const tooltipCallback = {
+                label: function (tooltipItem, data) {
+                    let label = '';
+                    const item = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                    let date = new Date(item.flightDate);
+                    date = new Intl.DateTimeFormat('ru').format(date);
+                    label += date;
+                    label += ' ' + item.flightNumber;
+                    label += ': (' + tooltipItem.label + ', ' + tooltipItem.value + ')';
+                    label = `Дата - ${date}, Номер вылета - ${item.flightNumber}: (${tooltipItem.label}, ${tooltipItem.value})`;
+                    return label;
+                }
+            };
 
-        var ctx1 = document.getElementById('t4Rnd');
-        var config1 = {{ t4Rnd|json_encode|raw }};
-        config1.options.tooltips.callbacks = {
-            label: function(tooltipItem, data) {
-                var label = '';
-                var item = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                var date = new Date(item.flightDate);
-                label += new Intl.DateTimeFormat('ru').format(date);
-                label += ' ' + item.flightNumber;
-                label += ': (' + tooltipItem.label + ', ' + tooltipItem.value + ')';
-                return label;
-            }
-        };
-        new Chart(ctx1, config1);
+            const ctx = document.getElementById('averageAll');
+            new Chart(ctx, {{ average|json_encode|raw }});
 
-        var ctx2 = document.getElementById('t4Rvd');
-        var config2 = {{ t4Rvd|json_encode|raw }};
-        config2.options.tooltips.callbacks = {
-            label: function(tooltipItem, data) {
-                var label = '';
-                var item = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                var date = new Date(item.flightDate);
-                label += new Intl.DateTimeFormat('ru').format(date);
-                label += ' ' + item.flightNumber;
-                label += ': (' + tooltipItem.label + ', ' + tooltipItem.value + ')';
-                return label;
-            }
-        };
-        new Chart(ctx2, config2);
+            const ctx1 = document.getElementById('t4Rnd');
+            const config1 = {{ t4Rnd|json_encode|raw }};
+            config1.options.tooltips.callbacks = tooltipCallback;
+            new Chart(ctx1, config1);
+
+            const ctx2 = document.getElementById('t4Rvd');
+            const config2 = {{ t4Rvd|json_encode|raw }};
+            config2.options.tooltips.callbacks = tooltipCallback;
+            new Chart(ctx2, config2);
+        })();
     </script>
 {% endblock %}
