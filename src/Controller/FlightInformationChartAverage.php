@@ -48,7 +48,8 @@ class FlightInformationChartAverage extends AbstractController
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
-            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd),
+            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd, $flightInformationIds),
+            'rndRvd' => $this->createChartJsConfigForRndRvd($averageRnd, $averageRvd, $flightInformationIds),
             'errors' => $errors,
         ]);
     }
@@ -65,6 +66,7 @@ class FlightInformationChartAverage extends AbstractController
         $averageRnd = [];
         $averageRvd = [];
         $errors = [];
+        $flightInformationIds = [];
         foreach ($flightInformationList as $flightInformation) {
             $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
@@ -76,11 +78,13 @@ class FlightInformationChartAverage extends AbstractController
             $averageT4[] = $averageParameter->getT4();
             $averageRnd[] = $averageParameter->getRnd();
             $averageRvd[] = $averageParameter->getRvd();
+            $flightInformationIds[] = $flightInformationId;
         }
         return $this->render('chart/average.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
-            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd),
-            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd),
+            't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
+            't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd, $flightInformationIds),
+            'rndRvd' => $this->createChartJsConfigForRndRvd($averageRnd, $averageRvd, $flightInformationIds),
             'errors' => $errors,
         ]);
     }
@@ -245,12 +249,23 @@ class FlightInformationChartAverage extends AbstractController
             ]];
     }
 
-    private function createChartJsConfigForT4Rvd(array $averageT4, array $averageRvd): array
+    /**
+     * @param float[] $averageT4
+     * @param float[] $averageRvd
+     * @param FlightInformationId[] $flightInformationIds
+     */
+    private function createChartJsConfigForT4Rvd(array $averageT4, array $averageRvd, array $flightInformationIds): array
     {
         $data = array_map(
-            static fn($t4, $rvd) => ['x' => $t4, 'y' => $rvd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            static fn($t4, $rvd, $id) => /** @var FlightInformationId $id */[
+                'x' => $t4,
+                'y' => $rvd,
+                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightNumber' => $id->getFlightNumber()
+            ],
             $averageT4,
-            $averageRvd
+            $averageRvd,
+            $flightInformationIds
         );
 
         return [
@@ -297,12 +312,23 @@ class FlightInformationChartAverage extends AbstractController
             ]];
     }
 
-    public function createChartJsConfigForRndRvd(array $averageRnd, array $averageRvd): array
+    /**
+     * @param float[] $averageRnd
+     * @param float[] $averageRvd
+     * @param FlightInformationId[] $flightInformationIds
+     */
+    public function createChartJsConfigForRndRvd(array $averageRnd, array $averageRvd, array $flightInformationIds): array
     {
         $data = array_map(
-            static fn($t4, $rnd) => ['x' => $t4, 'y' => $rnd, 'flightDate' => (new \DateTimeImmutable())->format(\DateTimeImmutable::ISO8601), 'flightNumber' => 199999],
+            static fn($rnd, $rvd, $id) => /** @var FlightInformationId $id */[
+                'x' => $rnd,
+                'y' => $rvd,
+                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightNumber' => $id->getFlightNumber()
+            ],
             $averageRnd,
-            $averageRvd
+            $averageRvd,
+            $flightInformationIds
         );
 
         return [
@@ -332,9 +358,9 @@ class FlightInformationChartAverage extends AbstractController
                         'display' => true,
                         'scaleLabel' => [
                             'display' => true,
-                            'labelString' => 'Средняя температура, °C на режиме МГ',
+                            'labelString' => 'Средняя обороты РНД на режиме МГ',
                         ],
-                        'ticks' => ['min' => 150, 'max' => 600],
+                        'ticks' => ['min' => 30, 'max' => 40],
                     ]],
                     'yAxes' =>
                         [[
@@ -343,7 +369,7 @@ class FlightInformationChartAverage extends AbstractController
                                 'display' => true,
                                 'labelString' => 'Средние обороты РВД на режиме МГ',
                             ],
-                            'ticks' => ['min' => 20, 'max' => 70],
+                            'ticks' => ['min' => 45, 'max' => 60],
                         ]]
                 ]
             ]];
