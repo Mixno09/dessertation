@@ -16,3 +16,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Repository/Mapping/FlightInformation'
                 prefix: 'App\Entity\FlightInformation'
                 alias: App
+            User:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Repository/Mapping/User'
+                prefix: 'App\Entity\User'
+                alias: User
