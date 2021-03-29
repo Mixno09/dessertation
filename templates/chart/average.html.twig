@@ -22,9 +22,6 @@
                     const item = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                     let date = new Date(item.flightDate);
                     date = new Intl.DateTimeFormat('ru').format(date);
-                    label += date;
-                    label += ' ' + item.flightNumber;
-                    label += ': (' + tooltipItem.label + ', ' + tooltipItem.value + ')';
                     label = `Дата - ${date}, Номер вылета - ${item.flightNumber}: (${tooltipItem.label}, ${tooltipItem.value})`;
                     return label;
                 }

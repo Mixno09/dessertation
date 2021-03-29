@@ -11,16 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
     private $username;
 
     /**
@@ -28,10 +20,6 @@ class User implements UserInterface
      */
     private $roles = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
     private $password;
 
     public function getId(): ?int
@@ -85,6 +73,7 @@ class User implements UserInterface
 
     public function setPassword(string $password): self
     {
+        $password = password_hash($password, PASSWORD_ARGON2ID);
         $this->password = $password;
 
         return $this;

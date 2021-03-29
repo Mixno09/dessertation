@@ -34,7 +34,31 @@
 {% set currentRoute = app.request.attributes.get('_route') %}
 <div class="container-fluid">
     <div class="row">
-        <main role="main" class="col-md-12 ml-sm-auto px-4">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('flight_information_import') }}">
+                            <span data-feather="tag"></span>
+                            Импорт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('main') }}">
+                            <span data-feather="shopping-bag"></span>
+                            Данные вылетов
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('airplanes') }}">
+                            <span data-feather="shopping-bag"></span>
+                            Выбрать самолет
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-10 ml-sm-auto px-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h2 class="h2">{% block h1 %}{% endblock %}</h2>
             </div>
