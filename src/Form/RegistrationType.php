@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +17,7 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, ['label' => 'Имя пользователя', 'attr' => ['placeholder' => 'Михаил']])
-            ->add('password', TextType::class, ['label' => 'Пароль', 'attr' => ['placeholder' => 'Пароль']])
+            ->add('password', PasswordType::class, ['label' => 'Пароль', 'attr' => ['placeholder' => 'Пароль']])
             ->add('save', SubmitType::class, ['label' => 'Зарегистрироваться', 'attr' => ['class' => 'btn-primary']])
         ;
     }

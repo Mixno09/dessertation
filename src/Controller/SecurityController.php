@@ -4,19 +4,23 @@ namespace App\Controller;
 
 use App\Entity\User\User;
 use App\Form\RegistrationType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    private UserRepository $repository;
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(UserRepository $repository, EntityManagerInterface $entityManager)
     {
+        $this->repository = $repository;
         $this->entityManager = $entityManager;
     }
 
@@ -34,7 +38,9 @@ class SecurityController extends AbstractController
             $user->setPassword($data['password']);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
-
+            $token = new UsernamePasswordToken($user, null, 'main', ['ROLE_USER']);
+            $this->get('security.token_storage')->setToken($token);
+            $this->get('session')->set('_security_main', serialize($token));
             return $this->redirectToRoute('main');
         }
         return $this->render('security/registration.html.twig', ['form' => $form->createView()]);

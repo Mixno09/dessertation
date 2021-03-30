@@ -73,7 +73,7 @@ class User implements UserInterface
 
     public function setPassword(string $password): self
     {
-        $password = password_hash($password, PASSWORD_ARGON2ID);
+        $password = password_hash($password, PASSWORD_ARGON2ID); //todo Где хэшировать пароль?
         $this->password = $password;
 
         return $this;
