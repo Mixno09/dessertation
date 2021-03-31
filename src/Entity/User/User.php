@@ -1,98 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\User;
 
-use App\Repository\UserRepository;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
+use InvalidArgumentException;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- */
-class User implements UserInterface
+class User
 {
-    private $id;
+    private ?int $id;
+    private string $login;
+    private string $passwordHash;
 
-    private $username;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
-    private $password;
-
-    public function getId(): ?int
+    public function __construct(string $login, string $passwordHash)
     {
-        return $this->id;
+        $this->setLogin($login);
+        $this->passwordHash = $passwordHash;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
+    public function getLogin(): string
     {
-        return (string) $this->username;
+        return $this->login;
     }
 
-    public function setUsername(string $username): self
+    public function getPasswordHash(): string
     {
-        $this->username = $username;
-
-        return $this;
+        return $this->passwordHash;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    private function setLogin(string $login): void
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $login = trim($login);
 
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
-    {
-        return (string) $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $password = password_hash($password, PASSWORD_ARGON2ID); //todo Где хэшировать пароль?
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $length = mb_strlen($login);
+        if ($length >= 1 && $length <= 50) {
+            $this->login = $login;
+        } else {
+            throw new InvalidArgumentException('Логин должен быть от 1 до 50 символов');
+        }
     }
 }

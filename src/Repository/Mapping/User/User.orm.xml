@@ -10,11 +10,11 @@
         </id>
 
         <unique-constraints>
-            <unique-constraint columns="username"/>
+            <unique-constraint columns="login"/>
         </unique-constraints>
 
-        <field name="username" column="username" type="string" length="50" nullable="false" unique="true"/>
-        <field name="password" column="password" type="string" nullable="false" unique="true"/>
+        <field name="login" length="50" unique="true"/>
+        <field name="passwordHash"/>
 
     </entity>
 </doctrine-mapping>
