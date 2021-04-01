@@ -6,6 +6,7 @@ namespace App\Security;
 
 use App\Entity\User\User as DomainUser;
 use App\Fetcher\UserFetcher;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,7 +25,7 @@ final class UserProvider implements UserProviderInterface
     {
         $user = $this->fetcher->findByLogin($username);
         if ($user === null) {
-            throw new UsernameNotFoundException();
+            throw new CustomUserMessageAuthenticationException('Пользователя с именем ' . $username . ' не существует.'); //todo вывод ошибок в форму
         }
         return $this->createSecurityUserFromUser($user);
     }
