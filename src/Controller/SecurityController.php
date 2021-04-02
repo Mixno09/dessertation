@@ -34,7 +34,7 @@ class SecurityController extends AbstractController
      */
     public function registration(Request $request): Response
     {
-        $form = $this->createForm(RegistrationType::class);
+        $form = $this->createForm(RegistrationType::class); //todo создать RegistrationFormDTO
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
