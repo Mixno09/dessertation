@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\UseCase\Command;
 
-use App\Entity\User\User;
+use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Security\User as SecurityUser;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateUserHandler
@@ -16,11 +15,11 @@ class CreateUserHandler
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository)
     {
-        $this->passwordEncoder = $passwordEncoder;
         $this->repository = $repository;
+        $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function handle(CreateUserCommand $command): void
+    public function handle(CreateUserCommand $command): void //todo сделать проверку на уникальное имя
     {
         $passwordHash = $this->encodePassword(
             $command->getPassword()
@@ -34,7 +33,7 @@ class CreateUserHandler
 
     private function encodePassword(string $password): string
     {
-        $user = SecurityUser::createEmpty();
+        $user = User::createEmpty();
         return $this->passwordEncoder->encodePassword($user, $password);
     }
 }

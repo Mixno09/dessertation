@@ -19,6 +19,6 @@ doctrine:
             User:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Repository/Mapping/User'
-                prefix: 'App\Entity\User'
+                dir: '%kernel.project_dir%/src/Repository/Mapping'
+                prefix: 'App\Entity'
                 alias: User

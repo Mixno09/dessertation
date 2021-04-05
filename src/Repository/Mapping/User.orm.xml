@@ -3,7 +3,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="App\Entity\User\User" table="user">
+    <entity name="App\Entity\User" table="user">
 
         <id name="id" type="integer">
             <generator/>
@@ -14,7 +14,7 @@
         </unique-constraints>
 
         <field name="login" length="50" unique="true"/>
-        <field name="passwordHash"/>
+        <field name="password"/>
 
     </entity>
 </doctrine-mapping>

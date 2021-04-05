@@ -4,29 +4,28 @@ declare(strict_types=1);
 
 namespace App\Security;
 
-use App\Entity\User\User as DomainUser;
-use App\Fetcher\UserFetcher;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final class UserProvider implements UserProviderInterface
 {
-    private UserFetcher $fetcher;
+    private UserRepository $repository;
 
-    public function __construct(UserFetcher $fetcher)
+    public function __construct(UserRepository $repository)
     {
-        $this->fetcher = $fetcher;
+        $this->repository = $repository;
     }
 
-    public function loadUserByUsername(string $username)
+    public function loadUserByUsername(string $login)
     {
-        $user = $this->fetcher->findByLogin($username);
+        $user = $this->repository->findOneByUsername($login);
         if ($user === null) {
             throw new UsernameNotFoundException();
         }
-        return $this->createSecurityUserFromUser($user);
+        return $user;
     }
 
     public function refreshUser(UserInterface $user)
@@ -36,14 +35,6 @@ final class UserProvider implements UserProviderInterface
 
     public function supportsClass(string $class)
     {
-        return User::class === $class || is_subclass_of($class, User::class);
-    }
-
-    private function createSecurityUserFromUser(DomainUser $user): User
-    {
-        return new User(
-            $user->getLogin(),
-            $user->getPasswordHash()
-        );
+        return (User::class === $class);
     }
 }
