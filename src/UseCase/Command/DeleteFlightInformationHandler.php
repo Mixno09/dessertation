@@ -19,7 +19,7 @@ class DeleteFlightInformationHandler
 
     public function handle(DeleteFlightInformationCommand $command)
     {
-       $flightInformation = $this->repository->findBySlug($command->slug);
+        $flightInformation = $this->repository->findBySlug($command->slug);
 
         if (! $flightInformation instanceof FlightInformation) {
             throw new Exception('Информации о самолете с № ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' с вылетом № ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' не существует.');

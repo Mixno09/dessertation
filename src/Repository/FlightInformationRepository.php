@@ -18,7 +18,7 @@ class FlightInformationRepository
         $this->entityManager = $entityManager;
     }
 
-    public function find(FlightInformationId $id): ?FlightInformation //todo зачем тут исключение?
+    public function find(FlightInformationId $id): ?FlightInformation //todo переделать на метод has
     {
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */
@@ -31,7 +31,7 @@ class FlightInformationRepository
         return $flightInformation;
     }
 
-    public function findBySlug(string $slug): ?FlightInformation //todo зачем тут исключение?
+    public function findBySlug(string $slug): ?FlightInformation //todo сделать исключение
     {
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Form\RegistrationFormDto;
+use App\Form\RegistrationDto;
 use App\Form\RegistrationType;
 use App\Security\LoginFormAuthenticator;
 use App\Security\UserProvider;
@@ -36,15 +36,17 @@ class SecurityController extends AbstractController
      */
     public function registration(Request $request): Response
     {
-        $registrationFormDto = new RegistrationFormDto();
-        $form = $this->createForm(RegistrationType::class, $registrationFormDto);
+        $registrationDto = new RegistrationDto();
+        $form = $this->createForm(RegistrationType::class, $registrationDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $command = new CreateUserCommand();
-            $command->hydrate($registrationFormDto); //todo норм метод?
+            $command = new CreateUserCommand($registrationDto->login, $registrationDto->password);
             $this->handler->handle($command);
-            $user = $this->userProvider->loadUserByUsername($command->getLogin());
-            $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
+            $user = $this->userProvider->loadUserByUsername($command->getLogin()); //todo сделать получение user по id
+            $response = $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
+            if ($response instanceof Response) {
+                return $response;
+            }
             return $this->redirectToRoute('main');
         }
         return $this->render('security/registration.html.twig', ['form' => $form->createView()]);

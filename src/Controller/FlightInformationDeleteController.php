@@ -37,7 +37,7 @@ class FlightInformationDeleteController extends AbstractController
             $this->handler->handle($command);
             return $this->redirectToRoute('main');
         }
-        $flightInformation = $this->repository->findBySlug($slug);
+        $flightInformation = $this->repository->findBySlug($slug); //todo переделать на fetcher
         if (! $flightInformation instanceof FlightInformation) {
             throw $this->createNotFoundException(
                 'Данных борта ' . $flightInformation->getFlightInformationId()->getAirplaneNumber() . ' с вылетом ' . $flightInformation->getFlightInformationId()->getFlightNumber() . ' не существует');
