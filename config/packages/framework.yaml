@@ -27,3 +27,8 @@ framework:
             chartjs:
                 base_path: '/chartjs'
                 version: '2.9.3'
+
+    validation:
+        mapping:
+            paths:
+                - "%kernel.project_dir%/src/Validator/User"

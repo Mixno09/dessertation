@@ -24,7 +24,7 @@ class UserRepository
 
     public function save(UserInterface $user): void
     {
-        $this->entityManager->persist($user); // todo заменить на транзакцию
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 

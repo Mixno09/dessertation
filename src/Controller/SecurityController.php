@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\RegistrationFormDto;
 use App\Form\RegistrationType;
 use App\Security\LoginFormAuthenticator;
 use App\Security\UserProvider;
@@ -35,13 +36,14 @@ class SecurityController extends AbstractController
      */
     public function registration(Request $request): Response
     {
-        $form = $this->createForm(RegistrationType::class); //todo создать RegistrationFormDTO
+        $registrationFormDto = new RegistrationFormDto();
+        $form = $this->createForm(RegistrationType::class, $registrationFormDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $command = new CreateUserCommand($data['username'], $data['password']);
+            $command = new CreateUserCommand();
+            $command->hydrate($registrationFormDto); //todo норм метод?
             $this->handler->handle($command);
-            $user = $this->userProvider->loadUserByUsername($data['username']);
+            $user = $this->userProvider->loadUserByUsername($command->getLogin());
             $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
             return $this->redirectToRoute('main');
         }
