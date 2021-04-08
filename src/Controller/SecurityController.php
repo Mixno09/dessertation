@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Form\RegistrationDto;
 use App\Form\RegistrationType;
+use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
-use App\Security\UserProvider;
 use App\UseCase\Command\CreateUserCommand;
 use App\UseCase\Command\CreateUserHandler;
+use Exception;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,14 +22,14 @@ class SecurityController extends AbstractController
     private CreateUserHandler $handler;
     private GuardAuthenticatorHandler $authenticatorHandler;
     private LoginFormAuthenticator $loginFormAuthenticator;
-    private UserProvider $userProvider; //todo use UserRepository
+    private UserRepository $repository;
 
-    public function __construct(CreateUserHandler $handler, GuardAuthenticatorHandler $authenticatorHandler, LoginFormAuthenticator $loginFormAuthenticator, UserProvider $userProvider)
+    public function __construct(CreateUserHandler $handler, GuardAuthenticatorHandler $authenticatorHandler, LoginFormAuthenticator $loginFormAuthenticator, UserRepository $repository)
     {
         $this->handler = $handler;
         $this->authenticatorHandler = $authenticatorHandler;
         $this->loginFormAuthenticator = $loginFormAuthenticator;
-        $this->userProvider = $userProvider;
+        $this->repository = $repository;
     }
 
     /**
@@ -41,8 +42,12 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new CreateUserCommand($registrationDto->login, $registrationDto->password);
-            $this->handler->handle($command);
-            $user = $this->userProvider->loadUserByUsername($command->getLogin()); //todo сделать получение user по id
+            try {
+                $userId = $this->handler->handle($command);
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage()); //todo как сделать?
+            }
+            $user = $this->repository->findOneByUserId($userId);
             $response = $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
             if ($response instanceof Response) {
                 return $response;

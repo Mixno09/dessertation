@@ -18,7 +18,7 @@ class FlightInformationRepository
         $this->entityManager = $entityManager;
     }
 
-    public function find(FlightInformationId $id): ?FlightInformation //todo переделать на метод has
+    public function hasFlightInformation(FlightInformationId $id): bool
     {
         $repository = $this->getRepository();
         /** @var FlightInformation|null $flightInformation */
@@ -28,17 +28,7 @@ class FlightInformationRepository
             'flightInformationId.flightNumber' => $id->getFlightNumber(),
         ]);
 
-        return $flightInformation;
-    }
-
-    public function findBySlug(string $slug): ?FlightInformation //todo сделать исключение
-    {
-        $repository = $this->getRepository();
-        /** @var FlightInformation|null $flightInformation */
-        $flightInformation = $repository->findOneBy([
-            'slug' => $slug,
-        ]);
-        return $flightInformation;
+        return ($flightInformation instanceof FlightInformation);
     }
 
     public function save(FlightInformation $flightInformation): void

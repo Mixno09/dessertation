@@ -6,6 +6,7 @@ namespace App\UseCase\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateUserHandler
@@ -19,16 +20,24 @@ class CreateUserHandler
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function handle(CreateUserCommand $command): void //todo сделать проверку на уникальное имя
+    public function handle(CreateUserCommand $command): ?int
     {
         $passwordHash = $this->encodePassword(
             $command->getPassword()
         );
+
+        $user = $this->repository->findOneByUsername($command->getLogin());
+
+        if ($user instanceof User) {
+            throw new Exception('Пользователь с именем ' . $user->getUsername() . ' уже существует');
+        }
+
         $user = new User(
             $command->getLogin(),
             $passwordHash
         );
-        $this->repository->save($user);
+
+        return $this->repository->save($user);
     }
 
     private function encodePassword(string $password): string

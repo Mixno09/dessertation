@@ -13,7 +13,7 @@ class RegistrationDto
      * @Assert\Type(type="string")
      * @Assert\Length(min=1, max=50, allowEmptyString=false)
      */
-    public string $login;
+    public string $login; //todo приватные поля не работают?
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")

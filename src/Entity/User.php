@@ -19,6 +19,11 @@ class User implements UserInterface
         $this->password = $password;
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function getRoles()
     {
         return [];

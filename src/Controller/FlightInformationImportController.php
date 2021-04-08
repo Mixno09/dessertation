@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\ImportFlightInformationDto;
 use App\Form\ImportFlightInformationType;
 use App\Service\FlightInformationImportXlsParser;
 use App\UseCase\Command\CreateFlightInformationCommand;
@@ -29,15 +30,15 @@ class FlightInformationImportController extends AbstractController
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(ImportFlightInformationType::class);
+        $importFlightInformationDto = new ImportFlightInformationDto();
+        $form = $this->createForm(ImportFlightInformationType::class, $importFlightInformationDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $result = $this->parser->parse($data['flightInformation']);
+            $result = $this->parser->parse($importFlightInformationDto->file);
             $command = new CreateFlightInformationCommand(
-                $data['airplane'],
-                $data['date'],
-                $data['departure'],
+                $importFlightInformationDto->airplaneNumber,
+                $importFlightInformationDto->flightDate,
+                $importFlightInformationDto->flightNumber,
                 $result->getTime(),
                 $result->getT4Right(),
                 $result->getT4Left(),
