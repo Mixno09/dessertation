@@ -20,24 +20,25 @@ class CreateUserHandler
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function handle(CreateUserCommand $command): ?int
+    public function handle(CreateUserCommand $command): int
     {
-        $passwordHash = $this->encodePassword(
-            $command->getPassword()
-        );
-
-        $user = $this->repository->findOneByUsername($command->getLogin());
-
+        $user = $this->repository->findByUsername($command->getLogin()); //todo сделать has
         if ($user instanceof User) {
             throw new Exception('Пользователь с именем ' . $user->getUsername() . ' уже существует');
         }
+
+        $passwordHash = $this->encodePassword(
+            $command->getPassword()
+        );
 
         $user = new User(
             $command->getLogin(),
             $passwordHash
         );
 
-        return $this->repository->save($user);
+        $this->repository->save($user);
+
+        return $user->getId();
     }
 
     private function encodePassword(string $password): string

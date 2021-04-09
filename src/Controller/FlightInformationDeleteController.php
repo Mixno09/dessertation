@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\FlightInformation\FlightInformation;
 use App\Fetcher\FlightInformationFetcher;
 use App\UseCase\Command\DeleteFlightInformationCommand;
 use App\UseCase\Command\DeleteFlightInformationHandler;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,19 +28,18 @@ class FlightInformationDeleteController extends AbstractController
      */
     public function delete(string $slug, Request $request): Response
     {
+        $flightInformation = $this->fetcher->findBySlug($slug);
+        if ($flightInformation === null) {
+            throw $this->createNotFoundException('Записи с параметрами ' . $slug . ' не существует');
+        }
+
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new DeleteFlightInformationCommand();
             $command->slug = $slug;
-            $this->handler->handle($command); //todo как отправить данные с формы методом post
+            $this->handler->handle($command);
             return $this->redirectToRoute('main');
-        }
-        try {
-            /** @var FlightInformation $flightInformation */
-            $flightInformation = $this->fetcher->findBySlug($slug);
-        } catch (Exception $e) {
-            throw $this->createNotFoundException('Записи с параметрами ' . $slug . ' не существует'); //todo это норм?
         }
 
         return $this->render('index/delete.html.twig', [

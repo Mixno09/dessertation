@@ -24,6 +24,9 @@ class FlightInformationChartAverage extends AbstractController
     public function averageLeft(int $airplane): Response
     {
         $flightInformationList = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
+        if (count($flightInformationList) === 0) {
+            throw $this->createNotFoundException(); //todo message
+        }
 
         $flightNumber = [];
         $averageT4 = [];
@@ -60,6 +63,9 @@ class FlightInformationChartAverage extends AbstractController
     public function averageRight(int $airplane)
     {
         $flightInformationList = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
+        if (count($flightInformationList) === 0) {
+            throw $this->createNotFoundException(); //todo message
+        }
 
         $flightNumber = [];
         $averageT4 = [];

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface
 {
-    private ?int $id;
+    private ?int $id = null;
     private string $login;
     private string $password;
 
@@ -19,8 +20,14 @@ class User implements UserInterface
         $this->password = $password;
     }
 
-    public function getId(): ?int
+    /**
+     * @throws LogicException
+     */
+    public function getId(): int
     {
+        if ($this->id === null) {
+            throw new LogicException('Идентификатор не сгенерирован. Используйте App\\Repository\\UserRepository::save().');
+        }
         return $this->id;
     }
 

@@ -13,7 +13,7 @@ class RegistrationDto
      * @Assert\Type(type="string")
      * @Assert\Length(min=1, max=50, allowEmptyString=false)
      */
-    public string $login; //todo приватные поля не работают?
+    public string $login; //todo сделать кастомную на существование user
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="string")

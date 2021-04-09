@@ -16,23 +16,22 @@ class UserRepository
         $this->entityManager = $entityManager;
     }
 
-    public function findOneByUserId(int $id): ?User
+    public function findByUserId(int $id): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getRepository()->findOneBy(['id' => $id]);
     }
 
-    public function findOneByUsername(string $username): ?User
+    public function findByUsername(string $username): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getRepository()->findOneBy(['login' => $username]);
     }
 
-    public function save(UserInterface $user): ?int
+    public function save(UserInterface $user): void
     {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        return $user->getId();
     }
 
     private function getRepository(): EntityRepository

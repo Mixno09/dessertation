@@ -7,7 +7,6 @@ namespace App\Fetcher;
 use App\Entity\FlightInformation\EngineParameter;
 use App\Entity\FlightInformation\FlightInformation;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class FlightInformationFetcher
 {
@@ -59,7 +58,7 @@ class FlightInformationFetcher
             ->getResult();
     }
 
-    public function findByAirplane(int $airplane): array
+    public function getByAirplane(int $airplane): array
     {
         return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.id.airplane = :airplane')
@@ -67,20 +66,11 @@ class FlightInformationFetcher
             ->getResult();
     }
 
-    /**
-     * @return FlightInformation
-     * @throws Exception
-     */
-    public function findBySlug(string $slug): FlightInformation
+    public function findBySlug(string $slug): ?FlightInformation
     {
-        $flightInformation = $this->entityManager
+        return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.slug = :slug')
             ->setParameter('slug', $slug)
-            ->getSingleResult();
-        if ($flightInformation instanceof FlightInformation) {
-            return $flightInformation;
-        }
-
-        throw new Exception('Записи с параметрами ' . $slug . ' не существует');
+            ->getOneOrNullResult();
     }
 }

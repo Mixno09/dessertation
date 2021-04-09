@@ -8,7 +8,6 @@ use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use App\UseCase\Command\CreateUserCommand;
 use App\UseCase\Command\CreateUserHandler;
-use Exception;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,12 +41,8 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new CreateUserCommand($registrationDto->login, $registrationDto->password);
-            try {
-                $userId = $this->handler->handle($command);
-            } catch (Exception $e) {
-                throw new Exception($e->getMessage()); //todo как сделать?
-            }
-            $user = $this->repository->findOneByUserId($userId);
+            $userId = $this->handler->handle($command);
+            $user = $this->repository->findByUserId($userId);
             $response = $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
             if ($response instanceof Response) {
                 return $response;

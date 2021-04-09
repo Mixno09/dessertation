@@ -31,6 +31,14 @@ class FlightInformationRepository
         return ($flightInformation instanceof FlightInformation);
     }
 
+    public function findBySlug(string $slug): FlightInformation
+    {
+        return $this->entityManager
+            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getSingleResult();
+    }
+
     public function save(FlightInformation $flightInformation): void
     {
         $this->entityManager->persist($flightInformation);

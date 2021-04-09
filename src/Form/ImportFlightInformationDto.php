@@ -8,17 +8,16 @@ use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ImportFlightInformationDto
+class ImportFlightInformationDto //todo создать валидацию для проверки существующих данных в бд
 {
     /**
      * @Assert\NotBlank
      * @Assert\Type(type="integer")
      */
     public int $airplaneNumber;
-//    /**
-//     * @Assert\NotBlank
-//     * @Assert\DateTime()
-//     */
+    /**
+     * @Assert\NotBlank
+     */
     public DateTimeImmutable $flightDate;
     /**
      * @Assert\NotBlank
