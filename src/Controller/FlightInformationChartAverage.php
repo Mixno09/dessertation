@@ -25,7 +25,7 @@ class FlightInformationChartAverage extends AbstractController
     {
         $flightInformationList = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
         if (count($flightInformationList) === 0) {
-            throw $this->createNotFoundException(); //todo message
+            throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
 
         $flightNumber = [];
@@ -64,7 +64,7 @@ class FlightInformationChartAverage extends AbstractController
     {
         $flightInformationList = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
         if (count($flightInformationList) === 0) {
-            throw $this->createNotFoundException(); //todo message
+            throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
 
         $flightNumber = [];

@@ -25,7 +25,7 @@ class FlightInformationChartController extends AbstractController
         $leftEngineParameters = $this->fetcher->getLeftEngineParametersBySlug($slug);
         $rightEngineParameters = $this->fetcher->getRightEngineParametersBySlug($slug);
         if (count($leftEngineParameters) === 0 || count($rightEngineParameters) === 0) {
-            throw $this->createNotFoundException(); //todo wright message
+            throw $this->createNotFoundException('Данных не существует.');
         }
 
         return $this->render('chart/index.html.twig', [

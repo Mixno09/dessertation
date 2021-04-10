@@ -28,6 +28,13 @@ class UserRepository
         return $this->getRepository()->findOneBy(['login' => $username]);
     }
 
+    public function hasUserByUsername(string $username): bool
+    {
+        $user = $this->getRepository()->findOneBy(['login' => $username]);
+
+        return ($user instanceof User);
+    }
+
     public function save(UserInterface $user): void
     {
         $this->entityManager->persist($user);
