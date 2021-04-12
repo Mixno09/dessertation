@@ -7,12 +7,17 @@ namespace App\Form;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator as FIAssert;
+use App\Validator\ExistsFlightInformation;
 
 /**
- * @FIAssert\ExistsFlightInformation()
+ * @ExistsFlightInformation(
+ *     airplaneNumberPath="airplaneNumber",
+ *     flightDatePath="flightDate",
+ *     flightNumberPath="flightNumber",
+ *     errorPath="airplaneNumber"
+ * )
  */
-class ImportFlightInformationDto //todo создать валидацию для проверки существующих данных в бд
+class ImportFlightInformationDto
 {
     /**
      * @Assert\NotBlank

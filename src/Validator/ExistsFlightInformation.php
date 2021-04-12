@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Form\ImportFlightInformationDto;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -13,6 +12,10 @@ use Symfony\Component\Validator\Constraint;
 class ExistsFlightInformation extends Constraint
 {
     public string $message = 'Информация о самолете № {{airplaneNumber}}, с вылетом № {{flightNumber}} уже существует. Дата {{flightDate}}.';
+    public ?string $airplaneNumberPath = null;
+    public ?string $flightNumberPath = null;
+    public ?string $flightDatePath = null;
+    public ?string $errorPath = null;
 
     public function validatedBy()
     {

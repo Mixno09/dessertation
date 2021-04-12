@@ -22,7 +22,7 @@ class ExistsUsernameValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!$constraint instanceof ExistsUsername) {
+        if (! $constraint instanceof ExistsUsername) {
             throw new UnexpectedTypeException($constraint, ExistsUsername::class);
         }
 
@@ -35,7 +35,7 @@ class ExistsUsernameValidator extends ConstraintValidator
         }
 
         /** @var ?User $user */
-        $user = $this->entityManager //todo использовать em?
+        $user = $this->entityManager //todo использовать repository
             ->createQuery('SELECT u FROM App\Entity\User u WHERE u.login = :login')
             ->setParameter('login', $value)
             ->getOneOrNullResult();

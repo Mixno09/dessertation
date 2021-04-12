@@ -22,8 +22,10 @@ class CreateUserHandler
 
     public function handle(CreateUserCommand $command): int
     {
-        $user = $this->repository->hasUserByUsername($command->getLogin());
-        if ($user) {
+        $hasUser = $this->repository->hasUserByUsername(
+            $command->getLogin()
+        );
+        if ($hasUser) {
             throw new Exception('Пользователь с именем ' . $command->getLogin() . ' уже существует');
         }
 
