@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use DateTimeImmutable;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\ExistsFlightInformation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ExistsFlightInformation(
@@ -20,25 +18,29 @@ use App\Validator\ExistsFlightInformation;
 class ImportFlightInformationDto
 {
     /**
+     * @var int
      * @Assert\NotBlank
      * @Assert\Type(type="integer")
      */
-    public int $airplaneNumber;
+    public $airplaneNumber;
     /**
+     * @var \DateTimeImmutable
      * @Assert\NotBlank
      */
-    public DateTimeImmutable $flightDate;
+    public $flightDate;
     /**
+     * @var int
      * @Assert\NotBlank
      * @Assert\Type(type="integer")
      */
-    public int $flightNumber;
+    public $flightNumber;
     /**
+     * @var \Symfony\Component\HttpFoundation\File\File
      * @Assert\NotBlank
      * @Assert\File(
      *     mimeTypes = {"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
      *     mimeTypesMessage = "Загружаемый файл должен быть типа .xls или .xlsx"
      * )
      */
-    public File $file;
+    public $file;
 }

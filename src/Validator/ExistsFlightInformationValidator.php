@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Entity\FlightInformation\FlightInformation;
-use App\Form\ImportFlightInformationDto;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
@@ -41,14 +41,32 @@ class ExistsFlightInformationValidator extends ConstraintValidator
             throw new ConstraintDefinitionException('Нужно заполнить поле flightDatePath');
         }
 
-        if (null === $value) {
+        if ($value === null) {
             return;
         }
 
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $airplaneNumber = $propertyAccessor->getValue($value, $constraint->airplaneNumberPath);
-        $flightDate = $propertyAccessor->getValue($value, $constraint->flightDatePath); //todo проверить на datetime
+        if ($airplaneNumber === null) {
+            return;
+        }
+        if (! is_int($airplaneNumber)) {
+            throw new UnexpectedValueException($airplaneNumber, 'int');
+        }
+        $flightDate = $propertyAccessor->getValue($value, $constraint->flightDatePath);
+        if ($flightDate === null) {
+            return;
+        }
+        if (! $flightDate instanceof DateTimeImmutable) {
+            throw new UnexpectedValueException($flightDate, '\DateTimeImmutable');
+        }
         $flightNumber = $propertyAccessor->getValue($value, $constraint->flightNumberPath);
+        if ($flightNumber === null) {
+            return;
+        }
+        if (! is_int($flightNumber)) {
+            throw new UnexpectedValueException($flightNumber, 'int');
+        }
 
         $repository = $this->entityManager->getRepository(FlightInformation::class); //todo брать фетчер и сделать has
         $flightInformation = $repository->findOneBy([

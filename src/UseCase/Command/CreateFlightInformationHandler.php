@@ -29,8 +29,8 @@ class CreateFlightInformationHandler
             $command->getFlightNumber()
         );
 
-        $flightInformation = $this->repository->hasFlightInformation($flightInformationId);
-        if ($flightInformation) {
+        $hasFlightInformation = $this->repository->hasFlightInformation($flightInformationId);
+        if ($hasFlightInformation) {
             throw new Exception('Такие данные уже существуют в хранилище');
         }
 
