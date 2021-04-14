@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ExistsFlightInformation extends Constraint
+class UniqueFlightInformation extends Constraint
 {
     public string $message = 'Информация о самолете № {{airplaneNumber}}, с вылетом № {{flightNumber}} уже существует. Дата {{flightDate}}.';
     public ?string $airplaneNumberPath = null;
@@ -19,7 +19,7 @@ class ExistsFlightInformation extends Constraint
 
     public function validatedBy()
     {
-        return ExistsFlightInformationValidator::class;
+        return UniqueFlightInformationValidator::class;
     }
 
     public function getTargets()

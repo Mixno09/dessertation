@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Entity\FlightInformation\FlightInformation;
+use App\Fetcher\FlightInformationFetcher;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -14,19 +13,19 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class ExistsFlightInformationValidator extends ConstraintValidator
+class UniqueFlightInformationValidator extends ConstraintValidator
 {
-    private EntityManagerInterface $entityManager;
+    private FlightInformationFetcher $fetcher;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(FlightInformationFetcher $fetcher)
     {
-        $this->entityManager = $entityManager;
+        $this->fetcher = $fetcher;
     }
 
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof ExistsFlightInformation) {
-            throw new UnexpectedTypeException($constraint, ExistsFlightInformation::class);
+        if (! $constraint instanceof UniqueFlightInformation) {
+            throw new UnexpectedTypeException($constraint, UniqueFlightInformation::class);
         }
 
         if (! is_string($constraint->airplaneNumberPath)) {
@@ -68,14 +67,9 @@ class ExistsFlightInformationValidator extends ConstraintValidator
             throw new UnexpectedValueException($flightNumber, 'int');
         }
 
-        $repository = $this->entityManager->getRepository(FlightInformation::class); //todo брать фетчер и сделать has
-        $flightInformation = $repository->findOneBy([
-            'flightInformationId.airplaneNumber' => $airplaneNumber,
-            'flightInformationId.flightDate' => $flightDate,
-            'flightInformationId.flightNumber' => $flightNumber,
-        ]);
+        $hasFlightInformation = $this->fetcher->hasFlightInformation($airplaneNumber, $flightDate, $flightNumber);
 
-        if ($flightInformation instanceof FlightInformation) {
+        if ($hasFlightInformation) {
             $errorPath = $constraint->errorPath ?? $constraint->airplaneNumberPath;
             $this->context->buildViolation($constraint->message)
                 ->setParameters([

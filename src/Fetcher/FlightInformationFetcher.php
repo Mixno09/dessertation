@@ -6,6 +6,7 @@ namespace App\Fetcher;
 
 use App\Entity\FlightInformation\EngineParameter;
 use App\Entity\FlightInformation\FlightInformation;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FlightInformationFetcher
@@ -15,6 +16,18 @@ class FlightInformationFetcher
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function hasFlightInformation(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): bool
+    {
+        /** @var FlightInformation|null $flightInformation */
+        $flightInformation = $this->entityManager->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.flightInformationId.flightDate = :flightDate AND f.flightInformationId.flightNumber = :flightNumber')
+            ->setParameter('airplaneNumber', $airplaneNumber)
+            ->setParameter('flightDate', $flightDate)
+            ->setParameter('flightNumber', $flightNumber)
+            ->getOneOrNullResult();
+
+        return ($flightInformation instanceof FlightInformation);
     }
 
     public function count(): int
@@ -55,14 +68,6 @@ class FlightInformationFetcher
         return $this->entityManager
             ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.rightEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
             ->setParameter('slug', $slug)
-            ->getResult();
-    }
-
-    public function getByAirplane(int $airplane): array
-    {
-        return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.id.airplane = :airplane')
-            ->setParameter('airplane', $airplane)
             ->getResult();
     }
 

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Validator\ExistsFlightInformation;
+use App\Validator as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ExistsFlightInformation(
+ * @AppAssert\UniqueFlightInformation(
  *     airplaneNumberPath="airplaneNumber",
  *     flightDatePath="flightDate",
  *     flightNumberPath="flightNumber",

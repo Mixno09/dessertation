@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Validator as UserAssert;
+use App\Validator as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class RegistrationDto
@@ -13,7 +13,7 @@ class RegistrationDto
      * @Assert\NotBlank
      * @Assert\Type(type="string")
      * @Assert\Length(min=1, max=50, allowEmptyString=false)
-     * @UserAssert\ExistsUsername()
+     * @AppAssert\UniqueUsername()
      */
     public string $login;
     /**

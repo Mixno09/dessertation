@@ -4,26 +4,25 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class ExistsUsernameValidator extends ConstraintValidator
+class UniqueUsernameValidator extends ConstraintValidator
 {
-    private EntityManagerInterface $entityManager;
+    private UserRepository $repository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(UserRepository $repository)
     {
-        $this->entityManager = $entityManager;
+        $this->repository = $repository;
     }
 
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof ExistsUsername) {
-            throw new UnexpectedTypeException($constraint, ExistsUsername::class);
+        if (! $constraint instanceof UniqueUsername) {
+            throw new UnexpectedTypeException($constraint, UniqueUsername::class);
         }
 
         if (null === $value || '' === $value) {
@@ -34,13 +33,9 @@ class ExistsUsernameValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        /** @var ?User $user */
-        $user = $this->entityManager //todo использовать repository
-            ->createQuery('SELECT u FROM App\Entity\User u WHERE u.login = :login')
-            ->setParameter('login', $value)
-            ->getOneOrNullResult();
+        $hasUser = $this->repository->hasUserByUsername($value);
 
-        if ($value === $user->getUsername()) {
+        if ($hasUser) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->setParameter('{{username}}', $value)

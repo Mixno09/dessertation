@@ -9,12 +9,12 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class ExistsUsername extends Constraint
+class UniqueUsername extends Constraint
 {
     public string $message = 'Пользователь с именем {{username}} уже существует.';
 
     public function validatedBy()
     {
-        return ExistsUsernameValidator::class;
+        return UniqueUsernameValidator::class;
     }
 }
