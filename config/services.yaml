@@ -25,3 +25,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Test\DebugUserListener:
+        tags:
+            - { name: kernel.event_listener, event: custom.user_created }
+
+    App_Test_DebugUserListener:
+        class: App\Test\DebugUserListener
+        tags:
+            - { name: kernel.event_listener, event: custom.user_created }

@@ -6,18 +6,22 @@ namespace App\UseCase\Command;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Test\UserCreatedEvent;
 use Exception;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CreateUserHandler
 {
     private UserPasswordEncoderInterface $passwordEncoder;
     private UserRepository $repository;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository, EventDispatcherInterface $eventDispatcher)
     {
         $this->repository = $repository;
         $this->passwordEncoder = $passwordEncoder;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function handle(CreateUserCommand $command): int
@@ -39,6 +43,9 @@ class CreateUserHandler
         );
 
         $this->repository->save($user);
+
+        $event = new UserCreatedEvent($user->getId());
+        $this->eventDispatcher->dispatch($event, 'custom.user_created');
 
         return $user->getId();
     }

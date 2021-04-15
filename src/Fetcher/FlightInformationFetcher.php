@@ -20,7 +20,6 @@ class FlightInformationFetcher
 
     public function hasFlightInformation(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): bool
     {
-        /** @var FlightInformation|null $flightInformation */
         $flightInformation = $this->entityManager->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.flightInformationId.flightDate = :flightDate AND f.flightInformationId.flightNumber = :flightNumber')
             ->setParameter('airplaneNumber', $airplaneNumber)
             ->setParameter('flightDate', $flightDate)
