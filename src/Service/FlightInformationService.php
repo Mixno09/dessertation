@@ -29,7 +29,7 @@ class FlightInformationService
             $command->getFlightNumber()
         );
         if ($hasFlightInformation) {
-            throw new Exception('Такие данные уже существуют в хранилище');
+            throw new Exception('Данные о вылете с параметрами: ' . $command->getAirplaneNumber() . $command->getFlightDate()->format('Y-m-d') . $command->getFlightNumber() . ' уже существуют.');
         }
 
         $flightInformation = FlightInformationFactory::create(

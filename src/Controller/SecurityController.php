@@ -6,8 +6,8 @@ use App\Form\RegistrationDto;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
-use App\UseCase\Command\CreateUserCommand;
-use App\UseCase\Command\CreateUserHandler;
+use App\Service\CreateUserCommand;
+use App\Service\UserService;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,14 +18,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    private CreateUserHandler $handler;
+    private UserService $userService;
     private GuardAuthenticatorHandler $authenticatorHandler;
     private LoginFormAuthenticator $loginFormAuthenticator;
     private UserRepository $repository;
 
-    public function __construct(CreateUserHandler $handler, GuardAuthenticatorHandler $authenticatorHandler, LoginFormAuthenticator $loginFormAuthenticator, UserRepository $repository)
+    public function __construct(UserService $userService, GuardAuthenticatorHandler $authenticatorHandler, LoginFormAuthenticator $loginFormAuthenticator, UserRepository $repository)
     {
-        $this->handler = $handler;
+        $this->userService = $userService;
         $this->authenticatorHandler = $authenticatorHandler;
         $this->loginFormAuthenticator = $loginFormAuthenticator;
         $this->repository = $repository;
@@ -41,7 +41,7 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new CreateUserCommand($registrationDto->login, $registrationDto->password);
-            $userId = $this->handler->handle($command);
+            $userId = $this->userService->create($command);
             $user = $this->repository->findByUserId($userId);
             $response = $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
             if ($response instanceof Response) {

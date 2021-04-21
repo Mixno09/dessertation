@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\FlightInformation\EngineParameter;
-use App\Fetcher\FlightInformationFetcher;
+use App\Repository\FlightInformationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationChartController extends AbstractController
 {
-    private FlightInformationFetcher $fetcher;
+    private FlightInformationRepository $repository;
 
-    public function __construct(FlightInformationFetcher $fetcher)
+    public function __construct(FlightInformationRepository $repository)
     {
-        $this->fetcher = $fetcher;
+        $this->repository = $repository;
     }
 
     /**
@@ -22,8 +22,8 @@ class FlightInformationChartController extends AbstractController
      */
     public function index(string $slug): Response
     {
-        $leftEngineParameters = $this->fetcher->getLeftEngineParametersBySlug($slug);
-        $rightEngineParameters = $this->fetcher->getRightEngineParametersBySlug($slug);
+        $leftEngineParameters = $this->repository->getLeftEngineParametersBySlug($slug);
+        $rightEngineParameters = $this->repository->getRightEngineParametersBySlug($slug);
         if (count($leftEngineParameters) === 0 || count($rightEngineParameters) === 0) {
             throw $this->createNotFoundException('Данных не существует.');
         }

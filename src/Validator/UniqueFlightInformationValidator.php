@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use App\Fetcher\FlightInformationFetcher;
+use App\Repository\FlightInformationRepository;
 use DateTimeImmutable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
@@ -15,11 +15,11 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class UniqueFlightInformationValidator extends ConstraintValidator
 {
-    private FlightInformationFetcher $fetcher;
+    private FlightInformationRepository $repository;
 
-    public function __construct(FlightInformationFetcher $fetcher)
+    public function __construct(FlightInformationRepository $repository)
     {
-        $this->fetcher = $fetcher;
+        $this->repository = $repository;
     }
 
     public function validate($value, Constraint $constraint)
@@ -67,7 +67,7 @@ class UniqueFlightInformationValidator extends ConstraintValidator
             throw new UnexpectedValueException($flightNumber, 'int');
         }
 
-        $hasFlightInformation = $this->fetcher->hasFlightInformation($airplaneNumber, $flightDate, $flightNumber);
+        $hasFlightInformation = $this->repository->hasOneByFlightInformationId($airplaneNumber, $flightDate, $flightNumber);
 
         if ($hasFlightInformation) {
             $errorPath = $constraint->errorPath ?? $constraint->airplaneNumberPath;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\Command;
+namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class CreateUserHandler
+class UserService
 {
     private UserPasswordEncoderInterface $passwordEncoder;
     private UserRepository $repository;
@@ -20,7 +20,7 @@ class CreateUserHandler
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function handle(CreateUserCommand $command): int
+    public function create(CreateUserCommand $command): int
     {
         $hasUser = $this->repository->hasUserByUsername(
             $command->getLogin()

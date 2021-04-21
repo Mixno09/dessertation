@@ -7,8 +7,8 @@ namespace App\Controller;
 use App\Form\ImportFlightInformationDto;
 use App\Form\ImportFlightInformationType;
 use App\Service\FlightInformationImportXlsParser;
-use App\UseCase\Command\CreateFlightInformationCommand;
-use App\UseCase\Command\CreateFlightInformationHandler;
+use App\Service\FlightInformationService;
+use App\Service\CreateFlightInformationCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationImportController extends AbstractController
 {
-    private CreateFlightInformationHandler $handler;
+    private FlightInformationService $flightInformationService;
     private FlightInformationImportXlsParser $parser;
 
-    public function __construct(CreateFlightInformationHandler $handler, FlightInformationImportXlsParser $parser)
+    public function __construct(FlightInformationService $flightInformationService, FlightInformationImportXlsParser $parser)
     {
-        $this->handler = $handler;
+        $this->flightInformationService = $flightInformationService;
         $this->parser = $parser;
     }
 
@@ -49,7 +49,7 @@ class FlightInformationImportController extends AbstractController
                 $result->getRndRight(),
                 $result->getRvdRight()
             );
-            $this->handler->handle($command);
+            $this->flightInformationService->create($command);
             return $this->redirectToRoute('main');
         }
         return $this->render('import/index.html.twig', [

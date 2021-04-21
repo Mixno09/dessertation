@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Fetcher\FlightInformationFetcher;
-use App\UseCase\Command\DeleteFlightInformationCommand;
-use App\UseCase\Command\DeleteFlightInformationHandler;
+use App\Repository\FlightInformationRepository;
+use App\Service\DeleteFlightInformationCommand;
+use App\Service\FlightInformationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,13 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationDeleteController extends AbstractController
 {
-    private DeleteFlightInformationHandler $handler;
-    private FlightInformationFetcher $fetcher;
+    private FlightInformationService $flightInformationService;
+    private FlightInformationRepository $repository;
 
-    public function __construct(DeleteFlightInformationHandler $handler, FlightInformationFetcher $fetcher)
+    public function __construct(FlightInformationService $flightInformationService, FlightInformationRepository $repository)
     {
-        $this->handler = $handler;
-        $this->fetcher = $fetcher;
+        $this->flightInformationService = $flightInformationService;
+        $this->repository = $repository;
     }
 
     /**
@@ -28,7 +28,7 @@ class FlightInformationDeleteController extends AbstractController
      */
     public function delete(string $slug, Request $request): Response
     {
-        $flightInformation = $this->fetcher->findBySlug($slug);
+        $flightInformation = $this->repository->findBySlug($slug);
         if ($flightInformation === null) {
             throw $this->createNotFoundException('Записи с параметрами ' . $slug . ' не существует');
         }
@@ -36,9 +36,12 @@ class FlightInformationDeleteController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $command = new DeleteFlightInformationCommand();
-            $command->slug = $slug;
-            $this->handler->handle($command);
+            $command = new DeleteFlightInformationCommand(
+                $flightInformation->getFlightInformationId()->getAirplaneNumber(),
+                $flightInformation->getFlightInformationId()->getFlightDate(),
+                $flightInformation->getFlightInformationId()->getFlightNumber()
+            );
+            $this->flightInformationService->delete($command);
             return $this->redirectToRoute('main');
         }
 

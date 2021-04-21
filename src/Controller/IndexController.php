@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Fetcher\FlightInformationFetcher;
+use App\Repository\FlightInformationRepository;
 use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    private FlightInformationFetcher $fetcher;
+    private FlightInformationRepository $repository;
     private PaginatorInterface $paginator;
 
-    public function __construct(FlightInformationFetcher $fetcher, PaginatorInterface $paginator)
+    public function __construct(FlightInformationRepository $repository, PaginatorInterface $paginator)
     {
-        $this->fetcher = $fetcher;
+        $this->repository = $repository;
         $this->paginator = $paginator;
     }
 
@@ -39,8 +39,8 @@ class IndexController extends AbstractController
     private function createPagination(int $page, int $limit): PaginationInterface
     {
         $target = new CallbackPagination(
-            fn() => $this->fetcher->count(),
-            fn($offset, $limit) => $this->fetcher->items($offset, $limit)
+            fn() => $this->repository->count(),
+            fn($offset, $limit) => $this->repository->items($offset, $limit)
         );
 
         return $this->paginator->paginate($target, $page, $limit);

@@ -4,18 +4,19 @@ namespace App\Controller;
 
 use App\Entity\FlightInformation\AverageEngineParameter;
 use App\Entity\FlightInformation\FlightInformationId;
-use App\Fetcher\AirplaneFetcher;
+use App\Repository\FlightInformationRepository;
+use DateTimeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FlightInformationChartAverage extends AbstractController
 {
-    private AirplaneFetcher $fetcher;
+    private FlightInformationRepository $repository;
 
-    public function __construct(AirplaneFetcher $fetcher)
+    public function __construct(FlightInformationRepository $repository)
     {
-        $this->fetcher = $fetcher;
+        $this->repository = $repository;
     }
 
     /**
@@ -23,7 +24,7 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageLeft(int $airplane): Response
     {
-        $flightInformationList = $this->fetcher->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->repository->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
         if (count($flightInformationList) === 0) {
             throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
@@ -62,7 +63,7 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageRight(int $airplane)
     {
-        $flightInformationList = $this->fetcher->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->repository->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
         if (count($flightInformationList) === 0) {
             throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
@@ -201,7 +202,7 @@ class FlightInformationChartAverage extends AbstractController
             static fn($t4, $rnd, $id) => /** @var FlightInformationId $id */ [
                 'x' => $t4,
                 'y' => $rnd,
-                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightDate' => $id->getFlightDate()->format(DateTimeInterface::ATOM),
                 'flightNumber' => $id->getFlightNumber(),
             ],
             $averageT4,
@@ -266,7 +267,7 @@ class FlightInformationChartAverage extends AbstractController
             static fn($t4, $rvd, $id) => /** @var FlightInformationId $id */[
                 'x' => $t4,
                 'y' => $rvd,
-                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightDate' => $id->getFlightDate()->format(DateTimeInterface::ATOM),
                 'flightNumber' => $id->getFlightNumber()
             ],
             $averageT4,
@@ -329,7 +330,7 @@ class FlightInformationChartAverage extends AbstractController
             static fn($rnd, $rvd, $id) => /** @var FlightInformationId $id */[
                 'x' => $rnd,
                 'y' => $rvd,
-                'flightDate' => $id->getFlightDate()->format(\DateTimeInterface::ATOM),
+                'flightDate' => $id->getFlightDate()->format(DateTimeInterface::ATOM),
                 'flightNumber' => $id->getFlightNumber()
             ],
             $averageRnd,
