@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\FlightInformation\FlightInformation;
-use App\Entity\FlightInformation\FlightInformationId;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 
 class FlightInformationRepository
 {
@@ -18,43 +17,13 @@ class FlightInformationRepository
         $this->entityManager = $entityManager;
     }
 
-    public function hasFlightInformation(FlightInformationId $id): bool
+    public function hasOneByFlightInformationId(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): bool
     {
-        $repository = $this->getRepository();
-        /** @var FlightInformation|null $flightInformation */
-        $flightInformation = $repository->findOneBy([
-            'flightInformationId.airplaneNumber' => $id->getAirplaneNumber(),
-            'flightInformationId.flightDate' => $id->getFlightDate(),
-            'flightInformationId.flightNumber' => $id->getFlightNumber(),
-        ]);
-
-        return ($flightInformation instanceof FlightInformation);
+        //todo реализовать
     }
 
-    public function findBySlug(string $slug): FlightInformation
+    public function findOneByFlightInformationId(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): ?FlightInformation
     {
-        return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.slug = :slug')
-            ->setParameter('slug', $slug)
-            ->getSingleResult();
-    }
-
-    public function save(FlightInformation $flightInformation): void
-    {
-        $this->entityManager->persist($flightInformation);
-        $this->entityManager->flush(); //todo заменить на транзакцию
-    }
-
-    public function delete(FlightInformation $flightInformation): void
-    {
-        $this->entityManager->remove($flightInformation);
-        $this->entityManager->flush(); //todo заменить на транзакцию
-    }
-
-    private function getRepository(): EntityRepository
-    {
-        /** @var EntityRepository $repository */
-        $repository = $this->entityManager->getRepository(FlightInformation::class);
-        return $repository;
+        //todo реализовать
     }
 }
