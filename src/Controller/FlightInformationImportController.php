@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Form\ImportFlightInformationDto;
 use App\Form\ImportFlightInformationType;
+use App\Service\CreateFlightInformationCommand;
 use App\Service\FlightInformationImportXlsParser;
 use App\Service\FlightInformationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,11 +34,20 @@ class FlightInformationImportController extends AbstractController
         $form = $this->createForm(ImportFlightInformationType::class, $importFlightInformationDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $command = $this->parser->parse(
-                $importFlightInformationDto->airplaneNumber,
+            $result = $this->parser->parse($importFlightInformationDto->file);
+            $command = new CreateFlightInformationCommand(
+                $importFlightInformationDto->flightNumber,
                 $importFlightInformationDto->flightDate,
                 $importFlightInformationDto->flightNumber,
-                $importFlightInformationDto->file
+                $result->getTime(),
+                $result->getT4Right(),
+                $result->getT4Left(),
+                $result->getAlfaRudLeft(),
+                $result->getAlfaRudRight(),
+                $result->getRndLeft(),
+                $result->getRvdLeft(),
+                $result->getRndRight(),
+                $result->getRvdRight()
             );
             $this->flightInformationService->create($command);
             return $this->redirectToRoute('main');

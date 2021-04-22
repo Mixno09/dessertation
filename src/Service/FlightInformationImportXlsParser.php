@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class FlightInformationImportXlsParser
 {
-    public function parse(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber, File $file): CreateFlightInformationCommand
+    public function parse(File $file): FlightInformationImportXlsParserResult
     {
         $reader = ReaderEntityFactory::createXLSXReader();
         $reader->open($file->getRealPath());
@@ -40,6 +40,6 @@ class FlightInformationImportXlsParser
                 $rvdRight[$value] = $cells[8]->getValue();
             }
         }
-        return new CreateFlightInformationCommand($airplaneNumber, $flightDate, $flightNumber, $time, $t4Right, $t4left, $alfaRudLeft, $alfaRudRight, $rndLeft, $rvdLeft, $rndRight, $rvdRight);
+        return new FlightInformationImportXlsParserResult($time, $t4Right, $t4left, $alfaRudLeft, $alfaRudRight, $rndLeft, $rvdLeft, $rndRight, $rvdRight);
     }
 }
