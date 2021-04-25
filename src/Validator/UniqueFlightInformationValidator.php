@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Entity\FlightInformation\FlightInformation;
 use App\Repository\FlightInformationRepository;
 use DateTimeImmutable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -67,9 +68,9 @@ class UniqueFlightInformationValidator extends ConstraintValidator
             throw new UnexpectedValueException($flightNumber, 'int');
         }
 
-        $hasFlightInformation = $this->repository->hasOneByFlightInformationId($airplaneNumber, $flightDate, $flightNumber);
+        $flightInformation = $this->repository->findFlightInformationByFlightInformationId($airplaneNumber, $flightDate, $flightNumber);
 
-        if ($hasFlightInformation) {
+        if ($flightInformation instanceof FlightInformation) {
             $errorPath = $constraint->errorPath ?? $constraint->airplaneNumberPath;
             $this->context->buildViolation($constraint->message)
                 ->setParameters([

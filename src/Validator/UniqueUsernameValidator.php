@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -33,9 +34,9 @@ class UniqueUsernameValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        $hasUser = $this->repository->hasUserByUsername($value);
+        $user = $this->repository->findUserByUsername($value);
 
-        if ($hasUser) {
+        if ($user instanceof User) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->setParameter('{{username}}', $value)

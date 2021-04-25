@@ -50,10 +50,17 @@ class FlightInformationFactory
         $leftAverageParameter = self::calcAverageParameter($leftEngineParameters);
         $rightAverageParameter = self::calcAverageParameter($rightEngineParameters);
 
+        $slug = implode('_', [
+            $flightInformationId->getAirplaneNumber(),
+            $flightInformationId->getFlightDate()->format('Y-m-d'),
+            $flightInformationId->getFlightNumber()
+        ]);
+
         return new FlightInformation(
             $flightInformationId,
             new EngineParameterCollection($leftEngineParameters, $leftAverageParameter),
-            new EngineParameterCollection($rightEngineParameters, $rightAverageParameter)
+            new EngineParameterCollection($rightEngineParameters, $rightAverageParameter),
+            $slug
         );
     }
 

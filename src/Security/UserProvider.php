@@ -19,9 +19,9 @@ final class UserProvider implements UserProviderInterface
         $this->repository = $repository;
     }
 
-    public function loadUserByUsername(string $login)
+    public function loadUserByUsername(string $username)
     {
-        $user = $this->repository->findByUsername($login);
+        $user = $this->repository->findUserByUsername($username);
         if ($user === null) {
             throw new UsernameNotFoundException();
         }

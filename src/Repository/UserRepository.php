@@ -3,9 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserRepository
 {
@@ -16,36 +15,21 @@ class UserRepository
         $this->entityManager = $entityManager;
     }
 
-    public function findByUserId(int $id): ?User
+    public function findUserById(int $id): ?User
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getRepository()->findOneBy(['id' => $id]);
+        return $this->entityManager
+            ->createQuery('SELECT u FROM App\Entity\User u WHERE u.id = :id')
+            ->setParameter('id', $id, Types::INTEGER)
+            ->getOneOrNullResult();
     }
 
-    public function findByUsername(string $username): ?User
+    public function findUserByUsername(string $username): ?User
     {
         $username = trim($username);
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getRepository()->findOneBy(['login' => $username]);
-    }
 
-    public function hasUserByUsername(string $username): bool
-    {
-        $username = trim($username);
-        $user = $this->getRepository()->findOneBy(['login' => $username]);
-
-        return ($user instanceof User);
-    }
-
-    public function save(UserInterface $user): void
-    {
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-    }
-
-    private function getRepository(): EntityRepository
-    {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->entityManager->getRepository(User::class);
+        return $this->entityManager
+            ->createQuery('SELECT u FROM App\Entity\User u WHERE u.username = :username')
+            ->setParameter('username', $username, Types::STRING)
+            ->getOneOrNullResult();
     }
 }

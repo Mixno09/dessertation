@@ -28,7 +28,7 @@ class FlightInformationDeleteController extends AbstractController
      */
     public function delete(string $slug, Request $request): Response
     {
-        $flightInformation = $this->repository->findBySlug($slug);
+        $flightInformation = $this->repository->findFlightInformationBySlug($slug);
         if ($flightInformation === null) {
             throw $this->createNotFoundException('Записи с параметрами ' . $slug . ' не существует');
         }
@@ -36,12 +36,15 @@ class FlightInformationDeleteController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $flightInformationId = $flightInformation->getFlightInformationId();
             $command = new DeleteFlightInformationCommand(
-                $flightInformation->getFlightInformationId()->getAirplaneNumber(),
-                $flightInformation->getFlightInformationId()->getFlightDate(),
-                $flightInformation->getFlightInformationId()->getFlightNumber()
+                $flightInformationId->getAirplaneNumber(),
+                $flightInformationId->getFlightDate(),
+                $flightInformationId->getFlightNumber()
             );
+
             $this->flightInformationService->delete($command);
+
             return $this->redirectToRoute('main');
         }
 

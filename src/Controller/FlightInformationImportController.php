@@ -49,7 +49,9 @@ class FlightInformationImportController extends AbstractController
                 $result->getRndRight(),
                 $result->getRvdRight()
             );
+
             $this->flightInformationService->create($command);
+
             return $this->redirectToRoute('main');
         }
         return $this->render('import/index.html.twig', [

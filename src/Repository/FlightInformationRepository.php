@@ -18,19 +18,7 @@ class FlightInformationRepository
         $this->entityManager = $entityManager;
     }
 
-    public function hasOneByFlightInformationId(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): bool
-    {
-        $flightInformation = $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.flightInformationId.flightDate = :flightDate AND f.flightInformationId.flightNumber = :flightNumber')
-            ->setParameter('airplaneNumber', $airplaneNumber)
-            ->setParameter('flightDate', $flightDate->format('Y-m-d'))
-            ->setParameter('flightNumber', $flightNumber)
-            ->getOneOrNullResult();
-
-        return ($flightInformation instanceof FlightInformation);
-    }
-
-    public function findOneByFlightInformationId(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): ?FlightInformation
+    public function findFlightInformationByFlightInformationId(int $airplaneNumber, DateTimeImmutable $flightDate, int $flightNumber): ?FlightInformation
     {
         return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber AND f.flightInformationId.flightDate = :flightDate AND f.flightInformationId.flightNumber = :flightNumber')
@@ -40,14 +28,14 @@ class FlightInformationRepository
             ->getOneOrNullResult();
     }
 
-    public function count(): int
+    public function countFlightInformation(): int
     {
         return (int) $this->entityManager
             ->createQuery('SELECT count(f) FROM App\Entity\FlightInformation\FlightInformation f')
             ->getSingleScalarResult();
     }
 
-    public function getCountUniqueAirplane(): int
+    public function countAirplaneNumber(): int
     {
         return (int) $this->entityManager
             ->createQuery('SELECT COUNT(DISTINCT f.flightInformationId.airplaneNumber) FROM App\Entity\FlightInformation\FlightInformation f')
@@ -57,7 +45,7 @@ class FlightInformationRepository
     /**
      * @return FlightInformation[]
      */
-    public function items(int $offset, int $limit): array
+    public function findFlightInformationInterval(int $offset, int $limit): array
     {
         return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f ORDER BY f.flightInformationId.airplaneNumber, f.flightInformationId.flightDate, f.flightInformationId.flightNumber')
@@ -69,7 +57,7 @@ class FlightInformationRepository
     /**
      * @return int[]
      */
-    public function itemsAirplane(int $offset, int $limit): array
+    public function findAirplaneNumberInterval(int $offset, int $limit): array
     {
         $rows = $this->entityManager
             ->createQuery('SELECT DISTINCT f.flightInformationId.airplaneNumber FROM App\Entity\FlightInformation\FlightInformation f ORDER BY f.flightInformationId.airplaneNumber')
@@ -83,7 +71,7 @@ class FlightInformationRepository
     /**
      * @return \App\Entity\FlightInformation\EngineParameter[]
      */
-    public function getLeftEngineParametersBySlug(string $slug): array
+    public function findLeftEngineParametersBySlug(string $slug): array
     {
         return $this->entityManager
             ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
@@ -94,7 +82,7 @@ class FlightInformationRepository
     /**
      * @return \App\Entity\FlightInformation\EngineParameter[]
      */
-    public function getRightEngineParametersBySlug(string $slug): array
+    public function findRightEngineParametersBySlug(string $slug): array
     {
         return $this->entityManager
             ->createQuery('SELECT ep FROM App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.rightEngineParameters epc WHERE f.slug = :slug AND ep MEMBER OF epc.collection')
@@ -102,7 +90,7 @@ class FlightInformationRepository
             ->getResult();
     }
 
-    public function findBySlug(string $slug): ?FlightInformation
+    public function findFlightInformationBySlug(string $slug): ?FlightInformation
     {
         return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.slug = :slug')
@@ -113,23 +101,12 @@ class FlightInformationRepository
     /**
      * @return FlightInformation[]
      */
-    public function getItemsWithLeftEngineParametersByAirplaneNumber(int $airplaneNumber): array
+    public function findFlightInformationByAirplaneNumberWithEngineParameter(int $airplaneNumber): array
     {
         return $this->entityManager
             ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate, f.flightInformationId.flightNumber')
             ->setParameter('airplaneNumber', $airplaneNumber)
             ->setFetchMode(FlightInformation::class, 'leftEngineParameters', ClassMetadataInfo::FETCH_EAGER)
-            ->getResult();
-    }
-
-    /**
-     * @return FlightInformation[]
-     */
-    public function getItemsWithRightEngineParametersByAirplaneNumber(int $airplaneNumber): array
-    {
-        return $this->entityManager
-            ->createQuery('SELECT f FROM App\Entity\FlightInformation\FlightInformation f WHERE f.flightInformationId.airplaneNumber = :airplaneNumber ORDER BY f.flightInformationId.flightDate')
-            ->setParameter('airplaneNumber', $airplaneNumber)
             ->setFetchMode(FlightInformation::class, 'rightEngineParameters', ClassMetadataInfo::FETCH_EAGER)
             ->getResult();
     }

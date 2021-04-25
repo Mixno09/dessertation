@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\FlightInformation\FlightInformation;
 use App\Entity\FlightInformation\FlightInformationFactory;
-use App\Entity\FlightInformation\FlightInformationId;
+use App\Exception\EntityExistsException;
+use App\Exception\EntityNotExistsException;
 use App\Repository\FlightInformationRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class FlightInformationService
 {
@@ -21,15 +22,23 @@ class FlightInformationService
         $this->entityManager = $entityManager;
     }
 
-    public function create(CreateFlightInformationCommand $command): FlightInformationId
+    /**
+     * @throws EntityExistsException
+     */
+    public function create(CreateFlightInformationCommand $command): void
     {
-        $hasFlightInformation = $this->repository->hasOneByFlightInformationId(
+        $flightInformation = $this->repository->findFlightInformationByFlightInformationId(
             $command->getAirplaneNumber(),
             $command->getFlightDate(),
             $command->getFlightNumber()
         );
-        if ($hasFlightInformation) {
-            throw new Exception('Данные о вылете с параметрами: ' . $command->getAirplaneNumber() . $command->getFlightDate()->format('Y-m-d') . $command->getFlightNumber() . ' уже существуют.');
+        if ($flightInformation instanceof FlightInformation) {
+            throw new EntityExistsException(sprintf(
+                'Вылет уже существует. Параметры: номер самолета - %d, дата - %s, номер вылета - %d.',
+                $command->getAirplaneNumber(),
+                $command->getFlightDate()->format('Y-m-d'),
+                $command->getFlightNumber()
+            ));
         }
 
         $flightInformation = FlightInformationFactory::create(
@@ -49,20 +58,25 @@ class FlightInformationService
 
         $this->entityManager->persist($flightInformation);
         $this->entityManager->flush();
-
-        return $flightInformation->getFlightInformationId();
     }
 
+    /**
+     * @throws EntityNotExistsException
+     */
     public function delete(DeleteFlightInformationCommand $command): void
     {
-        $flightInformation = $this->repository->findOneByFlightInformationId(
+        $flightInformation = $this->repository->findFlightInformationByFlightInformationId(
             $command->getAirplaneNumber(),
             $command->getFlightDate(),
             $command->getFlightNumber()
         );
-
         if ($flightInformation === null) {
-            throw new Exception('Таких данных не существует в хранилище');
+            throw new EntityNotExistsException(sprintf(
+                'Вылета не существует. Параметры: номер самолета - %d, дата - %s, номер вылета - %d.',
+                $command->getAirplaneNumber(),
+                $command->getFlightDate()->format('Y-m-d'),
+                $command->getFlightNumber()
+            ));
         }
 
         $this->entityManager->remove($flightInformation);

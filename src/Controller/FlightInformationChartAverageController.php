@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FlightInformationChartAverage extends AbstractController
+class FlightInformationChartAverageController extends AbstractController
 {
     private FlightInformationRepository $repository;
 
@@ -24,7 +24,7 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageLeft(int $airplane): Response
     {
-        $flightInformationList = $this->repository->getItemsWithLeftEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->repository->findFlightInformationByAirplaneNumberWithEngineParameter($airplane);
         if (count($flightInformationList) === 0) {
             throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
@@ -49,7 +49,7 @@ class FlightInformationChartAverage extends AbstractController
             $flightInformationIds[] = $flightInformationId;
         }
 
-        return $this->render('chart/average.html.twig', [
+        return $this->render('chart/average.html.twig', [ //todo нормальные названия шаблонов
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
             't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd, $flightInformationIds),
@@ -63,7 +63,7 @@ class FlightInformationChartAverage extends AbstractController
      */
     public function averageRight(int $airplane)
     {
-        $flightInformationList = $this->repository->getItemsWithRightEngineParametersByAirplaneNumber($airplane);
+        $flightInformationList = $this->repository->findFlightInformationByAirplaneNumberWithEngineParameter($airplane);
         if (count($flightInformationList) === 0) {
             throw $this->createNotFoundException('Данных для борта с номером ' . $airplane . ' не существует.');
         }
@@ -75,7 +75,7 @@ class FlightInformationChartAverage extends AbstractController
         $errors = [];
         $flightInformationIds = [];
         foreach ($flightInformationList as $flightInformation) {
-            $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
+            $averageParameter = $flightInformation->getRightEngineParameters()->averageParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
             if (!$averageParameter instanceof AverageEngineParameter) {
                 $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
@@ -343,8 +343,8 @@ class FlightInformationChartAverage extends AbstractController
             'data' => [
                 'datasets' => [[
                     'label' => 'Зависимость РНД от РВД',
-                    'backgroundColor' => '#ff0000',
-                    'borderColor' => '#ff0000',
+                    'backgroundColor' => '#00ff00',
+                    'borderColor' => '#00ff00',
                     'data' => $data
                 ]]
             ],

@@ -22,8 +22,8 @@ class FlightInformationChartController extends AbstractController
      */
     public function index(string $slug): Response
     {
-        $leftEngineParameters = $this->repository->getLeftEngineParametersBySlug($slug);
-        $rightEngineParameters = $this->repository->getRightEngineParametersBySlug($slug);
+        $leftEngineParameters = $this->repository->findLeftEngineParametersBySlug($slug);
+        $rightEngineParameters = $this->repository->findRightEngineParametersBySlug($slug);
         if (count($leftEngineParameters) === 0 || count($rightEngineParameters) === 0) {
             throw $this->createNotFoundException('Данных не существует.');
         }

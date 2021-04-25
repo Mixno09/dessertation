@@ -14,21 +14,16 @@ class FlightInformation
     private EngineParameterCollection $rightEngineParameters;
     private string $slug;
 
-    public function __construct(FlightInformationId $flightInformationId, EngineParameterCollection $leftEngineParameters, EngineParameterCollection $rightEngineParameters)
-    {
+    public function __construct(
+        FlightInformationId $flightInformationId,
+        EngineParameterCollection $leftEngineParameters,
+        EngineParameterCollection $rightEngineParameters,
+        string $slug
+    ) {
         $this->flightInformationId = $flightInformationId;
         $this->leftEngineParameters = $leftEngineParameters;
         $this->rightEngineParameters = $rightEngineParameters;
-        $this->setSlug($flightInformationId);
-    }
-
-    private function setSlug(FlightInformationId $id): void
-    {
-        $this->slug = implode('_', [
-            $id->getAirplaneNumber(),
-            $id->getFlightDate()->format('Y-m-d'),
-            $id->getFlightNumber()
-        ]);
+        $this->slug = $slug;
     }
 
     public function getFlightInformationId(): FlightInformationId

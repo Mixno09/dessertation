@@ -39,8 +39,8 @@ class IndexController extends AbstractController
     private function createPagination(int $page, int $limit): PaginationInterface
     {
         $target = new CallbackPagination(
-            fn() => $this->repository->count(),
-            fn($offset, $limit) => $this->repository->items($offset, $limit)
+            fn() => $this->repository->countFlightInformation(),
+            fn($offset, $limit) => $this->repository->findFlightInformationInterval($offset, $limit)
         );
 
         return $this->paginator->paginate($target, $page, $limit);

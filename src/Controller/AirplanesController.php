@@ -39,8 +39,8 @@ class AirplanesController extends AbstractController
     private function createPagination(int $page, int $limit): PaginationInterface
     {
         $target = new CallbackPagination(
-            fn() => $this->repository->getCountUniqueAirplane(),
-            fn($offset, $limit) => $this->repository->itemsAirplane($offset, $limit)
+            fn() => $this->repository->countAirplaneNumber(),
+            fn($offset, $limit) => $this->repository->findAirplaneNumberInterval($offset, $limit)
         );
 
         return $this->paginator->paginate($target, $page, $limit);

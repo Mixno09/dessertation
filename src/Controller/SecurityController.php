@@ -42,7 +42,7 @@ class SecurityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new CreateUserCommand($registrationDto->login, $registrationDto->password);
             $userId = $this->userService->create($command);
-            $user = $this->repository->findByUserId($userId);
+            $user = $this->repository->findUserById($userId);
             $response = $this->authenticatorHandler->authenticateUserAndHandleSuccess($user, $request, $this->loginFormAuthenticator, 'main');
             if ($response instanceof Response) {
                 return $response;

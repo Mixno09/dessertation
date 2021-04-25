@@ -11,18 +11,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     private ?int $id = null;
-    private string $login;
+    private string $username;
     private string $password;
 
-    public function __construct(string $login, string $password)
+    public function __construct(string $username, string $password)
     {
-        $this->setLogin($login);
+        $this->setUsername($username);
         $this->password = $password;
     }
 
-    /**
-     * @throws LogicException
-     */
     public function getId(): int
     {
         if ($this->id === null) {
@@ -48,7 +45,7 @@ class User implements UserInterface
 
     public function getUsername()
     {
-        return $this->login;
+        return $this->username;
     }
 
     public function eraseCredentials()
@@ -56,13 +53,13 @@ class User implements UserInterface
         $this->password = '';
     }
 
-    private function setLogin(string $login): void
+    private function setUsername(string $username): void
     {
-        $login = trim($login);
+        $username = trim($username);
 
-        $length = mb_strlen($login);
+        $length = mb_strlen($username);
         if ($length >= 1 && $length <= 50) {
-            $this->login = $login;
+            $this->username = $username;
         } else {
             throw new InvalidArgumentException('Логин должен быть от 1 до 50 символов');
         }

@@ -13,7 +13,7 @@
             <unique-constraint columns="login"/>
         </unique-constraints>
 
-        <field name="login" length="50" unique="true"/>
+        <field name="username" column="login" length="50" unique="true"/>
         <field name="password"/>
 
     </entity>

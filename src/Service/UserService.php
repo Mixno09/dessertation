@@ -5,28 +5,37 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
+use App\Exception\EntityExistsException;
 use App\Repository\UserRepository;
-use Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService
 {
     private UserPasswordEncoderInterface $passwordEncoder;
     private UserRepository $repository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository, EntityManagerInterface $entityManager)
     {
         $this->repository = $repository;
         $this->passwordEncoder = $passwordEncoder;
+        $this->entityManager = $entityManager;
     }
 
+    /**
+     * @throws EntityExistsException
+     */
     public function create(CreateUserCommand $command): int
     {
-        $hasUser = $this->repository->hasUserByUsername(
+        $user = $this->repository->findUserByUsername(
             $command->getLogin()
         );
-        if ($hasUser) {
-            throw new Exception('Пользователь с именем ' . $command->getLogin() . ' уже существует');
+        if ($user instanceof User) {
+            throw new EntityExistsException(sprintf(
+                'Пользователь с именем %s уже существует.',
+                $command->getLogin()
+            ));
         }
 
         $passwordHash = $this->encodePassword(
@@ -38,7 +47,8 @@ class UserService
             $passwordHash
         );
 
-        $this->repository->save($user);
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         return $user->getId();
     }
