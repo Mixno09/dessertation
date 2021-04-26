@@ -9,16 +9,16 @@ doctrine:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
-        mappings: #TODO перенести маппинг как написано в symfony
-            App:
+        mappings:
+            FlightInformation:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Repository/Mapping/FlightInformation'
+                dir: '%kernel.project_dir%/config/doctrine/flight_information' #todo зачем нужно обязательно создавать директорию flight_information?
                 prefix: 'App\Entity\FlightInformation'
-                alias: App
+                alias: FlightInformation
             User:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Repository/Mapping'
+                dir: '%kernel.project_dir%/config/doctrine'
                 prefix: 'App\Entity'
                 alias: User

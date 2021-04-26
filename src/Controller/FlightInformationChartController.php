@@ -18,7 +18,7 @@ class FlightInformationChartController extends AbstractController
     }
 
     /**
-     * @Route("/flight-informations/{slug}/chart", name="flight_information_chart", methods="GET")
+     * @Route("/flight-informations/{slug}/chart", name="flight_information", methods="GET")
      */
     public function index(string $slug): Response
     {
@@ -28,7 +28,7 @@ class FlightInformationChartController extends AbstractController
             throw $this->createNotFoundException('Данных не существует.');
         }
 
-        return $this->render('chart/index.html.twig', [
+        return $this->render('chart/flight_information.html.twig', [
             'chartConfig' => $this->createChartJsConfig($leftEngineParameters, $rightEngineParameters),
         ]);
     }

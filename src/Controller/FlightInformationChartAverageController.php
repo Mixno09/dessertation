@@ -20,7 +20,7 @@ class FlightInformationChartAverageController extends AbstractController
     }
 
     /**
-     * @Route("/airplane/average/{airplane}/left", name="airplane_average_left", methods={"GET"})
+     * @Route("/airplane/average/{airplane}/left", name="average_flight_information_left", methods={"GET"})
      */
     public function averageLeft(int $airplane): Response
     {
@@ -49,7 +49,7 @@ class FlightInformationChartAverageController extends AbstractController
             $flightInformationIds[] = $flightInformationId;
         }
 
-        return $this->render('chart/average.html.twig', [ //todo нормальные названия шаблонов
+        return $this->render('chart/average_flight_information.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
             't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd, $flightInformationIds),
@@ -59,7 +59,7 @@ class FlightInformationChartAverageController extends AbstractController
     }
 
     /**
-     * @Route("/airplane/average/{airplane}/right", name="airplane_average_right", methods={"GET"})
+     * @Route("/airplane/average/{airplane}/right", name="average_flight_information_right", methods={"GET"})
      */
     public function averageRight(int $airplane)
     {
@@ -87,7 +87,7 @@ class FlightInformationChartAverageController extends AbstractController
             $averageRvd[] = $averageParameter->getRvd();
             $flightInformationIds[] = $flightInformationId;
         }
-        return $this->render('chart/average.html.twig', [
+        return $this->render('chart/average_flight_information.html.twig', [
             'average' => $this->createChartJsConfigForAverage($flightNumber, $averageT4, $averageRnd, $averageRvd),
             't4Rnd' => $this->createChartJsConfigForT4Rnd($averageT4, $averageRnd, $flightInformationIds),
             't4Rvd' => $this->createChartJsConfigForT4Rvd($averageT4, $averageRvd, $flightInformationIds),
