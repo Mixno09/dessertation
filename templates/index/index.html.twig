@@ -28,7 +28,7 @@
                         <td class="col-md-3">{{ flightInformation.flightInformationId.flightDate|date('d-m-Y') }}</td>
                         <td class="col-md-2">{{ flightInformation.flightInformationId.flightNumber }}</td>
                         <td class="col-md-5">
-                            <a href="{{ path('flight_information_chart', { 'slug': flightInformation.slug }) }}" target="_blank"
+                            <a href="{{ path('flight_information', { 'slug': flightInformation.slug }) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Просмотреть
                             </a>
