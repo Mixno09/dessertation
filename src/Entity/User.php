@@ -50,7 +50,6 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-        $this->password = '';
     }
 
     private function setUsername(string $username): void
