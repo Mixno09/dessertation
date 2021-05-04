@@ -1,4 +1,6 @@
 {
+    "name": "mixno/dessertation",
+    "description": "",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -33,6 +35,7 @@
         "symfony/yaml": "5.1.*"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
         "sylius/fixtures-bundle": "^1.7",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
