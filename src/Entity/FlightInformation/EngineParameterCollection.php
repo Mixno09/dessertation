@@ -11,16 +11,16 @@ class EngineParameterCollection
 {
     private ?int $id;
     private Collection $collection;
-    private AverageEngineParameter $averageParameter;
-    private bool $averageParameterError;
+    private CalcEngineParameter $calcParameter;
+    private bool $calcParameterError;
 
     /**
      * @param EngineParameter[] $engineParameters
      */
-    public function __construct(array $engineParameters, ?AverageEngineParameter $averageParameter)
+    public function __construct(array $engineParameters, ?CalcEngineParameter $calcParameter)
     {
         $this->setCollection($engineParameters);
-        $this->setAverageParameter($averageParameter);
+        $this->setCalcParameter($calcParameter);
     }
 
     /**
@@ -31,22 +31,23 @@ class EngineParameterCollection
         $this->collection = new ArrayCollection($engineParameters);
     }
 
-    private function setAverageParameter(?AverageEngineParameter $averageParameter): void
+    private function setCalcParameter(?CalcEngineParameter $calcParameter): void
     {
-        if ($averageParameter instanceof AverageEngineParameter) {
-            $this->averageParameter = $averageParameter;
-            $this->averageParameterError = false;
+        if ($calcParameter instanceof CalcEngineParameter) {
+            $this->calcParameter = $calcParameter;
+            $this->calcParameterError = false;
         } else {
-            $this->averageParameter = new AverageEngineParameter(0, 0, 0);
-            $this->averageParameterError = true;
+            $value = new CalcEngineValue(0, 0, 0, 0, 0, 0);
+            $this->calcParameter = new CalcEngineParameter($value, $value, $value);
+            $this->calcParameterError = true;
         }
     }
 
     /**
-     * @return AverageEngineParameter|null Возвращает null в случае невозможности расчета
+     * @return CalcEngineParameter|null Возвращает null в случае невозможности расчета
      */
-    public function averageParameter(): ?AverageEngineParameter
+    public function calcParameter(): ?CalcEngineParameter
     {
-        return ($this->averageParameterError ? null : $this->averageParameter);
+        return ($this->calcParameterError ? null : $this->calcParameter);
     }
 }

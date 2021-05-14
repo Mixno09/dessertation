@@ -9,9 +9,9 @@
             <generator/>
         </id>
 
-        <embedded name="averageParameter" class="App\Entity\FlightInformation\AverageEngineParameter"/>
+        <embedded name="calcParameter" class="App\Entity\FlightInformation\CalcEngineParameter"/>
 
-        <field name="averageParameterError" type="boolean"/>
+        <field name="calcParameterError" type="boolean"/>
 
         <many-to-many field="collection" target-entity="App\Entity\FlightInformation\EngineParameter">
             <cascade>

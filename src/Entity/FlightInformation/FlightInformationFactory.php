@@ -47,8 +47,8 @@ class FlightInformationFactory
             );
         }
 
-        $leftAverageParameter = self::calcAverageParameter($leftEngineParameters);
-        $rightAverageParameter = self::calcAverageParameter($rightEngineParameters);
+        $leftCalcParameter = self::createCalcEngineParameter($leftEngineParameters);
+        $rightCalcParameter = self::createCalcEngineParameter($rightEngineParameters);
 
         $slug = implode('_', [
             $flightInformationId->getAirplaneNumber(),
@@ -58,8 +58,8 @@ class FlightInformationFactory
 
         return new FlightInformation(
             $flightInformationId,
-            new EngineParameterCollection($leftEngineParameters, $leftAverageParameter),
-            new EngineParameterCollection($rightEngineParameters, $rightAverageParameter),
+            new EngineParameterCollection($leftEngineParameters, $leftCalcParameter),
+            new EngineParameterCollection($rightEngineParameters, $rightCalcParameter),
             $slug
         );
     }
@@ -67,7 +67,7 @@ class FlightInformationFactory
     /**
      * @param EngineParameter[] $engineParameters
      */
-    private static function calcAverageParameter(array $engineParameters): ?AverageEngineParameter
+    private static function createCalcEngineParameter(array $engineParameters): ?CalcEngineParameter
     {
         $t4 = [];
         $rnd = [];
@@ -86,10 +86,31 @@ class FlightInformationFactory
             return null;
         }
 
-        $averageT4 = array_sum($t4) / count($t4);
-        $averageRnd = array_sum($rnd) / count($rnd);
-        $averageRvd = array_sum($rvd) / count($rvd);
+        $t4Value = self::createCalcEngineValue($t4);
+        $rndValue = self::createCalcEngineValue($rnd);
+        $rvdValue = self::createCalcEngineValue($rvd);
 
-        return new AverageEngineParameter($averageT4, $averageRnd, $averageRvd);
+        return new CalcEngineParameter($t4Value, $rndValue, $rvdValue);
+    }
+
+    private static function createCalcEngineValue(array $parameters): CalcEngineValue
+    {
+        $average = array_sum($parameters) / count($parameters);
+
+        $sum = 0;
+        foreach ($parameters as $parameter) {
+            $sum += (($parameter - $average) ** 2);
+        }
+        $sampleVariance = $sum / (count($parameters) - 1);
+
+        $rootMeanSquareDeviation = sqrt($sampleVariance);
+
+        $coefficientOfVariation = $rootMeanSquareDeviation / $average * 100;
+
+        $standardErrorOfTheMean = $rootMeanSquareDeviation / sqrt(count($parameters));
+
+        $numberOfDegreesOfFreedom = count($parameters) - 1;
+
+        return new CalcEngineValue($average, $sampleVariance, $rootMeanSquareDeviation, $coefficientOfVariation, $standardErrorOfTheMean, $numberOfDegreesOfFreedom);
     }
 }

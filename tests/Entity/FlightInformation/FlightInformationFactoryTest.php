@@ -40,11 +40,11 @@ final class FlightInformationFactoryTest extends TestCase
             $rvdRight
         );
 
-        $leftAverageParameter = $sut->getLeftEngineParameters()->averageParameter();
-        self::assertSame(34.4, $leftAverageParameter->getRnd());
-        self::assertSame(48.92, $leftAverageParameter->getRvd());
-        self::assertSame(257.6, $leftAverageParameter->getT4());
-        $rightAverageParameter = $sut->getRightEngineParameters()->averageParameter();
-        self::assertNull($rightAverageParameter);
+        $leftCalcParameter = $sut->getLeftEngineParameters()->calcParameter();
+        self::assertSame(34.4, $leftCalcParameter->getRnd());
+        self::assertSame(48.92, $leftCalcParameter->getRvd());
+        self::assertSame(257.6, $leftCalcParameter->getT4());
+        $rightCalcParameter = $sut->getRightEngineParameters()->calcParameter();
+        self::assertNull($rightCalcParameter);
     }
 }

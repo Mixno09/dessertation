@@ -36,7 +36,7 @@ class FlightInformationImportController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $result = $this->parser->parse($importFlightInformationDto->file);
             $command = new CreateFlightInformationCommand(
-                $importFlightInformationDto->flightNumber,
+                $importFlightInformationDto->airplaneNumber,
                 $importFlightInformationDto->flightDate,
                 $importFlightInformationDto->flightNumber,
                 $result->getTime(),

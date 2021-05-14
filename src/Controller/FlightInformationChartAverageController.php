@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\FlightInformation\AverageEngineParameter;
+use App\Entity\FlightInformation\CalcEngineParameter;
 use App\Entity\FlightInformation\FlightInformationId;
 use App\Repository\FlightInformationRepository;
 use DateTimeInterface;
@@ -36,9 +36,9 @@ class FlightInformationChartAverageController extends AbstractController
         $errors = [];
         $flightInformationIds = [];
         foreach ($flightInformationList as $flightInformation) {
-            $averageParameter = $flightInformation->getLeftEngineParameters()->averageParameter();
+            $averageParameter = $flightInformation->getLeftEngineParameters()->calcParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
-            if (!$averageParameter instanceof AverageEngineParameter) {
+            if (!$averageParameter instanceof CalcEngineParameter) {
                 $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
@@ -75,9 +75,9 @@ class FlightInformationChartAverageController extends AbstractController
         $errors = [];
         $flightInformationIds = [];
         foreach ($flightInformationList as $flightInformation) {
-            $averageParameter = $flightInformation->getRightEngineParameters()->averageParameter();
+            $averageParameter = $flightInformation->getRightEngineParameters()->calcParameter();
             $flightInformationId = $flightInformation->getFlightInformationId();
-            if (!$averageParameter instanceof AverageEngineParameter) {
+            if (!$averageParameter instanceof CalcEngineParameter) {
                 $errors[] = 'Проверь самолет с номером ' . $flightInformationId->getAirplaneNumber() . ' и вылетом номер ' . $flightInformationId->getFlightNumber() . ' на целостность данных';
                 continue;
             }
