@@ -5,13 +5,56 @@
 {% block h1 %}Оперативный контроль{% endblock %}
 
 {% block content %}
-    <canvas class="my-4 w-100" id="myChart"></canvas>
+    <div id="chart-t4"></div>
+    <div id="chart-rud"></div>
+    <div id="chart-rnd"></div>
+    <div id="chart-rvd"></div>
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('Chart.bundle.min.js', 'chartjs') }}"></script>
+    <script src="{{ asset('apexcharts.min.js', 'apexcharts') }}"></script>
+    <script src="{{ asset('js/app.js', 'app') }}"></script>
     <script>
-        var ctx = document.getElementById('myChart');
-        new Chart(ctx, {{ chartConfig|json_encode|raw }})
+        (function () {
+            const time = {{ time|json_encode|raw }};
+            const t4ValueLeft = {{ t4ValueLeft|json_encode|raw }};
+            const rudValueLeft = {{ rudValueLeft|json_encode|raw }};
+            const rndValueLeft = {{ rndValueLeft|json_encode|raw }};
+            const rvdValueLeft = {{ rvdValueLeft|json_encode|raw }};
+            const t4ValueRight = {{ t4ValueRight|json_encode|raw }};
+            const rudValueRight = {{ rudValueRight|json_encode|raw }};
+            const rndValueRight = {{ rndValueRight|json_encode|raw }};
+            const rvdValueRight = {{ rvdValueRight|json_encode|raw }};
+
+            const t4Config = {
+                title: 'Температура двигателя',
+                colorRight: '#0000ff',
+                colorLeft: '#ff0000',
+                unit: '°C'
+            };
+            const rudConfig = {
+                title: 'Положение РУД двигателя',
+                colorRight: '#00ff00',
+                colorLeft: '#000000',
+                unit: '°'
+            };
+            const rndConfig = {
+                title: 'Обороты РНД двигателя',
+                colorRight: '#999900',
+                colorLeft: '#ff8000',
+                unit: '%'
+            };
+            const rvdConfig = {
+                title: 'Обороты РВД двигателя',
+                colorRight: '#b300b3',
+                colorLeft: '#00b38f',
+                unit: '%'
+            };
+
+            flight_information_chart(document.getElementById('chart-t4'), time, t4ValueLeft, t4ValueRight, t4Config);
+            flight_information_chart(document.getElementById('chart-rud'), time, rudValueLeft, rudValueRight, rudConfig);
+            flight_information_chart(document.getElementById('chart-rnd'), time, rndValueLeft, rndValueRight, rndConfig);
+            flight_information_chart(document.getElementById('chart-rvd'), time, rvdValueLeft, rvdValueRight, rvdConfig);
+        })();
     </script>
 {% endblock %}

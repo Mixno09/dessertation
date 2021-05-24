@@ -1,6 +1,6 @@
 function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry) {
     const x1 = [], y1 = [], z1 = [];
-    rowsCurrent.forEach(row => {
+    rowsCurrent.forEach((row) => {
         x1.push(row.t4);
         y1.push(row.rvd);
         z1.push(row.ddT4Rvd);
@@ -24,7 +24,7 @@ function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, cal
     };
 
     const x2 = [], y2 = [], z2 = [];
-    rowsEnquiry.forEach(row => {
+    rowsEnquiry.forEach((row) => {
         x2.push(row.t4);
         y2.push(row.rvd);
         z2.push(row.ddT4Rvd);
@@ -115,3 +115,72 @@ function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, cal
         {displayModeBar: false}
     );
 }
+
+const flight_information_chart = (function () {
+    let id = 0;
+
+    return function (element, time, valueLeft, valueRight, config) {
+        const options = {
+            series: [
+                {
+                    name: 'Правый',
+                    data: valueRight
+                },
+                {
+                    name: 'Левый',
+                    data: valueLeft
+                },
+            ],
+            title: {
+                text: config.title,
+                align: 'left',
+            },
+            chart: {
+                id: 'flight_information_chart-' + id,
+                group: 'flight_information_chart',
+                type: 'line',
+                height: 180,
+                toolbar: {
+                    tools: {
+                        download: false,
+                        pan: false
+                    },
+                },
+            },
+            colors: [config.colorRight, config.colorLeft],
+            stroke: {
+                curve: 'straight',
+                width: 1
+            },
+            tooltip: {
+                theme: 'dark',
+                x: {
+                    show: false
+                },
+                marker: {
+                    show: true
+                },
+                y: {
+                    formatter: function (value) {
+                        return value + config.unit;
+                    }
+                }
+            },
+            grid: {
+                clipMarkers: false
+            },
+            xaxis: {
+                type: 'numeric',
+                categories: time,
+                tooltip: {
+                    formatter: function (value) {
+                        return value + ' с';
+                    }
+                },
+                tickAmount: 50,
+            }
+        };
+
+        new ApexCharts(element, options).render();
+    }
+})();

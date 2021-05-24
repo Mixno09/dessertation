@@ -32,4 +32,7 @@ framework:
                 version: '1.58.4'
             app:
                 base_path: '/app'
-                version: '0.5.0'
+                version: '1.0.0'
+            apexcharts:
+                base_path: '/apexcharts'
+                version: '3.26.3'
