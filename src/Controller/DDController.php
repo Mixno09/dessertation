@@ -35,9 +35,9 @@ final class DDController extends AbstractController
         $rows = $this->repository->findLeftMutualParameterWithEngineParameterBySlug($slug);
         $data = array_map(
             static fn($row) => [
-                'distributionDensityT4Rnd' => $row[0]->getDistributionDensityT4Rnd(),
-                'distributionDensityRndRvd' => $row[0]->getDistributionDensityT4Rnd(),
-                'distributionDensityT4Rvd' => $row[0]->getDistributionDensityT4Rvd(),
+                'ddT4Rnd' => $row[0]->getDistributionDensityT4Rnd(),
+                'ddRndRvd' => $row[0]->getDistributionDensityT4Rnd(),
+                'ddT4Rvd' => $row[0]->getDistributionDensityT4Rvd(),
                 't4' => (float) $row['t4'],
                 'rnd' => (float) $row['rnd'],
                 'rvd' => (float) $row['rvd'],
@@ -47,9 +47,9 @@ final class DDController extends AbstractController
         $rowsEnquiry = $this->repository->findLeftMutualParameterWithEngineParameterBySlug('31_2016-01-01_15');
         $dataEnquiry = array_map(
             static fn($rowEnquiry) => [
-                'distributionDensityT4Rnd' => $rowEnquiry[0]->getDistributionDensityT4Rnd(),
-                'distributionDensityRndRvd' => $rowEnquiry[0]->getDistributionDensityT4Rnd(),
-                'distributionDensityT4Rvd' => $rowEnquiry[0]->getDistributionDensityT4Rvd(),
+                'ddT4Rnd' => $rowEnquiry[0]->getDistributionDensityT4Rnd(),
+                'ddRndRvd' => $rowEnquiry[0]->getDistributionDensityT4Rnd(),
+                'ddT4Rvd' => $rowEnquiry[0]->getDistributionDensityT4Rvd(),
                 't4' => (float) $rowEnquiry['t4'],
                 'rnd' => (float) $rowEnquiry['rnd'],
                 'rvd' => (float) $rowEnquiry['rvd'],
@@ -57,9 +57,9 @@ final class DDController extends AbstractController
             $rowsEnquiry
         );
         return $this->render('chart/dd.html.twig', [
-            'data' => $data,
+            'dataCurrent' => $data,
             'dataEnquiry' => $dataEnquiry,
-            'calcEngineValue' => $calcEngineValue,
+            'calcEngineValueCurrent' => $calcEngineValue,
             'calcEngineValueEnquiry' => $calcEngineValueEnquiry,
         ]);
     }
