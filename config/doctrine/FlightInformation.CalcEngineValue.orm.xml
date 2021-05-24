@@ -4,11 +4,11 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
     <embeddable name="App\Entity\FlightInformation\CalcEngineValue">
-        <field name="average" type="decimal" scale="1" precision="5"/>
-        <field name="sampleVariance" type="decimal" scale="1" precision="5"/>
-        <field name="rootMeanSquareDeviation" type="decimal" scale="1" precision="5"/>
-        <field name="coefficientOfVariation" type="decimal" scale="1" precision="5"/>
-        <field name="standardErrorOfTheMean" type="decimal" scale="1" precision="5"/>
-        <field name="numberOfDegreesOfFreedom" type="decimal" scale="1" precision="5"/>
+        <field name="average" type="decimal" scale="3" precision="6"/>
+        <field name="sampleVariance" type="decimal" scale="3" precision="8"/>
+        <field name="rootMeanSquareDeviation" type="decimal" scale="3" precision="6"/>
+        <field name="coefficientOfVariation" type="decimal" scale="3" precision="6"/>
+        <field name="standardErrorOfTheMean" type="decimal" scale="3" precision="6"/>
+        <field name="numberOfDegreesOfFreedom" type="decimal" scale="3" precision="6"/>
     </embeddable>
 </doctrine-mapping>

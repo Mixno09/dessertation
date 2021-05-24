@@ -29,5 +29,21 @@
                 <order-by-field name="time" direction="ASC"/>
             </order-by>
         </many-to-many>
+        <many-to-many field="mutualParameters" target-entity="App\Entity\FlightInformation\MutualParameter">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+            <join-table name="engine_parameter_collections_mutual_parameters">
+                <join-columns>
+                    <join-column name="engine_parameter_collection" referenced-column-name="id" on-delete="CASCADE"/>
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="mutual_parameter" referenced-column-name="id" unique="true" on-delete="CASCADE"/>
+                </inverse-join-columns>
+            </join-table>
+            <order-by>
+                <order-by-field name="time" direction="ASC"/>
+            </order-by>
+        </many-to-many>
     </entity>
 </doctrine-mapping>

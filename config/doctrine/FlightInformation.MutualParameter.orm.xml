@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Entity\FlightInformation\MutualParameter" table="mutual_parameter">
+
+        <id name="id" type="integer">
+            <generator/>
+        </id>
+
+        <field name="time" column="time" type="integer">
+            <options>
+                <option name="unsigned">true</option>
+            </options>
+        </field>
+        <field name="distributionDensityT4Rnd" type="decimal" scale="9" precision="11"/>
+        <field name="distributionDensityT4Rvd" type="decimal" scale="9" precision="11"/>
+        <field name="distributionDensityRndRvd" type="decimal" scale="9" precision="11"/>
+    </entity>
+</doctrine-mapping>

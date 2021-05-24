@@ -36,4 +36,29 @@ class CalcEngineValue
     {
         return $this->average;
     }
+
+    public function getSampleVariance(): float
+    {
+        return $this->sampleVariance;
+    }
+
+    public function getRootMeanSquareDeviation(): float
+    {
+        return $this->rootMeanSquareDeviation;
+    }
+
+    public function getCoefficientOfVariation(): float
+    {
+        return $this->coefficientOfVariation;
+    }
+
+    public function getStandardErrorOfTheMean(): float
+    {
+        return $this->standardErrorOfTheMean;
+    }
+
+    public function getNumberOfDegreesOfFreedom(): float
+    {
+        return $this->numberOfDegreesOfFreedom;
+    }
 }

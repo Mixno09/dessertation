@@ -7,5 +7,8 @@
         <embedded name="t4" class="App\Entity\FlightInformation\CalcEngineValue"/>
         <embedded name="rnd" class="App\Entity\FlightInformation\CalcEngineValue"/>
         <embedded name="rvd" class="App\Entity\FlightInformation\CalcEngineValue"/>
+        <field name="correlationCoefficientForT4Rnd" type="decimal" scale="4" precision="8"/>
+        <field name="correlationCoefficientForT4Rvd" type="decimal" scale="4" precision="8"/>
+        <field name="correlationCoefficientForRndRvd" type="decimal" scale="4" precision="8"/>
     </embeddable>
 </doctrine-mapping>

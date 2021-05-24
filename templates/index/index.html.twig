@@ -32,6 +32,10 @@
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Просмотреть
                             </a>
+                            <a href="{{ path('flight_information_dd', { 'slug': flightInformation.slug }) }}" target="_blank"
+                               class="btn btn-outline-primary text-nowrap">
+                                <span data-feather="eye"></span> Плотность распределения
+                            </a>
                             <a href="{{ path('flight_information_delete', { 'slug': flightInformation.slug }) }}"
                                class="btn btn-danger text-nowrap">
                                 <span data-feather="x-square"></span> Удалить

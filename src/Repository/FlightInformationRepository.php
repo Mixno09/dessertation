@@ -110,4 +110,12 @@ class FlightInformationRepository
             ->setFetchMode(FlightInformation::class, 'rightEngineParameters', ClassMetadataInfo::FETCH_EAGER)
             ->getResult();
     }
+
+    public function findLeftMutualParameterWithEngineParameterBySlug(string $slug): array
+    {
+        return $this->entityManager
+            ->createQuery('SELECT mp, ep.t4 AS t4, ep.rnd AS rnd, ep.rvd AS rvd FROM App\Entity\FlightInformation\MutualParameter mp, App\Entity\FlightInformation\EngineParameter ep, App\Entity\FlightInformation\FlightInformation f JOIN f.leftEngineParameters epc WHERE f.slug = :slug AND mp MEMBER OF epc.mutualParameters AND ep MEMBER OF epc.collection AND mp.time = ep.time')
+            ->setParameter('slug', $slug)
+            ->getResult();
+    }
 }

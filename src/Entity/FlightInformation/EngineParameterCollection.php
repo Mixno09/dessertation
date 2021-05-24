@@ -12,15 +12,17 @@ class EngineParameterCollection
     private ?int $id;
     private Collection $collection;
     private CalcEngineParameter $calcParameter;
+    private Collection $mutualParameters;
     private bool $calcParameterError;
 
     /**
      * @param EngineParameter[] $engineParameters
      */
-    public function __construct(array $engineParameters, ?CalcEngineParameter $calcParameter)
+    public function __construct(array $engineParameters, ?CalcEngineParameter $calcParameter, array $mutualParameters)
     {
         $this->setCollection($engineParameters);
         $this->setCalcParameter($calcParameter);
+        $this->setMutualParameters($mutualParameters);
     }
 
     /**
@@ -38,9 +40,17 @@ class EngineParameterCollection
             $this->calcParameterError = false;
         } else {
             $value = new CalcEngineValue(0, 0, 0, 0, 0, 0);
-            $this->calcParameter = new CalcEngineParameter($value, $value, $value);
+            $this->calcParameter = new CalcEngineParameter($value, $value, $value, 0, 0, 0);
             $this->calcParameterError = true;
         }
+    }
+
+    /**
+     * @param MutualParameter[] $mutualParameters
+     */
+    private function setMutualParameters(array $mutualParameters): void
+    {
+        $this->mutualParameters = new ArrayCollection($mutualParameters);
     }
 
     /**
