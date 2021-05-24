@@ -5,162 +5,74 @@
 {% block h1 %}Плотность распределения{% endblock %}
 
 {% block content %}
-    <div id="tester" class="w-100"></div>
+    <div id="plotly" class="w-100 flex-fill"></div>
+
+    {#    <table class="table table-bordered table-hover table-sm">#}
+    {#        <thead>#}
+    {#                <tr class="d-flex">#}
+    {#                <th scope="col" class="col-md-2">Мат ожидание анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-3">Дисперсия анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-2">СКО анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-5">Коэфициент корреляции анализируемого двигаделя</th>#}
+    {#            </tr>#}
+    {#        </thead>#}
+    {#        <tbody>#}
+    {#            <tr class="d-flex">#}
+    {#                <td class="col-md-2">{{ calcEngineValue.t4 }}</td>#}
+    {#                <td class="col-md-3">{{ calcEngineValue.t4SampleVariance }}</td>#}
+    {#                <td class="col-md-2">{{ calcEngineValue.t4RootMeanSquareDeviation }}</td>#}
+    {#                <td class="col-md-5">{{ calcEngineValue.correlationCoefficientForT4Rvd }}</td>#}
+    {#            </tr>#}
+    {#        </tbody>#}
+    {#    </table>#}
+
+    {#    <div class="col-md-12">#}
+    {#        <table class="table table-bordered table-hover table-sm">#}
+    {#            <thead>#}
+    {#            <tr class="d-flex">#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД эталонного двигаделя</th>#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД эталонного двигаделя</th>#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД анализируемого двигаделя</th>#}
+    {#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД эталонного двигаделя</th>#}
+    {#            </tr>#}
+    {#            </thead>#}
+    {#            <tbody>#}
+    {#            {% for row in  data %}#}
+    {#                {% for row1 in dataEnquiry %}#}
+    {#                <tr class="d-flex">#}
+    {#                    <td class="col-md-4">{{ row.distributionDensityT4Rnd }}</td>#}
+    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rnd }}</td>#}
+    {#                    <td class="col-md-4">{{ row.distributionDensityT4Rvd }}</td>#}
+    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rvd }}</td>#}
+    {#                    <td class="col-md-4">{{ row.distributionDensityRndRvd }}</td>#}
+    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityRndRvd }}</td>#}
+    {#                </tr>#}
+    {#                    {% endfor %}#}
+    {#            {% endfor %}#}
+    {#            </tbody>#}
+    {#        </table>#}
+    {#    </div>#}
 {% endblock %}
 
 {% block javascripts %}
-    <script src="/plotly/plotly-latest.min.js"></script>
+    <script src="{{ asset('plotly-latest.min.js', 'plotly') }}"></script>
+    <script src="{{ asset('js/app.js', 'app') }}"></script>
     <script>
-        TESTER = document.getElementById('tester');
-        var rows = {{ data|json_encode|raw }};
-        var rowsEnquiry = {{ dataEnquiry|json_encode|raw }}
-        var x1 = [], y1 = [], z1 = [], row;
-        var x2 = [], y2 = [], z2 = [], row1;
-        rows.forEach(row => {
-            x1.push(row.t4);
-            y1.push(row.rvd);
-            z1.push(row.distributionDensityT4Rvd);
-        });
-        rowsEnquiry.forEach(row1 => {
-            x2.push(row1.t4);
-            y2.push(row1.rvd);
-            z2.push(row1.distributionDensityT4Rvd);
-        });
-        var dataCurrent = {
-            x: x1,
-            y: y1,
-            z: z1,
-            type: 'scatter3d',
-            mode: 'markers',
-            name: 'Анализируемая модель',
-            marker: {
-                size: 5,
-                color: '#FA6348',
-                line: {
-                    color: '#FBA394',
-                    width: 0.5
-                },
-                opacity: 0.8
-            },
-        };
-
-        var dataEnquiry = {
-            x: x2,
-            y: y2,
-            z: z2,
-            type: 'scatter3d',
-            mode: 'markers',
-            name: 'Эталонная модель',
-            marker: {
-                size: 5,
-                color: '#0089FA',
-                line: {
-                    color: '#00437A',
-                    width: 0.5
-                },
-                opacity: 0.8
-            },
-        };
-
-        var sampleVarianceEnquiry = {
-            x: [{{ calcEngineValueEnquiry.t4|json_encode|raw }}],
-            y: [{{ calcEngineValueEnquiry.rvd|json_encode|raw }}],
-            z: [0],
-            type: 'scatter3d',
-            mode: 'markers',
-            name: 'Среднее значение математических ожиданий эталонного',
-            marker: {
-                size: 7,
-                color: '#FAF200',
-                line: {
-                    color: '#FAF200',
-                    width: 0.5
-                },
-                opacity: 0.8
-            },
-        };
-
-        var sampleVariance = {
-            x: [{{ calcEngineValue.t4|json_encode|raw }}],
-            y: [{{ calcEngineValue.rvd|json_encode|raw }}],
-            z: [0],
-            type: 'scatter3d',
-            mode: 'markers',
-            name: 'Среднее значение математических ожиданий исследуемого',
-            marker: {
-                size: 7,
-                color: '#000000',
-                line: {
-                    color: '#000000',
-                    width: 0.5
-                },
-                opacity: 0.8
-            },
-        };
-
-        var layout = {
-            scene: {camera: {eye: {x: 0.785, y: -0.785, z: 0.785}}},
-            autosize: true,
-            // width: TESTER.clientWidth,
-            // height: 500,
-            margin: {
-                l: 0,
-                r: 0,
-                b: 0,
-                t: 0,
-            },
-            showLegend: false,
-        };
-        var data = [sampleVariance, sampleVarianceEnquiry, dataCurrent, dataEnquiry];
-        console.log(data)
-        Plotly.newPlot(TESTER, data, layout, {displayModeBar: false});
+        (function () {
+            const element = document.getElementById('plotly');
+            const rowsCurrent = {{ dataCurrent|json_encode|raw }};
+            const rowsEnquiry = {{ dataEnquiry|json_encode|raw }};
+            const calcEngineValueCurrent = {
+                t4: {{ calcEngineValueCurrent.t4|json_encode|raw }},
+                rvd: {{ calcEngineValueCurrent.rvd|json_encode|raw }}
+            };
+            const calcEngineValueEnquiry = {
+                t4: {{ calcEngineValueEnquiry.t4|json_encode|raw }},
+                rvd: {{ calcEngineValueEnquiry.rvd|json_encode|raw }}
+            };
+            dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry);
+        })();
     </script>
-
-{#    <table class="table table-bordered table-hover table-sm">#}
-{#        <thead>#}
-{#                <tr class="d-flex">#}
-{#                <th scope="col" class="col-md-2">Мат ожидание анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-3">Дисперсия анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-2">СКО анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-5">Коэфициент корреляции анализируемого двигаделя</th>#}
-{#            </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#            <tr class="d-flex">#}
-{#                <td class="col-md-2">{{ calcEngineValue.t4 }}</td>#}
-{#                <td class="col-md-3">{{ calcEngineValue.t4SampleVariance }}</td>#}
-{#                <td class="col-md-2">{{ calcEngineValue.t4RootMeanSquareDeviation }}</td>#}
-{#                <td class="col-md-5">{{ calcEngineValue.correlationCoefficientForT4Rvd }}</td>#}
-{#            </tr>#}
-{#        </tbody>#}
-{#    </table>#}
-
-{#    <div class="col-md-12">#}
-{#        <table class="table table-bordered table-hover table-sm">#}
-{#            <thead>#}
-{#            <tr class="d-flex">#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД эталонного двигаделя</th>#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД эталонного двигаделя</th>#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД анализируемого двигаделя</th>#}
-{#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД эталонного двигаделя</th>#}
-{#            </tr>#}
-{#            </thead>#}
-{#            <tbody>#}
-{#            {% for row in  data %}#}
-{#                {% for row1 in dataEnquiry %}#}
-{#                <tr class="d-flex">#}
-{#                    <td class="col-md-4">{{ row.distributionDensityT4Rnd }}</td>#}
-{#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rnd }}</td>#}
-{#                    <td class="col-md-4">{{ row.distributionDensityT4Rvd }}</td>#}
-{#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rvd }}</td>#}
-{#                    <td class="col-md-4">{{ row.distributionDensityRndRvd }}</td>#}
-{#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityRndRvd }}</td>#}
-{#                </tr>#}
-{#                    {% endfor %}#}
-{#            {% endfor %}#}
-{#            </tbody>#}
-{#        </table>#}
-{#    </div>#}
 {% endblock %}

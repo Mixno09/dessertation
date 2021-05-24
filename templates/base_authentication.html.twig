@@ -27,14 +27,14 @@
     </style>
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<body class="vh-100 d-flex flex-column">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark flex-shrink-0">
     <a class="navbar-brand" href={{ path('main') }}>Главная</a>
     <a class="ml-auto text-light" href="{{ path('app_logout') }}">Выйти</a>
 </nav>
 {% set currentRoute = app.request.attributes.get('_route') %}
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid flex-grow-1">
+    <div class="row h-100">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky pt-3">
                 <ul class="nav flex-column">
@@ -59,7 +59,7 @@
                 </ul>
             </div>
         </nav>
-        <main role="main" class="col-md-10 ml-sm-auto px-4">
+        <main role="main" class="col-md-10 ml-sm-auto px-4 d-flex flex-column">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">{% block h1 %}{% endblock %}</h1>
             </div>
