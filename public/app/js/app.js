@@ -118,6 +118,9 @@ function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, cal
 
 const flight_information_chart = (function () {
     let id = 0;
+    function next_id() {
+        return 'flight_information_chart-' + id++;
+    }
 
     return function (element, time, valueLeft, valueRight, config) {
         const options = {
@@ -136,7 +139,7 @@ const flight_information_chart = (function () {
                 align: 'left',
             },
             chart: {
-                id: 'flight_information_chart-' + id,
+                id: next_id(),
                 group: 'flight_information_chart',
                 type: 'line',
                 height: 180,
@@ -178,6 +181,11 @@ const flight_information_chart = (function () {
                     }
                 },
                 tickAmount: 50,
+            },
+            yaxis: {
+                labels: {
+                    minWidth: 40
+                }
             }
         };
 
