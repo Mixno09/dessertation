@@ -16,18 +16,18 @@
                 <thead>
                 <tr class="d-flex">
                     <th scope="col" class="col-md-2">Номер самолета</th>
-                    <th scope="col" class="col-md-3">Дата вылета</th>
+                    <th scope="col" class="col-md-2">Дата вылета</th>
                     <th scope="col" class="col-md-2">Номер вылета</th>
-                    <th scope="col" class="col-md-5">Действия</th>
+                    <th scope="col" class="col-md-6">Действия</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for flightInformation in pagination %}
                     <tr class="d-flex">
                         <td class="col-md-2">{{ flightInformation.flightInformationId.airplaneNumber }}</td>
-                        <td class="col-md-3">{{ flightInformation.flightInformationId.flightDate|date('d-m-Y') }}</td>
+                        <td class="col-md-2">{{ flightInformation.flightInformationId.flightDate|date('d-m-Y') }}</td>
                         <td class="col-md-2">{{ flightInformation.flightInformationId.flightNumber }}</td>
-                        <td class="col-md-5">
+                        <td class="col-md-6">
                             <a href="{{ path('flight_information', { 'slug': flightInformation.slug }) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Просмотреть

@@ -5,55 +5,9 @@
 {% block h1 %}Плотность распределения{% endblock %}
 
 {% block content %}
-    <div id="plotly" class="w-100 flex-fill"></div>
-
-    {#    <table class="table table-bordered table-hover table-sm">#}
-    {#        <thead>#}
-    {#                <tr class="d-flex">#}
-    {#                <th scope="col" class="col-md-2">Мат ожидание анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-3">Дисперсия анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-2">СКО анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-5">Коэфициент корреляции анализируемого двигаделя</th>#}
-    {#            </tr>#}
-    {#        </thead>#}
-    {#        <tbody>#}
-    {#            <tr class="d-flex">#}
-    {#                <td class="col-md-2">{{ calcEngineValue.t4 }}</td>#}
-    {#                <td class="col-md-3">{{ calcEngineValue.t4SampleVariance }}</td>#}
-    {#                <td class="col-md-2">{{ calcEngineValue.t4RootMeanSquareDeviation }}</td>#}
-    {#                <td class="col-md-5">{{ calcEngineValue.correlationCoefficientForT4Rvd }}</td>#}
-    {#            </tr>#}
-    {#        </tbody>#}
-    {#    </table>#}
-
-    {#    <div class="col-md-12">#}
-    {#        <table class="table table-bordered table-hover table-sm">#}
-    {#            <thead>#}
-    {#            <tr class="d-flex">#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РНД эталонного двигаделя</th>#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для T4 и РВД эталонного двигаделя</th>#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД анализируемого двигаделя</th>#}
-    {#                <th scope="col" class="col-md-4">Плотность распределения для РНД и РВД эталонного двигаделя</th>#}
-    {#            </tr>#}
-    {#            </thead>#}
-    {#            <tbody>#}
-    {#            {% for row in  data %}#}
-    {#                {% for row1 in dataEnquiry %}#}
-    {#                <tr class="d-flex">#}
-    {#                    <td class="col-md-4">{{ row.distributionDensityT4Rnd }}</td>#}
-    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rnd }}</td>#}
-    {#                    <td class="col-md-4">{{ row.distributionDensityT4Rvd }}</td>#}
-    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityT4Rvd }}</td>#}
-    {#                    <td class="col-md-4">{{ row.distributionDensityRndRvd }}</td>#}
-    {#                    <td class="col-md-4">{{ dataEnquiry.distributionDensityRndRvd }}</td>#}
-    {#                </tr>#}
-    {#                    {% endfor %}#}
-    {#            {% endfor %}#}
-    {#            </tbody>#}
-    {#        </table>#}
-    {#    </div>#}
+    <div id="plotlyT4Rvd" class="w-100 flex-fill"></div>
+    <div id="plotlyT4Rnd" class="w-100 flex-fill"></div>
+    <div id="plotlyRvdRnd" class="w-100 flex-fill"></div>
 {% endblock %}
 
 {% block javascripts %}
@@ -61,18 +15,25 @@
     <script src="{{ asset('js/app.js', 'app') }}"></script>
     <script>
         (function () {
-            const element = document.getElementById('plotly');
+            const elementT4Rvd = document.getElementById('plotlyT4Rvd');
+            const elementT4Rnd = document.getElementById('plotlyT4Rnd');
+            const elementRvdRnd = document.getElementById('plotlyRvdRnd');
             const rowsCurrent = {{ dataCurrent|json_encode|raw }};
             const rowsEnquiry = {{ dataEnquiry|json_encode|raw }};
             const calcEngineValueCurrent = {
                 t4: {{ calcEngineValueCurrent.t4|json_encode|raw }},
-                rvd: {{ calcEngineValueCurrent.rvd|json_encode|raw }}
+                rvd: {{ calcEngineValueCurrent.rvd|json_encode|raw }},
+                rnd: {{ calcEngineValueCurrent.rnd|json_encode|raw }},
             };
             const calcEngineValueEnquiry = {
                 t4: {{ calcEngineValueEnquiry.t4|json_encode|raw }},
-                rvd: {{ calcEngineValueEnquiry.rvd|json_encode|raw }}
+                rvd: {{ calcEngineValueEnquiry.rvd|json_encode|raw }},
+                rnd: {{ calcEngineValueEnquiry.rnd|json_encode|raw }},
             };
-            dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry);
+
+            dd_chartT4Rvd(elementT4Rvd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry);
+            dd_chartT4Rnd(elementT4Rnd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry);
+            dd_chartRvdRnd(elementRvdRnd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry);
         })();
     </script>
 {% endblock %}

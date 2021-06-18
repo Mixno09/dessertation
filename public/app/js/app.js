@@ -1,4 +1,4 @@
-function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry) {
+function dd_chartT4Rvd(elementT4Rvd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry/*, rangeEnquiry, range*/) {
     const x1 = [], y1 = [], z1 = [];
     rowsCurrent.forEach((row) => {
         x1.push(row.t4);
@@ -109,7 +109,242 @@ function dd_chart(element, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, cal
     };
 
     Plotly.newPlot(
-        element,
+        elementT4Rvd,
+        [dataCurrent, sampleVarianceCurrent, dataEnquiry, sampleVarianceEnquiry/*, rangeEnquiryValue, rangeValue*/],
+        layout,
+        {displayModeBar: false}
+    );
+}
+
+function dd_chartT4Rnd(elementT4Rnd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry) {
+    const x1 = [], y1 = [], z1 = [];
+    rowsCurrent.forEach((row) => {
+        x1.push(row.t4);
+        y1.push(row.rnd);
+        z1.push(row.ddT4Rnd);
+    });
+    const dataCurrent = {
+        x: x1,
+        y: y1,
+        z: z1,
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Анализируемая модель',
+        marker: {
+            size: 5,
+            color: '#FA6348',
+            line: {
+                color: '#FBA394',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const x2 = [], y2 = [], z2 = [];
+    rowsEnquiry.forEach((row) => {
+        x2.push(row.t4);
+        y2.push(row.rnd);
+        z2.push(row.ddT4Rnd);
+    });
+    const dataEnquiry = {
+        x: x2,
+        y: y2,
+        z: z2,
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Эталонная модель',
+        marker: {
+            size: 5,
+            color: '#0089FA',
+            line: {
+                color: '#00437A',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const sampleVarianceCurrent = {
+        x: [calcEngineValueCurrent.t4],
+        y: [calcEngineValueCurrent.rnd],
+        z: [0],
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Среднее значение математических ожиданий исследуемого',
+        marker: {
+            size: 7,
+            color: '#000000',
+            line: {
+                color: '#000000',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    var sampleVarianceEnquiry = {
+        x: [calcEngineValueEnquiry.t4],
+        y: [calcEngineValueEnquiry.rnd],
+        z: [0],
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Среднее значение математических ожиданий эталонного',
+        marker: {
+            size: 7,
+            color: '#FAF200',
+            line: {
+                color: '#FAF200',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const layout = {
+        scene: {
+            camera: {
+                eye: {x: -1.5, y: -1.5, z: 1.5},
+                center: {x: 0, y: 0, z: -0.15}
+            },
+            xaxis: {
+                title: 'Температура, °C'
+            },
+            yaxis: {
+                title: 'Обороты РНД, %',
+            },
+            zaxis: {
+                title: 'Плотность распределения',
+            }
+        },
+        autosize: true,
+        margin: {l: 0, r: 0, b: 0, t: 0},
+        legend: {
+            x: 0.95,
+            y: 0.95,
+            xanchor: 'right'
+        }
+    };
+
+    Plotly.newPlot(
+        elementT4Rnd,
+        [dataCurrent, sampleVarianceCurrent, dataEnquiry, sampleVarianceEnquiry],
+        layout,
+        {displayModeBar: false}
+    );
+}
+
+function dd_chartRvdRnd(elementRvdRnd, rowsCurrent, rowsEnquiry, calcEngineValueCurrent, calcEngineValueEnquiry) {
+    const x1 = [], y1 = [], z1 = [];
+    rowsCurrent.forEach((row) => {
+        x1.push(row.rvd);
+        y1.push(row.rnd);
+        z1.push(row.ddRndRvd);
+    });
+    const dataCurrent = {
+        x: x1,
+        y: y1,
+        z: z1,
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Анализируемая модель',
+        marker: {
+            size: 5,
+            color: '#FA6348',
+            line: {
+                color: '#FBA394',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const x2 = [], y2 = [], z2 = [];
+    rowsEnquiry.forEach((row) => {
+        x2.push(row.rvd);
+        y2.push(row.rnd);
+        z2.push(row.ddRndRvd);
+    });
+    const dataEnquiry = {
+        x: x2,
+        y: y2,
+        z: z2,
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Эталонная модель',
+        marker: {
+            size: 5,
+            color: '#0089FA',
+            line: {
+                color: '#00437A',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const sampleVarianceCurrent = {
+        x: [calcEngineValueCurrent.rvd],
+        y: [calcEngineValueCurrent.rnd],
+        z: [0],
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Среднее значение математических ожиданий исследуемого',
+        marker: {
+            size: 7,
+            color: '#000000',
+            line: {
+                color: '#000000',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    var sampleVarianceEnquiry = {
+        x: [calcEngineValueEnquiry.rvd],
+        y: [calcEngineValueEnquiry.rnd],
+        z: [0],
+        type: 'scatter3d',
+        mode: 'markers',
+        name: 'Среднее значение математических ожиданий эталонного',
+        marker: {
+            size: 7,
+            color: '#FAF200',
+            line: {
+                color: '#FAF200',
+                width: 0.5
+            },
+            opacity: 0.8
+        }
+    };
+
+    const layout = {
+        scene: {
+            camera: {
+                eye: {x: -1.5, y: -1.5, z: 1.5},
+                center: {x: 0, y: 0, z: -0.15}
+            },
+            xaxis: {
+                title: 'Обороты РВД, %'
+            },
+            yaxis: {
+                title: 'Обороты РНД, %',
+            },
+            zaxis: {
+                title: 'Плотность распределения',
+            }
+        },
+        autosize: true,
+        margin: {l: 0, r: 0, b: 0, t: 0},
+        legend: {
+            x: 0.95,
+            y: 0.95,
+            xanchor: 'right'
+        }
+    };
+    Plotly.newPlot(
+        elementRvdRnd,
         [dataCurrent, sampleVarianceCurrent, dataEnquiry, sampleVarianceEnquiry],
         layout,
         {displayModeBar: false}
