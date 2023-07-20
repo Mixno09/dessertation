@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Главная{% endblock %}</title>
+
+    <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
+
+    <meta name="theme-color" content="#563d7c">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="vh-100 d-flex flex-column">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark flex-shrink-0">
+    <a class="navbar-brand" href={{ path('main') }}>Главная</a>
+    <a class="ml-auto text-light" href="{{ path('app_logout') }}">Выйти</a>
+</nav>
+{% set currentRoute = app.request.attributes.get('_route') %}
+<div class="container-fluid flex-grow-1">
+    <div class="row h-100">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('flight_information_import') }}">
+                            <span data-feather="tag"></span>
+                            Импорт
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('main') }}">
+                            <span data-feather="shopping-bag"></span>
+                            Данные вылетов
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('airplanes') }}">
+                            <span data-feather="shopping-bag"></span>
+                            Выбрать самолет
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-10 ml-sm-auto px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{% block h1 %}{% endblock %}</h1>
+            </div>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<script src="{{ asset('jquery.min.js', 'jquery') }}"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

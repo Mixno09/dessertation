@@ -1,0 +1,4 @@
+Invalid credentials.: "Неверный пароль."
+An authentication exception occurred.: "Ошибка аутентификации."
+Invalid CSRF token.: "Недействительный токен CSRF."
+Username could not be found.: "Имя пользователя не найдено."

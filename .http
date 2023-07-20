@@ -1,0 +1,18 @@
+GET http://localhost:80/flight_informations/31_2016-01-01_16/delete
+Cookie: PHPSESSID=q4ev29ho9d1egvjn3mn3evqb10
+###
+POST http://localhost:80/flight_informations/31_2016-1-01_16/delete
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+
+31_2016-1-01_16
+--WebAppBoundary--
+
+--WebAppBoundary
+Content-Disposition: form-data; name="form[_token]"
+
+w413V-a_BcDD8W-P4bZ79esu9w9JltBcktCe1OaadgQ
+--WebAppBoundary--
+
+###

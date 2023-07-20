@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  php-fpm:
+    build: php-fpm
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "..:/var/www/html"
+    expose:
+      - "9000"
+    environment:
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_enable=1"
+      PHP_IDE_CONFIG: "serverName=Docker"
+      COMPOSER_HOME: "/tmp/.composer"
+      DATABASE_URL: "mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}?serverVersion=5.7"
+
+  nginx:
+    image: nginx:1.19.2-alpine
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "..:/var/www/html"
+    ports:
+      - "80:8080"
+
+  mysql:
+    image: mysql:5.7.31
+    restart: unless-stopped
+    user: "${UID}:${GID}"
+    volumes:
+      - "./mysql/database:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"

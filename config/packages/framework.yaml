@@ -27,3 +27,12 @@ framework:
             chartjs:
                 base_path: '/chartjs'
                 version: '2.9.3'
+            plotly:
+                base_path: '/plotly'
+                version: '1.58.4'
+            app:
+                base_path: '/app'
+                version: '1.0.1'
+            apexcharts:
+                base_path: '/apexcharts'
+                version: '3.26.3'

@@ -23,6 +23,9 @@
     "doctrine/common": {
         "version": "2.12.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.4.3"
+    },
     "doctrine/dbal": {
         "version": "v2.10.1"
     },
@@ -78,18 +81,6 @@
     "doctrine/reflection": {
         "version": "v1.1.0"
     },
-    "easycorp/easy-log-handler": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
-        },
-        "files": [
-            "config/packages/dev/easy_log_handler.yaml"
-        ]
-    },
     "egulias/email-validator": {
         "version": "2.1.17"
     },
@@ -101,6 +92,12 @@
     },
     "knplabs/knp-paginator-bundle": {
         "version": "v5.2.0"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.2.0"
+    },
+    "markrogoyski/math-php": {
+        "version": "v1.6.0"
     },
     "monolog/monolog": {
         "version": "2.0.2"
@@ -141,6 +138,9 @@
     "psr/log": {
         "version": "1.1.2"
     },
+    "roave/security-advisories": {
+        "version": "dev-latest"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -152,6 +152,9 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "sylius/fixtures-bundle": {
+        "version": "v1.7.0"
     },
     "symfony/asset": {
         "version": "v5.0.5"
@@ -201,6 +204,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v5.0.5"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v5.0.5"
@@ -274,9 +280,6 @@
         "version": "v5.0.5"
     },
     "symfony/http-kernel": {
-        "version": "v5.0.5"
-    },
-    "symfony/inflector": {
         "version": "v5.0.5"
     },
     "symfony/intl": {
@@ -373,6 +376,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.14.0"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.20.0"
     },
     "symfony/process": {
         "version": "v5.0.5"

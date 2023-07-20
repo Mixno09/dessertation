@@ -1,8 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_authentication.html.twig' %}
 
-{% block title %}Hello LoadFlightController!{% endblock %}
+{% block title %}Импорт данных{% endblock %}
 
-{% block body %}
+{% block h1 %}Импорт данных{% endblock %}
+
+{% block content %}
 <div class="row align-items-center">
     <div class="offset-sm-3 col-sm-6">
         {{ form(form) }}

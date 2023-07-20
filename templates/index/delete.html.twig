@@ -1,25 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_authentication.html.twig' %}
+
+{% block title %}Удаление{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="offset-md-3 col-md-6">
             <div class="card">
                 <h2 class="card-header">
-                    Удалить вылет № {{ departures.departure}}?
+                    Удалить вылет № {{ flightInformation.flightInformationId.flightNumber }}?
                 </h2>
                 <div class="card-body">
                     <h3 class="card-title">
-                        Борт № {{ departures.airplane }}
+                        Борт № {{ flightInformation.flightInformationId.airplaneNumber }}
                     </h3>
                     <h3 class="card-title">
-                        Дата вылета {{ departures.date }}
+                        Дата вылета {{ flightInformation.flightInformationId.flightDate|date('d-m-Y') }}
                     </h3>
                 </div>
                 <div class="card-footer">
                     {{ form_start(form, {'attr': {'class': 'd-inline'}}) }}
                     <button class="btn btn-danger">Удалить</button>
                     {{ form_end(form) }}
-                    <a href="{{ path('index') }}" class="btn btn-light">Отмена</a>
+                    <a href="{{ path('main') }}" class="btn btn-light">Отмена</a>
                 </div>
             </div>
         </div>

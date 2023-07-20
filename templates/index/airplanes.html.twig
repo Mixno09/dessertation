@@ -1,0 +1,42 @@
+{% extends 'base_authentication.html.twig' %}
+
+{% block title %}Список самолетов{% endblock %}
+
+{% block h1 %}Список самолетов{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr class="d-flex">
+                    <th scope="col" class="col-md-2">Номер самолета</th>
+                    <th scope="col" class="col-md-10">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for airplaneNumber in pagination %}
+                    <tr class="d-flex">
+                        <td class="col-md-2">{{ airplaneNumber }}</td>
+                        <td class="col-md-10">
+                            <a href="{{ path('average_flight_information_left', {'airplane': airplaneNumber}) }}" target="_blank"
+                               class="btn btn-outline-primary text-nowrap">
+                                <span data-feather="eye"></span> Левый двигатель
+                            </a>
+                            <a href="{{ path('average_flight_information_right', {'airplane': airplaneNumber}) }}" target="_blank"
+                               class="btn btn-outline-primary text-nowrap">
+                                <span data-feather="eye"></span> Правый двигатель
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-auto">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+{% endblock %}
