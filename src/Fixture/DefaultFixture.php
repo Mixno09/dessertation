@@ -28,6 +28,12 @@ class DefaultFixture extends AbstractFixture implements FixtureInterface
         $sql = 'DELETE FROM engine_parameter_collections_engine_parameters';
         $this->connection->executeQuery($sql);
 
+        $sql = 'DELETE FROM engine_parameter_collections_mutual_parameters';
+        $this->connection->executeQuery($sql);
+
+        $sql = 'DELETE FROM mutual_parameter';
+        $this->connection->executeQuery($sql);
+
         $sql = 'DELETE FROM engine_parameter';
         $this->connection->executeQuery($sql);
 
@@ -41,6 +47,12 @@ class DefaultFixture extends AbstractFixture implements FixtureInterface
         $this->connection->executeQuery($sql);
 
         $sql = file_get_contents(__DIR__ . '/sql/engine_parameter_collections_engine_parameters.sql');
+        $this->connection->executeQuery($sql);
+
+        $sql = file_get_contents(__DIR__ . '/sql/mutual_parameter.sql');
+        $this->connection->executeQuery($sql);
+
+        $sql = file_get_contents(__DIR__ . '/sql/engine_parameter_collections_mutual_parameters.sql');
         $this->connection->executeQuery($sql);
 
     }
